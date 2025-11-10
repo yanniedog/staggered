@@ -6,85 +6,232 @@
     <title>Trading Plan Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-H0uWsKekJy5o+1OtSWT8gJtIhXCTITVEWilQoNqT9XyM54q9WlH0I1GtIsfRSAxEPPGjBJOCa/BrGL3hXhNItA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha512-/p6KDAdAm8YGtS+wGGyRyvE4s46HoPazTA/gkGEXLMaLLq5yRvCNrI6VsgGAaHo9dZYkTfGZNVVRhk1FdY2wJg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --color-bg: #cde7ec;
+            --color-card: #edfcff;
+            --color-card-alt: #dbf6fa;
+            --color-card-muted: #f8fafa;
+            --color-text: #273f43;
+            --color-text-secondary: #2f3b58;
+            --color-text-muted: #48616b;
+            --color-border: #dbf6fa;
+            --color-border-strong: #bac6ea;
+            --color-primary: #00424a;
+            --color-primary-accent: #005f6b;
+            --color-primary-contrast: #edfcff;
+            --color-secondary: #006b5e;
+            --color-secondary-hover: #008a7b;
+            --color-tooltip-bg: #00424a;
+            --color-tooltip-text: #edfcff;
+            --color-table-row-even: #f8fafa;
+            --color-table-row-odd: #edfcff;
+            --color-summary-bg: #dbf6fa;
+            --color-summary-border: #00424a;
+            --color-executed-bg: #cde9d6;
+            --color-invalid: #b91c1c;
+            --color-helper-border: #2f3b58;
+            --color-slider-track: #bac6ea;
+            --color-slider-thumb: #00424a;
+            --color-grid-line: rgba(186, 198, 234, 0.7);
+            --color-chart-axis-text: #2f3b58;
+            --color-buy-bar: #2f3b58;
+            --color-buy-bar-hover: #00424a;
+            --color-sell-bar: #006b5e;
+            --color-sell-bar-hover: #008a7b;
+            --color-control-bg: rgba(237, 252, 255, 0.75);
+            --color-control-text: #2f3b58;
+            --color-control-border: #bac6ea;
+            --color-control-active: #00424a;
+            --color-control-active-text: #edfcff;
+            --color-control-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.18);
+            --focus-ring-color: rgba(0, 66, 74, 0.2);
+            --shadow-base: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.06);
+        }
+
+        body.theme-dark {
+            --color-bg: #0f172a;
+            --color-card: #1e293b;
+            --color-card-alt: rgba(30, 41, 59, 0.78);
+            --color-card-muted: rgba(15, 23, 42, 0.85);
+            --color-text: #e2e8f0;
+            --color-text-secondary: #cbd5f5;
+            --color-text-muted: #94a3b8;
+            --color-border: #334155;
+            --color-border-strong: #475569;
+            --color-primary: #38bdf8;
+            --color-primary-accent: #0ea5e9;
+            --color-primary-contrast: #0f172a;
+            --color-secondary: #22d3ee;
+            --color-secondary-hover: #06b6d4;
+            --color-tooltip-bg: #0ea5e9;
+            --color-tooltip-text: #0f172a;
+            --color-table-row-even: rgba(30, 41, 59, 0.6);
+            --color-table-row-odd: rgba(15, 23, 42, 0.7);
+            --color-summary-bg: rgba(29, 78, 216, 0.78);
+            --color-summary-border: #38bdf8;
+            --color-executed-bg: rgba(34, 197, 94, 0.25);
+            --color-invalid: #f87171;
+            --color-helper-border: #38bdf8;
+            --color-slider-track: #1e40af;
+            --color-slider-thumb: #38bdf8;
+            --color-grid-line: rgba(148, 163, 184, 0.5);
+            --color-chart-axis-text: #e2e8f0;
+            --color-buy-bar: #38bdf8;
+            --color-buy-bar-hover: #0ea5e9;
+            --color-sell-bar: #22d3ee;
+            --color-sell-bar-hover: #06b6d4;
+            --color-control-bg: rgba(15, 23, 42, 0.82);
+            --color-control-text: #cbd5f5;
+            --color-control-border: #1e3a8a;
+            --color-control-active: #38bdf8;
+            --color-control-active-text: #0f172a;
+            --color-control-shadow: 0 10px 24px -12px rgba(2, 6, 23, 0.65);
+            --focus-ring-color: rgba(56, 189, 248, 0.35);
+            --shadow-base: 0 18px 28px -12px rgba(2, 6, 23, 0.65), 0 10px 16px -8px rgba(2, 6, 23, 0.55);
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #cde7ec;
-            color: #273f43;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-        .form-input {
-            background-color: #f8fafa;
-            border: 1px solid #dbf6fa;
-            color: #273f43;
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        .text-primary-dark {
+            color: var(--color-text);
+        }
+
+        .text-secondary-dark {
+            color: var(--color-text-secondary);
+        }
+
+        .text-tertiary-dark {
+            color: var(--color-text-muted);
+        }
+
+        .form-input,
+        select.form-input {
+            background-color: var(--color-card-muted);
+            border: 1px solid var(--color-border);
+            color: var(--color-text);
             transition: all 0.3s ease;
         }
-        .form-input:focus {
+
+        .form-input:focus,
+        select.form-input:focus {
             outline: none;
-            border-color: #00424a;
-            box-shadow: 0 0 0 3px rgba(0, 66, 74, 0.1);
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px var(--focus-ring-color);
         }
+
         .btn-primary {
-            background-color: #00424a;
-            color: #edfcff;
-            transition: background-color 0.3s ease;
+            background-color: var(--color-primary);
+            color: var(--color-primary-contrast);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
+
         .btn-primary:hover {
-            background-color: #005f6b;
+            background-color: var(--color-primary-accent);
         }
+
         .btn-secondary {
-            background-color: #006b5e; /* sell-bar color */
-            color: #edfcff;
+            background-color: var(--color-secondary);
+            color: var(--color-primary-contrast);
             transition: background-color 0.3s ease;
         }
+
         .btn-secondary:hover {
-            background-color: #008a7b; /* sell-bar hover */
+            background-color: var(--color-secondary-hover);
         }
+
         .card {
-            background-color: #edfcff;
+            background-color: var(--color-card);
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            box-shadow: var(--shadow-base);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
+
         .summary-card {
-            background-color: #dbf6fa;
-            border-left: 4px solid #00424a;
+            background-color: var(--color-summary-bg);
+            border-left: 4px solid var(--color-summary-border);
         }
+
+        .surface-muted {
+            background-color: var(--color-card-muted);
+        }
+
+        .surface-accent {
+            background-color: var(--color-card-alt);
+        }
+
+        .border-soft {
+            border-color: var(--color-border);
+        }
+
+        .border-strong {
+            border-color: var(--color-border-strong);
+        }
+
+        .border-accent {
+            border-color: var(--color-summary-border);
+        }
+
         .table-header {
-            background-color: #dbf6fa;
+            background-color: var(--color-card-alt);
         }
-        .table-row-odd {
-            background-color: #edfcff;
+
+        body.layout-desktop .table-row-odd td {
+            background-color: var(--color-table-row-odd);
         }
-        .table-row-even {
-            background-color: #f8fafa;
+
+        body.layout-desktop .table-row-even td {
+            background-color: var(--color-table-row-even);
         }
+
         .executed-rung td {
-            background-color: #cde9d6;
+            background-color: var(--color-executed-bg);
             font-weight: 600;
         }
+
         .label-invalid {
-            color: #b91c1c !important;
+            color: var(--color-invalid) !important;
         }
+
         .input-invalid {
-            border-color: #b91c1c !important;
-            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.1);
+            border-color: var(--color-invalid) !important;
+            box-shadow: 0 0 0 3px rgba(185, 28, 28, 0.18);
         }
+
         .label-with-info {
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
+
         .label-with-info .info-button {
             margin-left: auto;
         }
+
         .info-button {
             background-color: transparent;
-            border: 1px solid #b91c1c;
-            color: #b91c1c;
+            border: 1px solid var(--color-invalid);
+            color: var(--color-invalid);
             border-radius: 9999px;
             width: 18px;
             height: 18px;
@@ -94,15 +241,18 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
+
         .info-button:hover,
-        .info-button:focus {
-            background-color: rgba(185, 28, 28, 0.1);
+        .info-button:focus-visible {
+            background-color: rgba(185, 28, 28, 0.12);
         }
+
         .helper-tooltip {
             background-color: transparent;
-            border: 1px solid #2f3b58;
-            color: #2f3b58;
+            border: 1px solid var(--color-helper-border);
+            color: var(--color-helper-border);
             border-radius: 9999px;
             width: 18px;
             height: 18px;
@@ -112,87 +262,189 @@
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: background-color 0.2s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
+
         .helper-tooltip:hover,
-        .helper-tooltip:focus {
-            background-color: rgba(47, 59, 88, 0.1);
+        .helper-tooltip:focus-visible {
+            background-color: rgba(47, 59, 88, 0.12);
         }
-        /* Custom slider styles */
+
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
             width: 100%;
             height: 8px;
-            background: #bac6ea;
+            background: var(--color-slider-track);
             border-radius: 5px;
             outline: none;
             opacity: 0.7;
-            transition: opacity .2s;
+            transition: opacity 0.2s;
         }
+
         input[type=range]:hover {
             opacity: 1;
         }
+
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
             width: 20px;
             height: 20px;
-            background: #00424a;
+            background: var(--color-slider-thumb);
             cursor: pointer;
             border-radius: 50%;
-            border: 2px solid #edfcff;
+            border: 2px solid var(--color-primary-contrast);
         }
+
         input[type=range]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: #00424a;
+            background: var(--color-slider-thumb);
             cursor: pointer;
             border-radius: 50%;
-            border: 2px solid #edfcff;
+            border: 2px solid var(--color-primary-contrast);
         }
+
         .d3-chart .domain {
-            stroke: #2f3b58;
+            stroke: var(--color-chart-axis-text);
         }
+
         .d3-chart .tick line {
-            stroke: #bac6ea;
+            stroke: var(--color-grid-line);
         }
+
         .d3-chart .tick text {
-            fill: #2f3b58;
-            font-size: 11px; /* Slightly smaller for price labels */
+            fill: var(--color-chart-axis-text);
+            font-size: 11px;
         }
+
         .d3-chart .grid line {
-            stroke: #bac6ea;
-            stroke-opacity: 0.5;
+            stroke: var(--color-grid-line);
+            stroke-opacity: 0.6;
             shape-rendering: crispEdges;
         }
+
         .d3-chart .buy-bar {
-            fill: #2f3b58;
+            fill: var(--color-buy-bar);
             transition: all 0.3s ease-out;
         }
+
         .d3-chart .buy-bar:hover {
-            fill: #00424a;
+            fill: var(--color-buy-bar-hover);
         }
+
         .d3-chart .sell-bar {
-            fill: #006b5e; /* New color for sell chart */
+            fill: var(--color-sell-bar);
             transition: all 0.3s ease-out;
         }
+
         .d3-chart .sell-bar:hover {
-            fill: #008a7b; /* New hover color for sell chart */
+            fill: var(--color-sell-bar-hover);
         }
+
         .tooltip {
             position: absolute;
             text-align: center;
             padding: 8px;
             font-size: 12px;
-            background: #00424a;
-            color: #edfcff;
-            border: 0px;
+            background: var(--color-tooltip-bg);
+            color: var(--color-tooltip-text);
             border-radius: 8px;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 10px 18px -12px rgba(15, 23, 42, 0.45);
         }
+
+        .display-control-panel {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: flex-start;
+            background-color: var(--color-control-bg);
+            border: 1px solid var(--color-control-border);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            box-shadow: var(--color-control-shadow);
+        }
+
+        .display-control-panel .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            min-width: 8rem;
+        }
+
+        .display-control-panel .control-label {
+            font-size: 0.75rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            font-weight: 600;
+            color: var(--color-text-muted);
+        }
+
+        .toggle-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            border: 1px solid var(--color-control-border);
+            border-radius: 9999px;
+            padding: 0.15rem;
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .toggle-button {
+            position: relative;
+            border: none;
+            background: transparent;
+            color: var(--color-control-text);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 0.35rem 1rem;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .toggle-button.active {
+            background-color: var(--color-control-active);
+            color: var(--color-control-active-text);
+            box-shadow: 0 8px 16px -10px rgba(15, 23, 42, 0.35);
+        }
+
+        .toggle-button:focus-visible {
+            outline: 2px solid var(--color-control-active);
+            outline-offset: 2px;
+        }
+
+        .toggle-button:active {
+            transform: translateY(1px);
+        }
+
+        .export-panel {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            box-shadow: 0 12px 20px -14px rgba(15, 23, 42, 0.3);
+        }
+
+        @media (min-width: 640px) {
+            .export-panel {
+                background-color: transparent;
+                border-color: transparent;
+                box-shadow: none;
+                padding: 0;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .display-control-panel {
+                align-items: center;
+            }
+        }
+
         @media (max-width: 640px) {
             .mobile-two-col {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -201,38 +453,167 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
         }
+
+        body.layout-mobile {
+            background-color: var(--color-bg);
+        }
+
+        body.layout-mobile header {
+            text-align: left;
+        }
+
+        body.layout-mobile h1 {
+            font-size: 1.85rem;
+        }
+
+        body.layout-mobile #app {
+            max-width: 100%;
+        }
+
+        body.layout-mobile main {
+            display: flex;
+            flex-direction: column;
+            gap: 1.25rem;
+        }
+
+        body.layout-mobile .card {
+            padding: 1.25rem;
+        }
+
+        body.layout-mobile .summary-mobile-grid {
+            grid-template-columns: 1fr !important;
+        }
+
+        body.layout-mobile .summary-card {
+            text-align: left;
+        }
+
+        body.layout-mobile .display-control-panel {
+            width: 100%;
+        }
+
+        body.layout-mobile .toggle-group {
+            width: 100%;
+        }
+
+        body.layout-mobile .toggle-button {
+            flex: 1 1 50%;
+            text-align: center;
+        }
+
+        body.layout-mobile .text-secondary-dark,
+        body.layout-mobile .text-tertiary-dark {
+            text-align: left;
+        }
+
+        body.layout-mobile .overflow-x-auto {
+            overflow-x: visible;
+        }
+
+        body.layout-mobile table {
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        body.layout-mobile table thead {
+            display: none;
+        }
+
+        body.layout-mobile table tbody tr {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+            padding: 0.85rem;
+            border: 1px solid var(--color-border);
+            border-radius: 0.85rem;
+            background-color: var(--color-card);
+            margin-bottom: 0.85rem;
+        }
+
+        body.layout-mobile table tbody tr:last-child {
+            margin-bottom: 0;
+        }
+
+        body.layout-mobile table tbody tr.executed-rung {
+            background-color: var(--color-executed-bg);
+        }
+
+        body.layout-mobile table tbody tr td {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            border: none;
+            background: transparent;
+            padding: 0;
+            font-size: 0.95rem;
+        }
+
+        body.layout-mobile table tbody tr td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        body.layout-mobile table tbody tr td input[type="checkbox"] {
+            margin-left: auto;
+        }
+
+        body.layout-mobile .d3-chart svg {
+            min-height: 260px;
+        }
+
         details summary {
             list-style: none;
         }
+
         details summary::-webkit-details-marker {
             display: none;
         }
     </style>
 </head>
-<body class="p-2 sm:p-4">
+<body class="p-2 sm:p-4 theme-light layout-desktop">
     <div id="app" class="max-w-7xl mx-auto">
         <header class="py-6">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 text-center sm:text-left">
-                <h1 class="text-3xl sm:text-4xl font-bold text-primary-dark">Trading Plan Calculator</h1>
-                <details id="export-collapse" class="relative self-center sm:self-auto">
-                    <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
-                        Export Options
-                        <span class="text-xs opacity-80 tracking-wide">▼</span>
-                    </summary>
-                    <div class="mt-3 sm:mt-2 flex flex-col sm:flex-row gap-2 bg-[#edfcff] sm:bg-transparent p-3 sm:p-0 border border-[#dbf6fa] sm:border-0 rounded-lg shadow-sm sm:shadow-none">
-                        <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                            Download CSV
-                        </button>
-                        <button id="download-xls-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                            Download XLS
-                        </button>
-                        <button id="download-pdf-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                            Download PDF
-                        </button>
+            <div class="flex flex-col gap-4">
+                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 text-left">
+                    <div class="flex flex-col lg:flex-row lg:items-center gap-4">
+                        <div id="display-control-panel" class="display-control-panel">
+                            <div class="control-group" role="group" aria-label="Select layout mode">
+                                <span class="control-label">Layout</span>
+                                <div class="toggle-group" id="layout-toggle-group">
+                                    <button type="button" class="toggle-button" data-layout-toggle="desktop" aria-pressed="false">Desktop</button>
+                                    <button type="button" class="toggle-button" data-layout-toggle="mobile" aria-pressed="false">Mobile</button>
+                                </div>
+                            </div>
+                            <div class="control-group" role="group" aria-label="Select theme">
+                                <span class="control-label">Theme</span>
+                                <div class="toggle-group" id="theme-toggle-group">
+                                    <button type="button" class="toggle-button" data-theme-toggle="light" aria-pressed="false">Light</button>
+                                    <button type="button" class="toggle-button" data-theme-toggle="dark" aria-pressed="false">Dark</button>
+                                </div>
+                            </div>
+                            <span id="display-status-announcer" class="sr-only" aria-live="polite"></span>
+                        </div>
+                        <h1 class="text-3xl sm:text-4xl font-bold text-primary-dark">Trading Plan Calculator</h1>
                     </div>
-                </details>
+                    <details id="export-collapse" class="relative self-center sm:self-auto">
+                        <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
+                            Export Options
+                            <span class="text-xs opacity-80 tracking-wide">▼</span>
+                        </summary>
+                        <div class="mt-3 sm:mt-2 flex flex-col sm:flex-row gap-2 export-panel">
+                            <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
+                                Download CSV
+                            </button>
+                            <button id="download-xls-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
+                                Download XLS
+                            </button>
+                        </div>
+                    </details>
+                </div>
+                <p class="text-secondary-dark mt-2 text-md sm:text-lg">Design your buy and sell ladders with precision.</p>
             </div>
-            <p class="text-secondary-dark mt-2 text-md sm:text-lg text-center sm:text-left">Design your buy and sell ladders with precision.</p>
         </header>
 
         <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 auto-rows-min">
@@ -266,7 +647,7 @@
                             <span>Heavy</span>
                         </div>
                     </div>
-                    <div class="border border-[#dbf6fa] rounded-lg p-3 bg-[#f8fafa] space-y-3">
+                    <div class="border border-soft rounded-lg p-3 surface-muted space-y-3">
                         <label class="flex items-center space-x-2 text-xs font-medium text-secondary-dark">
                             <input id="advanced_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
                             <span>Advanced mode</span>
@@ -274,7 +655,7 @@
                         <div id="advanced-settings" class="space-y-3 hidden">
                             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                                 <div class="sm:col-span-4">
-                                    <div class="border-2 border-primary-dark bg-[#edf2ff] rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                    <div class="border-2 border-accent surface-accent rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                                         <div>
                                             <p class="text-xs font-semibold text-secondary-dark uppercase tracking-wide">Mode</p>
                                             <p class="text-sm font-semibold text-primary-dark">Sell-only ladder</p>
@@ -474,13 +855,157 @@
             const exportCollapse = document.getElementById('export-collapse');
             const downloadCsvBtn = document.getElementById('download-csv-btn');
             const downloadXlsBtn = document.getElementById('download-xls-btn');
-            const downloadPdfBtn = document.getElementById('download-pdf-btn');
+            const layoutToggleButtons = Array.from(document.querySelectorAll('[data-layout-toggle]'));
+            const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+            const displayStatusAnnouncer = document.getElementById('display-status-announcer');
+
+            const LAYOUT_STORAGE_KEY = 'tpc-layout-mode';
+            const THEME_STORAGE_KEY = 'tpc-theme-mode';
+            const LAYOUT_BREAKPOINT = 1024;
+
+            const detectLayoutMode = (width = window.innerWidth) => (width < LAYOUT_BREAKPOINT ? 'mobile' : 'desktop');
+            const detectThemePreference = () => (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+
+            const getCssVariable = (name, fallback = '') => {
+                const value = getComputedStyle(document.body).getPropertyValue(name);
+                return value ? value.trim() : fallback;
+            };
+
+            const updateToggleGroup = (buttons, attribute, activeValue) => {
+                if (!Array.isArray(buttons)) {
+                    return;
+                }
+                buttons.forEach((button) => {
+                    const value = button.getAttribute(attribute);
+                    const isActive = value === activeValue;
+                    button.classList.toggle('active', isActive);
+                    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+                });
+            };
+
+            const titleCase = (value) => value.charAt(0).toUpperCase() + value.slice(1);
+
+            let currentLayoutMode = 'desktop';
+            let currentThemeMode = 'light';
+            let layoutLocked = false;
+            let themeLocked = false;
+            let displayTestsExecuted = false;
+
+            const announceDisplayStatus = () => {
+                if (!displayStatusAnnouncer) {
+                    return;
+                }
+                displayStatusAnnouncer.textContent = `Layout: ${titleCase(currentLayoutMode)} · Theme: ${titleCase(currentThemeMode)}`;
+            };
+
+            const applyLayoutMode = (mode, options = {}) => {
+                const { announce = true, source = 'system' } = options;
+                const normalizedMode = mode === 'mobile' ? 'mobile' : 'desktop';
+                currentLayoutMode = normalizedMode;
+                document.body.classList.toggle('layout-mobile', normalizedMode === 'mobile');
+                document.body.classList.toggle('layout-desktop', normalizedMode === 'desktop');
+                document.body.dataset.layoutMode = normalizedMode;
+                updateToggleGroup(layoutToggleButtons, 'data-layout-toggle', normalizedMode);
+                if (announce) {
+                    announceDisplayStatus();
+                }
+                console.info(`[Display] Layout mode set to ${normalizedMode} (${source}).`);
+            };
+
+            const applyThemeMode = (mode, options = {}) => {
+                const { announce = true, source = 'system' } = options;
+                const normalizedTheme = mode === 'dark' ? 'dark' : 'light';
+                currentThemeMode = normalizedTheme;
+                document.body.classList.toggle('theme-dark', normalizedTheme === 'dark');
+                document.body.classList.toggle('theme-light', normalizedTheme === 'light');
+                document.body.dataset.themeMode = normalizedTheme;
+                updateToggleGroup(themeToggleButtons, 'data-theme-toggle', normalizedTheme);
+                if (announce) {
+                    announceDisplayStatus();
+                }
+                console.info(`[Display] Theme mode set to ${normalizedTheme} (${source}).`);
+            };
 
             const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number.isFinite(value) ? value : 0);
             const formatPercent = (value) => Number.isFinite(value) ? `${value.toFixed(2)}%` : '0.00%';
             const formatNumber = (value, digits = 4) => Number.isFinite(value) ? value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: digits }) : '0';
             const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
             const MAX_SKEW_RATIO = 10;
+
+            const getStoredValue = (key) => {
+                try {
+                    return localStorage.getItem(key);
+                } catch (error) {
+                    console.warn('[Storage] Unable to read key', key, error);
+                    return null;
+                }
+            };
+
+            const setStoredValue = (key, value) => {
+                try {
+                    localStorage.setItem(key, value);
+                } catch (error) {
+                    console.warn('[Storage] Unable to persist key', key, error);
+                }
+            };
+
+            const storedLayoutPreference = getStoredValue(LAYOUT_STORAGE_KEY);
+            if (storedLayoutPreference === 'desktop' || storedLayoutPreference === 'mobile') {
+                layoutLocked = true;
+                applyLayoutMode(storedLayoutPreference, { announce: false, source: 'preference' });
+            } else {
+                applyLayoutMode(detectLayoutMode(), { announce: false, source: 'auto-detect' });
+            }
+
+            const storedThemePreference = getStoredValue(THEME_STORAGE_KEY);
+            if (storedThemePreference === 'dark' || storedThemePreference === 'light') {
+                themeLocked = true;
+                applyThemeMode(storedThemePreference, { announce: false, source: 'preference' });
+            } else {
+                applyThemeMode(detectThemePreference(), { announce: false, source: 'system' });
+            }
+
+            announceDisplayStatus();
+
+            if (layoutToggleButtons.length > 0) {
+                layoutToggleButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const value = button.getAttribute('data-layout-toggle');
+                        if (!value) {
+                            return;
+                        }
+                        layoutLocked = true;
+                        setStoredValue(LAYOUT_STORAGE_KEY, value);
+                        applyLayoutMode(value, { source: 'user' });
+                    });
+                });
+            }
+
+            if (themeToggleButtons.length > 0) {
+                themeToggleButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const value = button.getAttribute('data-theme-toggle');
+                        if (!value) {
+                            return;
+                        }
+                        themeLocked = true;
+                        setStoredValue(THEME_STORAGE_KEY, value);
+                        applyThemeMode(value, { source: 'user' });
+                    });
+                });
+            }
+
+            if (window.matchMedia) {
+                const colorSchemeMedia = window.matchMedia('(prefers-color-scheme: dark)');
+                if (colorSchemeMedia && typeof colorSchemeMedia.addEventListener === 'function') {
+                    colorSchemeMedia.addEventListener('change', (event) => {
+                        if (themeLocked) {
+                            return;
+                        }
+                        applyThemeMode(event.matches ? 'dark' : 'light', { source: 'system' });
+                    });
+                }
+            }
 
             const deriveExecutedBuyTotals = (buyLadder, highestRung) => {
                 if (!Array.isArray(buyLadder) || buyLadder.length === 0 || !Number.isFinite(highestRung)) {
@@ -656,6 +1181,12 @@
                     .replace(/>/g, '&gt;')
                     .replace(/"/g, '&quot;')
                     .replace(/'/g, '&#39;');
+            };
+
+            const buildTableCell = (label, content, classList = []) => {
+                const classes = ['px-2', 'py-2', ...classList].filter(Boolean).join(' ');
+                const safeLabel = escapeForHtml(label);
+                return `<td class="${classes}" data-label="${safeLabel}">${content}</td>`;
             };
 
             const collectExportSettings = () => ({
@@ -1545,49 +2076,50 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
                 plan.buyLadder.forEach((rung, i) => {
                     const rowClass = i % 2 === 0 ? 'table-row-even' : 'table-row-odd';
-                    const cells = [
-                        ...(showExecutionCheckboxes ? [`<td class="px-2 py-2 text-center">
+                    const cellMarkup = [];
+                    if (showExecutionCheckboxes) {
+                        const checkbox = `
                             <input type="checkbox"
                                    class="form-checkbox buy-rung-executed h-4 w-4 text-primary-dark rounded focus:ring-0"
-                                   data-rung="${rung.rung}">
-                        </td>`] : []),
-                        `<td class="px-2 py-2 font-medium text-center">${rung.rung}</td>`,
-                        `<td class="px-2 py-2">${formatCurrency(rung.price)}</td>`,
-                        `<td class="px-2 py-2">${formatNumber(rung.assetSize)}</td>`,
-                        `<td class="px-2 py-2">${formatPercent(rung.allocation)}</td>`,
-                        `<td class="px-2 py-2">${formatCurrency(rung.capital)}</td>`
-                    ];
+                                   data-rung="${escapeForHtml(rung.rung)}">
+                        `;
+                        cellMarkup.push(buildTableCell('Executed', checkbox, ['text-center']));
+                    }
+                    cellMarkup.push(buildTableCell('Rung', `<span class="font-medium">${escapeForHtml(rung.rung)}</span>`, ['font-medium', 'text-center']));
+                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Volume', formatNumber(rung.assetSize), ['text-right']));
+                    cellMarkup.push(buildTableCell('Allocation', formatPercent(rung.allocation), ['text-right']));
+                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital), ['text-right', 'whitespace-nowrap']));
                     if (showFeeColumns) {
                         const feeCellValue = plan.feeSettings.type === 'percent'
                             ? formatCurrency(rung.fee)
                             : formatPercent(rung.capital > 0 ? (rung.fee / rung.capital) * 100 : 0);
-                        cells.push(`<td class="px-2 py-2">${feeCellValue}</td>`);
+                        cellMarkup.push(buildTableCell(feeHeaderLabel, feeCellValue, ['text-right', 'whitespace-nowrap']));
                     }
-                    cells.push(`<td class="px-2 py-2">${formatCurrency(rung.progressiveAvgPrice)}</td>`);
+                    cellMarkup.push(buildTableCell('Avg Buy Price', formatCurrency(rung.progressiveAvgPrice), ['text-right', 'whitespace-nowrap']));
                     const executedClass = Number.isFinite(highestExecuted) && highestExecuted !== null && rung.rung <= highestExecuted
                         ? ' executed-rung'
                         : '';
-                    buyBody.innerHTML += `<tr class="${rowClass}${executedClass}">${cells.join('')}</tr>`;
+                    buyBody.innerHTML += `<tr class="${rowClass}${executedClass}">${cellMarkup.join('')}</tr>`;
                 });
 
                 plan.sellLadder.forEach((rung, i) => {
                     const rowClass = i % 2 === 0 ? 'table-row-even' : 'table-row-odd';
-                    const cells = [
-                        `<td class="px-2 py-2 font-medium text-center">${rung.rung}</td>`,
-                        `<td class="px-2 py-2">${formatCurrency(rung.price)}</td>`,
-                        `<td class="px-2 py-2">${formatNumber(rung.assetSize)}</td>`,
-                        `<td class="px-2 py-2">${formatPercent(rung.allocation)}</td>`,
-                        `<td class="px-2 py-2">${formatCurrency(rung.capital)}</td>`
-                    ];
+                    const cellMarkup = [];
+                    cellMarkup.push(buildTableCell('Rung', `<span class="font-medium">${escapeForHtml(rung.rung)}</span>`, ['font-medium', 'text-center']));
+                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Volume', formatNumber(rung.assetSize), ['text-right']));
+                    cellMarkup.push(buildTableCell('Allocation', formatPercent(rung.allocation), ['text-right']));
+                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital), ['text-right', 'whitespace-nowrap']));
                     if (showFeeColumns) {
                         const feeCellValue = plan.feeSettings.type === 'percent'
                             ? formatCurrency(rung.fee)
                             : formatPercent(rung.capital > 0 ? (rung.fee / rung.capital) * 100 : 0);
-                        cells.push(`<td class="px-2 py-2">${feeCellValue}</td>`);
+                        cellMarkup.push(buildTableCell(feeHeaderLabel, feeCellValue, ['text-right', 'whitespace-nowrap']));
                     }
-                    cells.push(`<td class="px-2 py-2">${formatCurrency(rung.progressiveAvgSellPrice)}</td>`);
-                    cells.push(`<td class="px-2 py-2">${formatCurrency(rung.netProfit)}</td>`);
-                    sellBody.innerHTML += `<tr class="${rowClass}">${cells.join('')}</tr>`;
+                    cellMarkup.push(buildTableCell('Avg Sell Price', formatCurrency(rung.progressiveAvgSellPrice), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Net Profit', formatCurrency(rung.netProfit), ['text-right', 'whitespace-nowrap']));
+                    sellBody.innerHTML += `<tr class="${rowClass}">${cellMarkup.join('')}</tr>`;
                 });
 
                 if (showExecutionCheckboxes) {
@@ -1642,6 +2174,8 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .domain(sortedData.map(d => d.price)) // X-axis is now price
                     .padding(0.2);
 
+                const axisTextColor = getCssVariable('--color-chart-axis-text', '#2f3b58');
+
                 svg.append("g")
                     .attr("transform", `translate(0,${height})`)
                     .call(d3.axisBottom(x).tickFormat(d => formatCurrency(parseFloat(d))))
@@ -1656,7 +2190,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("x", width / 2)
                     .attr("y", height + margin.bottom - 10) // Adjusted y
                     .text("Buy Price")
-                    .style("fill", "#2f3b58")
+                    .style("fill", axisTextColor)
                     .style("font-size", "12px");
 
                 const localMax = d3.max(data, d => d.assetSize);
@@ -1673,7 +2207,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("text-anchor", "middle")
                     .attr("transform", `translate(${width + 40}, ${height / 2}) rotate(90)`)
                     .text("Vol")
-                    .style("fill", "#2f3b58")
+                    .style("fill", axisTextColor)
                     .style("font-size", "12px");
 
                 const tooltip = d3.select("#tooltip");
@@ -1742,6 +2276,8 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .domain(sortedData.map(d => d.price))
                     .padding(0.2);
 
+                const axisTextColor = getCssVariable('--color-chart-axis-text', '#2f3b58');
+
                 svg.append("g")
                     .attr("transform", `translate(0,${height})`)
                     .call(d3.axisBottom(x).tickFormat(d => formatCurrency(parseFloat(d))))
@@ -1756,7 +2292,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("x", width / 2)
                     .attr("y", height + margin.bottom - 10) // Adjusted y
                     .text("Sell Price")
-                    .style("fill", "#2f3b58")
+                    .style("fill", axisTextColor)
                     .style("font-size", "12px");
 
                 const localMax = d3.max(sortedData, d => d.assetSize);
@@ -1774,7 +2310,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("y", -margin.left + 20)
                     .attr("x", -height / 2 + 20)
                     .text("Vol")
-                    .style("fill", "#2f3b58")
+                    .style("fill", axisTextColor)
                     .style("font-size", "12px");
 
                 const tooltip = d3.select("#tooltip");
@@ -1993,77 +2529,72 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 closeExportMenu();
             };
 
-            const handlePdfDownload = async () => {
-                const plan = ensurePlanAvailable();
-                if (!plan) {
-                    return;
-                }
-                const appContainer = document.getElementById('app');
-                if (!appContainer || !window.html2canvas || !window.jspdf) {
-                    console.error('PDF export dependencies are not available.');
-                    return;
-                }
-                try {
-                    const canvas = await window.html2canvas(appContainer, {
-                        scale: 2,
-                        useCORS: true,
-                        backgroundColor: '#ffffff'
-                    });
-                    const imgData = canvas.toDataURL('image/png');
-                    const { jsPDF } = window.jspdf;
-                    const pdf = new jsPDF('p', 'pt', 'a4');
-                    const pdfWidth = pdf.internal.pageSize.getWidth();
-                    const pdfHeight = pdf.internal.pageSize.getHeight();
-                    const imgWidth = pdfWidth;
-                    const imgHeight = canvas.height * (imgWidth / canvas.width);
-
-                    let heightLeft = imgHeight;
-                    let position = 0;
-
-                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                    heightLeft -= pdfHeight;
-
-                    while (heightLeft > 0) {
-                        position -= pdfHeight;
-                        pdf.addPage();
-                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                        heightLeft -= pdfHeight;
-                    }
-
-                    pdf.save(`trading_plan_${new Date().toISOString().slice(0, 10)}.pdf`);
-                    closeExportMenu();
-                } catch (error) {
-                    console.error('Failed to generate PDF export:', error);
-                }
-            };
-
             if (downloadCsvBtn) {
                 downloadCsvBtn.addEventListener('click', handleCsvDownload);
             }
             if (downloadXlsBtn) {
                 downloadXlsBtn.addEventListener('click', handleXlsDownload);
             }
-            if (downloadPdfBtn) {
-                downloadPdfBtn.addEventListener('click', handlePdfDownload);
-            }
 
+            const runDisplayTests = () => {
+                if (displayTestsExecuted) {
+                    return;
+                }
+                displayTestsExecuted = true;
+
+                const originalLayout = currentLayoutMode;
+                const originalTheme = currentThemeMode;
+
+                const mobileDetection = detectLayoutMode(480);
+                console.assert(mobileDetection === 'mobile', 'Mobile detection failed at 480px width.');
+                const desktopDetection = detectLayoutMode(1280);
+                console.assert(desktopDetection === 'desktop', 'Desktop detection failed at 1280px width.');
+
+                applyLayoutMode('desktop', { announce: false, source: 'self-test' });
+                console.assert(document.body.classList.contains('layout-desktop'), 'layout-desktop class missing after desktop apply.');
+
+                applyLayoutMode('mobile', { announce: false, source: 'self-test' });
+                console.assert(document.body.classList.contains('layout-mobile'), 'layout-mobile class missing after mobile apply.');
+
+                applyThemeMode('light', { announce: false, source: 'self-test' });
+                const lightBackground = getCssVariable('--color-bg');
+                console.assert(lightBackground !== '', 'Light theme background variable unavailable.');
+
+                applyThemeMode('dark', { announce: false, source: 'self-test' });
+                const darkBackground = getCssVariable('--color-bg');
+                console.assert(darkBackground !== '', 'Dark theme background variable unavailable.');
+
+                const tableCell = document.querySelector('#buy-ladder-body td');
+                if (tableCell) {
+                    console.assert(tableCell.hasAttribute('data-label'), 'Responsive table cells missing data-label attribute.');
+                }
+
+                applyLayoutMode(originalLayout, { announce: false, source: 'self-test' });
+                applyThemeMode(originalTheme, { announce: false, source: 'self-test' });
+                announceDisplayStatus();
+                console.log('[Display] Self-tests completed for layout detection, theme toggling, and responsive tables.');
+            };
 
             // --- Resize and Initial Load ---
-            
-            // Debounce resize event
             let resizeTimer;
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    // Only calculate if we have valid data
+                    if (!layoutLocked) {
+                        const detectedLayout = detectLayoutMode();
+                        if (detectedLayout !== currentLayoutMode) {
+                            applyLayoutMode(detectedLayout, { source: 'auto-detect' });
+                        }
+                    }
                     if (currentPlanData) {
                         calculatePlan();
                     }
-                }, 250); // Redraw 250ms after resize events stop
+                }, 250);
             });
 
             // Initial calculation on page load
             calculatePlan();
+            runDisplayTests();
             
         });
     </script>
