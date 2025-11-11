@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trading Plan Calculator</title>
+    <title>Order Skew | Trading Plan Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -357,69 +357,201 @@
             box-shadow: 0 10px 18px -12px rgba(15, 23, 42, 0.45);
         }
 
-        .display-control-panel {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.75rem;
-            align-items: flex-start;
-            background-color: var(--color-control-bg);
-            border: 1px solid var(--color-control-border);
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            box-shadow: var(--color-control-shadow);
-        }
-
-        .display-control-panel .control-group {
+        .brand-header {
             display: flex;
             flex-direction: column;
-            gap: 0.35rem;
-            min-width: 8rem;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(145deg, rgba(237, 252, 255, 0.85), rgba(219, 246, 250, 0.65));
+            border: 1px solid rgba(186, 198, 234, 0.45);
+            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.35);
         }
 
-        .display-control-panel .control-label {
+        .brand-header-inner {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .brand-title {
+            font-size: clamp(2.5rem, 3.8vw, 3.75rem);
+            font-weight: 800;
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+            background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-secondary) 45%, var(--color-primary-accent) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 6px 14px rgba(0, 66, 74, 0.18);
+        }
+
+        .brand-kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
             font-size: 0.75rem;
-            letter-spacing: 0.04em;
             text-transform: uppercase;
+            letter-spacing: 0.16em;
             font-weight: 600;
             color: var(--color-text-muted);
         }
 
-        .toggle-group {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
-            border: 1px solid var(--color-control-border);
-            border-radius: 9999px;
-            padding: 0.15rem;
-            background-color: rgba(255, 255, 255, 0.25);
+        .brand-kicker::before {
+            content: '';
+            display: inline-block;
+            width: 32px;
+            height: 1px;
+            background: var(--color-border-strong);
+            opacity: 0.6;
         }
 
-        .toggle-button {
-            position: relative;
+        .brand-subtitle {
+            font-size: clamp(1rem, 1.8vw, 1.35rem);
+            color: var(--color-text-secondary);
+            max-width: 38rem;
+        }
+
+        .header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            align-self: flex-start;
+        }
+
+        .theme-toggle-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            border: 1px solid rgba(186, 198, 234, 0.6);
+            background-color: rgba(237, 252, 255, 0.6);
+            box-shadow: var(--color-control-shadow);
+        }
+
+        .theme-toggle-button {
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
             border: none;
             background: transparent;
             color: var(--color-control-text);
-            font-size: 0.85rem;
-            font-weight: 600;
-            padding: 0.35rem 1rem;
-            border-radius: 9999px;
             cursor: pointer;
             transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
 
-        .toggle-button.active {
-            background-color: var(--color-control-active);
-            color: var(--color-control-active-text);
-            box-shadow: 0 8px 16px -10px rgba(15, 23, 42, 0.35);
+        .theme-toggle-button svg {
+            width: 16px;
+            height: 16px;
         }
 
-        .toggle-button:focus-visible {
+        .theme-toggle-button.active {
+            background-color: var(--color-control-active);
+            color: var(--color-control-active-text);
+            box-shadow: 0 8px 14px -8px rgba(15, 23, 42, 0.3);
+        }
+
+        .theme-toggle-button:focus-visible {
             outline: 2px solid var(--color-control-active);
             outline-offset: 2px;
         }
 
-        .toggle-button:active {
-            transform: translateY(1px);
+        .display-footer {
+            margin-top: 3rem;
+            padding: 1.5rem 0 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--color-text-muted);
+            font-size: 0.75rem;
+        }
+
+        .layout-toggle-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.2rem 0.35rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(186, 198, 234, 0.6);
+            background-color: rgba(237, 252, 255, 0.35);
+        }
+
+        .layout-toggle-button {
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            border: none;
+            background: transparent;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+        }
+
+        .layout-toggle-button svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .layout-toggle-button.active {
+            background-color: rgba(0, 66, 74, 0.12);
+            color: var(--color-primary);
+        }
+
+        .layout-toggle-button:focus-visible {
+            outline: 2px solid var(--color-control-active);
+            outline-offset: 2px;
+        }
+
+        body.theme-dark .brand-header {
+            background: linear-gradient(150deg, rgba(30, 41, 59, 0.92), rgba(15, 23, 42, 0.88));
+            border-color: rgba(56, 189, 248, 0.28);
+            box-shadow: 0 24px 50px -24px rgba(2, 6, 23, 0.8);
+        }
+
+        body.theme-dark .brand-kicker::before {
+            background: rgba(56, 189, 248, 0.4);
+        }
+
+        body.theme-dark .brand-subtitle {
+            color: var(--color-text-muted);
+        }
+
+        body.theme-dark .theme-toggle-group {
+            background-color: rgba(15, 23, 42, 0.75);
+            border-color: rgba(56, 189, 248, 0.35);
+            box-shadow: 0 10px 20px -14px rgba(2, 6, 23, 0.7);
+        }
+
+        body.theme-dark .layout-toggle-group {
+            background-color: rgba(15, 23, 42, 0.65);
+            border-color: rgba(56, 189, 248, 0.35);
+        }
+
+        body.theme-dark .layout-toggle-button.active {
+            background-color: rgba(56, 189, 248, 0.18);
+            color: var(--color-secondary);
+        }
+
+        @media (min-width: 768px) {
+            .brand-header {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
+            }
+
+            .header-controls {
+                align-self: flex-end;
+            }
         }
 
         .export-panel {
@@ -462,8 +594,8 @@
             text-align: left;
         }
 
-        body.layout-mobile h1 {
-            font-size: 1.85rem;
+        body.layout-mobile .brand-title {
+            font-size: clamp(2.1rem, 6vw, 2.65rem);
         }
 
         body.layout-mobile #app {
@@ -486,19 +618,6 @@
 
         body.layout-mobile .summary-card {
             text-align: left;
-        }
-
-        body.layout-mobile .display-control-panel {
-            width: 100%;
-        }
-
-        body.layout-mobile .toggle-group {
-            width: 100%;
-        }
-
-        body.layout-mobile .toggle-button {
-            flex: 1 1 50%;
-            text-align: center;
         }
 
         body.layout-mobile .text-secondary-dark,
@@ -575,29 +694,37 @@
 <body class="p-2 sm:p-4 theme-light layout-desktop">
     <div id="app" class="max-w-7xl mx-auto">
         <header class="py-6">
-            <div class="flex flex-col gap-4">
-                <div class="flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4 text-left">
-                    <div class="flex flex-col lg:flex-row lg:items-center gap-4">
-                        <div id="display-control-panel" class="display-control-panel">
-                            <div class="control-group" role="group" aria-label="Select layout mode">
-                                <span class="control-label">Layout</span>
-                                <div class="toggle-group" id="layout-toggle-group">
-                                    <button type="button" class="toggle-button" data-layout-toggle="desktop" aria-pressed="false">Desktop</button>
-                                    <button type="button" class="toggle-button" data-layout-toggle="mobile" aria-pressed="false">Mobile</button>
-                                </div>
-                            </div>
-                            <div class="control-group" role="group" aria-label="Select theme">
-                                <span class="control-label">Theme</span>
-                                <div class="toggle-group" id="theme-toggle-group">
-                                    <button type="button" class="toggle-button" data-theme-toggle="light" aria-pressed="false">Light</button>
-                                    <button type="button" class="toggle-button" data-theme-toggle="dark" aria-pressed="false">Dark</button>
-                                </div>
-                            </div>
-                            <span id="display-status-announcer" class="sr-only" aria-live="polite"></span>
-                        </div>
-                        <h1 class="text-3xl sm:text-4xl font-bold text-primary-dark">Trading Plan Calculator</h1>
+            <div class="flex flex-col gap-6">
+                <div class="brand-header">
+                    <div class="brand-header-inner">
+                        <span class="brand-kicker">OrderSkew.com</span>
+                        <h1 class="brand-title">Order Skew</h1>
+                        <p class="brand-subtitle">Design your buy and sell ladders with precision at OrderSkew.com.</p>
                     </div>
-                    <details id="export-collapse" class="relative self-center sm:self-auto">
+                    <div class="header-controls">
+                        <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
+                            <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="5"></circle>
+                                    <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
+                                    <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
+                                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                                    <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
+                                    <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
+                                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                                    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                                </svg>
+                            </button>
+                            <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <details id="export-collapse" class="relative self-center sm:self-auto">
                         <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
                             Export Options
                             <span class="text-xs opacity-80 tracking-wide">▼</span>
@@ -612,7 +739,6 @@
                         </div>
                     </details>
                 </div>
-                <p class="text-secondary-dark mt-2 text-md sm:text-lg">Design your buy and sell ladders with precision.</p>
             </div>
         </header>
 
@@ -814,6 +940,26 @@
                 </div>
             </div>
         </main>
+
+        <footer class="display-footer">
+            <span class="text-[10px] font-semibold tracking-[0.3em] uppercase opacity-70">Layout</span>
+            <div class="layout-toggle-group" id="layout-toggle-group" role="group" aria-label="Switch layout">
+                <button type="button" class="layout-toggle-button" data-layout-toggle="desktop" aria-pressed="false" aria-label="Show desktop layout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="12" rx="2"></rect>
+                        <line x1="8" y1="20" x2="16" y2="20"></line>
+                        <line x1="12" y1="16" x2="12" y2="20"></line>
+                    </svg>
+                </button>
+                <button type="button" class="layout-toggle-button" data-layout-toggle="mobile" aria-pressed="false" aria-label="Show mobile layout">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="7" y="2" width="10" height="20" rx="2"></rect>
+                        <line x1="11" y1="18" x2="13" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <span id="display-status-announcer" class="sr-only" aria-live="polite"></span>
+        </footer>
     </div>
     <div id="tooltip" class="tooltip"></div>
 
@@ -859,7 +1005,204 @@
             const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
             const displayStatusAnnouncer = document.getElementById('display-status-announcer');
 
-            const LAYOUT_STORAGE_KEY = 'tpc-layout-mode';
+            const DEV_TRACKING_ENABLED = true;
+
+            const sanitizeForTracking = (value, depth = 0) => {
+                if (depth > 2) {
+                    return Array.isArray(value)
+                        ? `[Array(${value.length})]`
+                        : (value && typeof value === 'object' ? '[Object]' : value);
+                }
+                if (value === null || typeof value === 'number' || typeof value === 'boolean') {
+                    return value;
+                }
+                if (typeof value === 'string') {
+                    return value.length > 160 ? `${value.slice(0, 157)}…` : value;
+                }
+                if (value instanceof Date) {
+                    return value.toISOString();
+                }
+                if (value instanceof Error) {
+                    return {
+                        name: value.name,
+                        message: value.message,
+                        stack: value.stack ? value.stack.split('\n').slice(0, 6).join('\n') : ''
+                    };
+                }
+                if (Array.isArray(value)) {
+                    return value.slice(0, 10).map(item => sanitizeForTracking(item, depth + 1));
+                }
+                if (value && typeof value === 'object') {
+                    const output = {};
+                    Object.keys(value).slice(0, 10).forEach((key) => {
+                        output[key] = sanitizeForTracking(value[key], depth + 1);
+                    });
+                    return output;
+                }
+                return String(value);
+            };
+
+            const createDevTracking = () => {
+                const MAX_EVENTS = 750;
+                const events = [];
+                const subscribers = new Set();
+                const timers = new Map();
+                let sequence = 0;
+
+                const record = ({ channel = 'system', action = 'unknown', details = {}, severity = 'info' }) => {
+                    if (!DEV_TRACKING_ENABLED) {
+                        return null;
+                    }
+                    const entry = {
+                        id: ++sequence,
+                        ts: new Date().toISOString(),
+                        channel,
+                        action,
+                        severity,
+                        details: sanitizeForTracking(details)
+                    };
+                    events.push(entry);
+                    if (events.length > MAX_EVENTS) {
+                        events.shift();
+                    }
+                    subscribers.forEach((callback) => {
+                        if (typeof callback !== 'function') {
+                            return;
+                        }
+                        try {
+                            callback(entry, events);
+                        } catch (callbackError) {
+                            // Tracking callbacks should never break the app.
+                        }
+                    });
+                    return entry;
+                };
+
+                const startTimer = (label, meta = {}) => {
+                    if (!DEV_TRACKING_ENABLED) {
+                        return () => {};
+                    }
+                    const token = `${label}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
+                    timers.set(token, { label, meta, startedAt: performance.now() });
+                    record({
+                        channel: 'timer',
+                        action: `${label}:start`,
+                        details: meta
+                    });
+                    return (extra = {}) => {
+                        const timer = timers.get(token);
+                        if (!timer) {
+                            record({
+                                channel: 'timer',
+                                action: `${label}:missing`,
+                                severity: 'warn',
+                                details: { meta, extra }
+                            });
+                            return null;
+                        }
+                        timers.delete(token);
+                        const duration = performance.now() - timer.startedAt;
+                        return record({
+                            channel: 'timer',
+                            action: `${label}:complete`,
+                            details: {
+                                ...timer.meta,
+                                ...extra,
+                                duration: Number(duration.toFixed(2))
+                            }
+                        });
+                    };
+                };
+
+                const getSnapshot = () => events.slice();
+                const clear = () => {
+                    events.length = 0;
+                    record({ channel: 'system', action: 'log:cleared' });
+                };
+                const subscribe = (callback) => {
+                    if (typeof callback === 'function') {
+                        subscribers.add(callback);
+                    }
+                    return () => subscribers.delete(callback);
+                };
+                const dumpToConsole = () => events.slice();
+
+                return { record, startTimer, getSnapshot, clear, subscribe, dumpToConsole };
+            };
+
+            const devTracking = createDevTracking();
+
+            const trackEvent = (channel, action, details = {}, severity = 'info') => {
+                return devTracking.record({ channel, action, details, severity });
+            };
+
+            const trackInteraction = (action, details = {}) => trackEvent('interaction', action, details);
+
+            const safeNumericSummary = (value, digits = 4) => {
+                if (!Number.isFinite(value)) {
+                    return null;
+                }
+                const precisionFactor = Math.pow(10, digits);
+                return Math.round(value * precisionFactor) / precisionFactor;
+            };
+
+            window.devTracking = devTracking;
+
+            const installConsoleBridge = (tracker) => {
+                if (!DEV_TRACKING_ENABLED || !tracker) {
+                    return () => {};
+                }
+                const original = {
+                    error: console.error.bind(console),
+                    warn: console.warn.bind(console),
+                    info: console.info.bind(console)
+                };
+                let forwarding = false;
+
+                const wrap = (method, severity) => (...args) => {
+                    original[method](...args);
+                    if (forwarding) {
+                        return;
+                    }
+                    forwarding = true;
+                    tracker.record({
+                        channel: 'console',
+                        action: method,
+                        severity,
+                        details: { messages: args.map((arg) => sanitizeForTracking(arg)) }
+                    });
+                    forwarding = false;
+                };
+
+                console.error = wrap('error', 'error');
+                console.warn = wrap('warn', 'warn');
+                console.info = wrap('info', 'info');
+
+                return () => {
+                    console.error = original.error;
+                    console.warn = original.warn;
+                    console.info = original.info;
+                };
+            };
+
+            const teardownConsoleBridge = installConsoleBridge(devTracking);
+            window.releaseConsoleBridge = teardownConsoleBridge;
+
+            window.addEventListener('error', (event) => {
+                trackEvent('runtime', 'error', {
+                    message: event.message,
+                    filename: event.filename,
+                    line: event.lineno,
+                    column: event.colno
+                }, 'error');
+            });
+
+            window.addEventListener('unhandledrejection', (event) => {
+                trackEvent('runtime', 'unhandledrejection', {
+                    reason: sanitizeForTracking(event.reason)
+                }, 'error');
+            });
+
             const THEME_STORAGE_KEY = 'tpc-theme-mode';
             const LAYOUT_BREAKPOINT = 1024;
 
@@ -887,7 +1230,6 @@
 
             let currentLayoutMode = 'desktop';
             let currentThemeMode = 'light';
-            let layoutLocked = false;
             let themeLocked = false;
             let displayTestsExecuted = false;
 
@@ -909,6 +1251,10 @@
                 if (announce) {
                     announceDisplayStatus();
                 }
+                trackEvent('display', 'layout:apply', {
+                    mode: normalizedMode,
+                    source
+                });
                 console.info(`[Display] Layout mode set to ${normalizedMode} (${source}).`);
             };
 
@@ -923,6 +1269,10 @@
                 if (announce) {
                     announceDisplayStatus();
                 }
+                trackEvent('display', 'theme:apply', {
+                    theme: normalizedTheme,
+                    source
+                });
                 console.info(`[Display] Theme mode set to ${normalizedTheme} (${source}).`);
             };
 
@@ -949,13 +1299,19 @@
                 }
             };
 
-            const storedLayoutPreference = getStoredValue(LAYOUT_STORAGE_KEY);
-            if (storedLayoutPreference === 'desktop' || storedLayoutPreference === 'mobile') {
-                layoutLocked = true;
-                applyLayoutMode(storedLayoutPreference, { announce: false, source: 'preference' });
-            } else {
-                applyLayoutMode(detectLayoutMode(), { announce: false, source: 'auto-detect' });
+            const removeStoredValue = (key) => {
+                try {
+                    localStorage.removeItem(key);
+                } catch (error) {
+                    console.warn('[Storage] Unable to remove key', key, error);
+                }
+            };
+
+            if (getStoredValue('tpc-layout-mode')) {
+                removeStoredValue('tpc-layout-mode');
             }
+
+            applyLayoutMode(detectLayoutMode(), { announce: false, source: 'auto-detect' });
 
             const storedThemePreference = getStoredValue(THEME_STORAGE_KEY);
             if (storedThemePreference === 'dark' || storedThemePreference === 'light') {
@@ -974,8 +1330,11 @@
                         if (!value) {
                             return;
                         }
-                        layoutLocked = true;
-                        setStoredValue(LAYOUT_STORAGE_KEY, value);
+                        const previousMode = currentLayoutMode;
+                        trackInteraction('layout-toggle', {
+                            requested: value,
+                            previous: previousMode
+                        });
                         applyLayoutMode(value, { source: 'user' });
                     });
                 });
@@ -990,6 +1349,10 @@
                         }
                         themeLocked = true;
                         setStoredValue(THEME_STORAGE_KEY, value);
+                        trackInteraction('theme-toggle', {
+                            requested: value,
+                            previous: currentThemeMode
+                        });
                         applyThemeMode(value, { source: 'user' });
                     });
                 });
@@ -1002,6 +1365,9 @@
                         if (themeLocked) {
                             return;
                         }
+                        trackEvent('display', 'theme:media-change', {
+                            prefersDark: !!event.matches
+                        });
                         applyThemeMode(event.matches ? 'dark' : 'light', { source: 'system' });
                     });
                 }
@@ -1086,6 +1452,11 @@
                         } else {
                             newHighest = rung;
                         }
+                        trackInteraction('sell-only-execution-toggle', {
+                            rung,
+                            previousHighest,
+                            newHighest
+                        });
                         setSellOnlyHighestExecutedRung(newHighest);
                         calculatePlan();
                     };
@@ -1160,6 +1531,7 @@
                 if (currentPlanData) {
                     return currentPlanData;
                 }
+                trackEvent('calculation', 'plan:missing', {});
                 const firstInvalidLabel = document.querySelector('.label-invalid');
                 if (firstInvalidLabel) {
                     firstInvalidLabel.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -1506,6 +1878,10 @@ caption { font-weight: 600; margin-bottom: 6px; }
             }
 
             function calculatePlan() {
+                const finishCalculation = devTracking.startTimer('calculatePlan', {
+                    layout: currentLayoutMode,
+                    theme: currentThemeMode
+                });
                 // 1. Get inputs
                 const C = parseFloat(document.getElementById('starting_capital').value);
                 const N = parseInt(document.getElementById('number_of_rungs').value);
@@ -1527,6 +1903,23 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 const spacingMode = advancedEnabled && spacingModeSelect ? spacingModeSelect.value : 'absolute';
                 const isRelativeSpacing = spacingMode === 'relative';
                 const selectedHighestExecutedRung = sellOnlyMode ? sellOnlyState.highestExecutedRung : null;
+                const equalQuantityRequested = advancedEnabled && equalQuantityCheckbox ? equalQuantityCheckbox.checked : false;
+
+                trackEvent('calculation', 'calculate:inputs', {
+                    capital: safeNumericSummary(C, 2),
+                    rungs: Number.isFinite(N) ? N : null,
+                    skew: Number.isFinite(S) ? S : null,
+                    currentPrice: safeNumericSummary(currentPrice, 4),
+                    depthPercent: safeNumericSummary(depth, 4),
+                    advancedEnabled,
+                    feeType,
+                    feeSettlement,
+                    feeValue: safeNumericSummary(feeValue, 6),
+                    sellOnlyMode,
+                    spacingMode,
+                    equalQuantityRequested,
+                    selectedHighestExecutedRung
+                });
 
                 const validations = [
                     {
@@ -1594,6 +1987,16 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 });
 
                 if (hasInvalidInput) {
+                    const invalidFields = validations
+                        .filter(({ enabled, isValid }) => enabled && !isValid)
+                        .map(({ id }) => id);
+                    trackEvent('calculation', 'calculate:invalid', {
+                        invalidFields
+                    }, 'warn');
+                    finishCalculation({
+                        status: 'invalid-input',
+                        invalidFields
+                    });
                     currentPlanData = null;
                     return;
                 }
@@ -1601,7 +2004,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 const feeEnabled = feeValue > 0 && advancedEnabled;
                 const feeRate = feeType === 'percent' ? feeValue / 100 : 0;
                 const isFeeNetted = feeSettlement !== 'external';
-                const useEqualQuantity = advancedEnabled && equalQuantityCheckbox ? equalQuantityCheckbox.checked : false;
+                const useEqualQuantity = equalQuantityRequested;
 
                 const deriveBuyAmounts = (allocatedCapital) => {
                     if (!feeEnabled) {
@@ -1975,10 +2378,56 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     };
                 }
 
-                updateUI(plan);
+                const summarySnapshot = {
+                    avgBuyPrice: safeNumericSummary(plan.summary.avgBuyPrice, 6),
+                    avgSellPrice: safeNumericSummary(plan.summary.avgSellPrice, 6),
+                    totalQuantity: safeNumericSummary(plan.summary.totalQuantity, 6),
+                    totalFees: safeNumericSummary(plan.summary.totalFees, 4),
+                    grossProfit: safeNumericSummary(plan.summary.grossProfit, 4),
+                    netProfit: safeNumericSummary(plan.summary.netProfit, 4),
+                    roi: safeNumericSummary(plan.summary.roi, 4)
+                };
+
+                trackEvent('calculation', 'plan:prepared', {
+                    summary: summarySnapshot,
+                    buyRungs: Array.isArray(plan.buyLadder) ? plan.buyLadder.length : 0,
+                    sellRungs: Array.isArray(plan.sellLadder) ? plan.sellLadder.length : 0,
+                    modes: plan.modes,
+                    feeSettings: plan.feeSettings,
+                    spacing: plan.spacing
+                });
+
+                let uiError = null;
+                try {
+                    updateUI(plan);
+                } catch (error) {
+                    uiError = error;
+                    trackEvent('ui', 'update:error', {
+                        error: sanitizeForTracking(error)
+                    }, 'error');
+                    throw error;
+                } finally {
+                    finishCalculation({
+                        status: uiError ? 'ui-error' : 'success',
+                        summary: summarySnapshot,
+                        sellOnly: plan.modes.sellOnly,
+                        equalQuantity: plan.modes.equalQuantity,
+                        error: uiError ? sanitizeForTracking(uiError) : null
+                    });
+                }
             }
 
             function updateUI(plan) {
+                const finishUiUpdate = devTracking.startTimer('ui:update', {
+                    layout: currentLayoutMode,
+                    theme: currentThemeMode
+                });
+                trackEvent('ui', 'update:start', {
+                    buyRungs: Array.isArray(plan?.buyLadder) ? plan.buyLadder.length : 0,
+                    sellRungs: Array.isArray(plan?.sellLadder) ? plan.sellLadder.length : 0,
+                    sellOnly: !!(plan?.modes && plan.modes.sellOnly)
+                });
+
                 // Store data for CSV export
                 currentPlanData = plan;
 
@@ -2122,6 +2571,16 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     sellBody.innerHTML += `<tr class="${rowClass}">${cellMarkup.join('')}</tr>`;
                 });
 
+                const buyRowCount = Array.isArray(plan.buyLadder) ? plan.buyLadder.length : 0;
+                const sellRowCount = Array.isArray(plan.sellLadder) ? plan.sellLadder.length : 0;
+
+                trackEvent('ui', 'tables:rendered', {
+                    buyRows: buyRowCount,
+                    sellRows: sellRowCount,
+                    showFeeColumns,
+                    sellOnly: !!(plan.modes && plan.modes.sellOnly)
+                });
+
                 if (showExecutionCheckboxes) {
                     bindSellOnlyCheckboxEvents();
                 } else {
@@ -2139,14 +2598,33 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     d3.select("#allocation-chart").selectAll("*").remove();
                 }
                 drawSellChart(plan.sellLadder, sharedMaxVolume);
+                trackEvent('chart', 'render:requested', {
+                    buyChartEnabled: plan.buyLadder.length > 0 && !(plan.modes && plan.modes.sellOnly),
+                    sellChartEnabled: plan.sellLadder.length > 0,
+                    sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                });
+
+                finishUiUpdate({
+                    buyRows: buyRowCount,
+                    sellRows: sellRowCount,
+                    showFeeColumns,
+                    sellOnly: !!(plan.modes && plan.modes.sellOnly),
+                    sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                });
             }
             
             function drawBuyChart(data, sharedMaxVolume) {
                 const container = d3.select("#visualization");
-                if (container.node() === null) return; 
+                if (container.node() === null) {
+                    trackEvent('chart', 'buy:container-missing', {}, 'warn');
+                    return;
+                }
 
                 d3.select("#allocation-chart").selectAll("*").remove();
                 if (!data || data.length === 0) {
+                    trackEvent('chart', 'buy:empty', {
+                        sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                    }, 'warn');
                     return;
                 }
 
@@ -2241,14 +2719,26 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("y", d => y(d.assetSize))
                     .attr("height", d => height - y(d.assetSize))
                     .delay((d, i) => i * 20);
+                trackEvent('chart', 'buy:rendered', {
+                    bars: Array.isArray(sortedData) ? sortedData.length : 0,
+                    width,
+                    height,
+                    sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                });
             }
 
             function drawSellChart(data, sharedMaxVolume) {
                 const container = d3.select("#sell-visualization");
-                if (container.node() === null) return; 
+                if (container.node() === null) {
+                    trackEvent('chart', 'sell:container-missing', {}, 'warn');
+                    return;
+                }
 
                 d3.select("#sell-allocation-chart").selectAll("*").remove();
                 if (!data || data.length === 0) {
+                    trackEvent('chart', 'sell:empty', {
+                        sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                    }, 'warn');
                     return;
                 }
 
@@ -2344,6 +2834,12 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     .attr("y", d => y(d.assetSize))
                     .attr("height", d => height - y(d.assetSize))
                     .delay((d, i) => i * 20);
+                trackEvent('chart', 'sell:rendered', {
+                    bars: Array.isArray(sortedData) ? sortedData.length : 0,
+                    width,
+                    height,
+                    sharedMaxVolume: safeNumericSummary(sharedMaxVolume, 4)
+                });
             }
 
             // --- Real-time updates ---
@@ -2370,18 +2866,36 @@ caption { font-weight: 600; margin-bottom: 6px; }
             inputsToTrack.forEach(id => {
                 const input = document.getElementById(id);
                 if (input) {
-                    input.addEventListener('input', debouncedCalculate);
+                    input.addEventListener('input', (event) => {
+                        trackInteraction('input-change', {
+                            id,
+                            value: event.target.value
+                        });
+                        debouncedCalculate(event);
+                    });
+                    input.addEventListener('blur', () => {
+                        trackInteraction('input-blur', {
+                            id,
+                            value: input.value
+                        });
+                    });
                 }
             });
 
             // The skew slider updates instantly
             skewSlider.addEventListener('input', (e) => {
+                trackInteraction('skew-adjust', {
+                    value: e.target.value
+                });
                 skewDisplay.textContent = e.target.value;
                 calculatePlan(); 
             });
 
             if (rungSlider && rungDisplay) {
                 rungSlider.addEventListener('input', (e) => {
+                    trackInteraction('rungs-adjust', {
+                        value: e.target.value
+                    });
                     rungDisplay.textContent = e.target.value;
                     calculatePlan();
                 });
@@ -2390,6 +2904,9 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             if (depthSlider && depthDisplay) {
                 depthSlider.addEventListener('input', (e) => {
+                    trackInteraction('depth-adjust', {
+                        value: e.target.value
+                    });
                     depthDisplay.textContent = e.target.value;
                     calculatePlan();
                 });
@@ -2398,6 +2915,9 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             if (advancedToggle) {
                 advancedToggle.addEventListener('change', () => {
+                    trackInteraction('advanced-mode-toggle', {
+                        enabled: advancedToggle.checked
+                    });
                     if (advancedToggle.checked) {
                         advancedSettings?.classList.remove('hidden');
                         if (equalQuantityCheckbox) {
@@ -2431,6 +2951,9 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             if (sellOnlyCheckbox) {
                 sellOnlyCheckbox.addEventListener('change', () => {
+                    trackInteraction('sell-only-toggle', {
+                        enabled: sellOnlyCheckbox.checked
+                    });
                     if (sellOnlyCheckbox.checked) {
                         sellOnlyInputs?.classList.remove('hidden');
                     } else {
@@ -2447,6 +2970,9 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             if (equalQuantityCheckbox) {
                 equalQuantityCheckbox.addEventListener('change', () => {
+                    trackInteraction('equal-quantity-toggle', {
+                        enabled: equalQuantityCheckbox.checked
+                    });
                     setSkewDisabled(equalQuantityCheckbox.checked);
                     calculatePlan();
                 });
@@ -2456,32 +2982,65 @@ caption { font-weight: 600; margin-bottom: 6px; }
             }
 
             if (feeTypeSelect) {
-                feeTypeSelect.addEventListener('change', calculatePlan);
+                feeTypeSelect.addEventListener('change', () => {
+                    trackInteraction('fee-type-change', {
+                        value: feeTypeSelect.value
+                    });
+                    calculatePlan();
+                });
             }
 
             if (feeValueInput) {
-                feeValueInput.addEventListener('input', debouncedCalculate);
+                feeValueInput.addEventListener('input', (event) => {
+                    trackInteraction('fee-value-change', {
+                        value: event.target.value
+                    });
+                    debouncedCalculate(event);
+                });
             }
 
             if (feeSettlementSelect) {
-                feeSettlementSelect.addEventListener('change', calculatePlan);
+                feeSettlementSelect.addEventListener('change', () => {
+                    trackInteraction('fee-settlement-change', {
+                        value: feeSettlementSelect.value
+                    });
+                    calculatePlan();
+                });
             }
 
             if (existingQuantityInput) {
-                existingQuantityInput.addEventListener('input', debouncedCalculate);
+                existingQuantityInput.addEventListener('input', (event) => {
+                    trackInteraction('existing-quantity-change', {
+                        value: event.target.value
+                    });
+                    debouncedCalculate(event);
+                });
             }
 
             if (existingAvgPriceInput) {
-                existingAvgPriceInput.addEventListener('input', debouncedCalculate);
+                existingAvgPriceInput.addEventListener('input', (event) => {
+                    trackInteraction('existing-avg-price-change', {
+                        value: event.target.value
+                    });
+                    debouncedCalculate(event);
+                });
             }
 
             if (spacingModeSelect) {
-                spacingModeSelect.addEventListener('change', calculatePlan);
+                spacingModeSelect.addEventListener('change', () => {
+                    trackInteraction('spacing-mode-change', {
+                        mode: spacingModeSelect.value
+                    });
+                    calculatePlan();
+                });
             }
             
             // --- Export Handlers ---
             if (exportCollapse) {
                 exportCollapse.addEventListener('toggle', () => {
+                    trackInteraction('export-menu-toggle', {
+                        open: exportCollapse.open
+                    });
                     const indicator = exportCollapse.querySelector('summary span');
                     if (indicator) {
                         indicator.textContent = exportCollapse.open ? '▲' : '▼';
@@ -2492,41 +3051,69 @@ caption { font-weight: 600; margin-bottom: 6px; }
             const handleCsvDownload = () => {
                 const plan = ensurePlanAvailable();
                 if (!plan) {
+                    trackEvent('export', 'csv:aborted', {
+                        reason: 'missing-plan'
+                    }, 'warn');
                     return;
                 }
                 const settings = collectExportSettings();
+                trackEvent('export', 'csv:prepare', {
+                    settings,
+                    summary: plan.summary ? {
+                        totalQuantity: safeNumericSummary(plan.summary.totalQuantity, 4),
+                        netProfit: safeNumericSummary(plan.summary.netProfit, 2)
+                    } : {}
+                });
                 const csvContent = buildCsvContent(plan, settings);
 
                 const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                 const link = document.createElement('a');
                 const url = URL.createObjectURL(blob);
                 link.setAttribute('href', url);
-                link.setAttribute('download', `trading_plan_${new Date().toISOString().slice(0, 10)}.csv`);
+                link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.csv`);
                 link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 closeExportMenu();
+                trackEvent('export', 'csv:completed', {
+                    bytes: csvContent.length,
+                    settings
+                });
             };
 
             const handleXlsDownload = () => {
                 const plan = ensurePlanAvailable();
                 if (!plan) {
+                    trackEvent('export', 'xls:aborted', {
+                        reason: 'missing-plan'
+                    }, 'warn');
                     return;
                 }
                 const settings = collectExportSettings();
+                trackEvent('export', 'xls:prepare', {
+                    settings,
+                    summary: plan.summary ? {
+                        totalQuantity: safeNumericSummary(plan.summary.totalQuantity, 4),
+                        netProfit: safeNumericSummary(plan.summary.netProfit, 2)
+                    } : {}
+                });
                 const workbook = buildXlsContent(plan, settings);
 
                 const blob = new Blob([workbook], { type: 'application/vnd.ms-excel' });
                 const link = document.createElement('a');
                 const url = URL.createObjectURL(blob);
                 link.setAttribute('href', url);
-                link.setAttribute('download', `trading_plan_${new Date().toISOString().slice(0, 10)}.xls`);
+                link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.xls`);
                 link.style.visibility = 'hidden';
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
                 closeExportMenu();
+                trackEvent('export', 'xls:completed', {
+                    bytes: workbook.byteLength || workbook.length || 0,
+                    settings
+                });
             };
 
             if (downloadCsvBtn) {
@@ -2538,9 +3125,11 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             const runDisplayTests = () => {
                 if (displayTestsExecuted) {
+                    trackEvent('system', 'display-tests:skip', {});
                     return;
                 }
                 displayTestsExecuted = true;
+                trackEvent('system', 'display-tests:start', {});
 
                 const originalLayout = currentLayoutMode;
                 const originalTheme = currentThemeMode;
@@ -2573,6 +3162,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 applyThemeMode(originalTheme, { announce: false, source: 'self-test' });
                 announceDisplayStatus();
                 console.log('[Display] Self-tests completed for layout detection, theme toggling, and responsive tables.');
+                trackEvent('system', 'display-tests:complete', {});
             };
 
             // --- Resize and Initial Load ---
@@ -2580,11 +3170,14 @@ caption { font-weight: 600; margin-bottom: 6px; }
             window.addEventListener('resize', () => {
                 clearTimeout(resizeTimer);
                 resizeTimer = setTimeout(() => {
-                    if (!layoutLocked) {
-                        const detectedLayout = detectLayoutMode();
-                        if (detectedLayout !== currentLayoutMode) {
-                            applyLayoutMode(detectedLayout, { source: 'auto-detect' });
-                        }
+                    const detectedLayout = detectLayoutMode();
+                    trackEvent('display', 'window:resize', {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                        detectedLayout
+                    });
+                    if (detectedLayout !== currentLayoutMode) {
+                        applyLayoutMode(detectedLayout, { source: 'auto-detect' });
                     }
                     if (currentPlanData) {
                         calculatePlan();
