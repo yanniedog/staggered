@@ -689,9 +689,368 @@
         details summary::-webkit-details-marker {
             display: none;
         }
+
+        /* Intro Modal Styles */
+        .intro-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.75);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .intro-modal-overlay.hidden {
+            display: none;
+        }
+
+        .intro-modal-container {
+            background-color: var(--color-card);
+            border-radius: 1rem;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .intro-modal-content {
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .intro-text-section {
+            text-align: center;
+        }
+
+        .intro-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: 1rem;
+        }
+
+        .intro-description {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .intro-features {
+            text-align: left;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .intro-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .intro-features-list li {
+            color: var(--color-text);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .intro-features-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--color-secondary);
+            font-weight: bold;
+        }
+
+        .intro-video-section {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .intro-video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 aspect ratio */
+            height: 0;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: var(--color-bg);
+        }
+
+        .youtube-link-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            text-decoration: none;
+            display: block;
+            cursor: pointer;
+        }
+
+        .youtube-thumbnail {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: var(--color-bg);
+            transition: transform 0.2s ease;
+        }
+
+        .youtube-link-wrapper:hover .youtube-thumbnail {
+            transform: scale(1.02);
+        }
+
+        .youtube-thumbnail-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        .youtube-play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 68px;
+            height: 48px;
+            transition: transform 0.2s ease;
+        }
+
+        .youtube-link-wrapper:hover .youtube-play-button {
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        .youtube-overlay-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+            padding: 1.5rem 1rem 1rem;
+            color: white;
+            text-align: center;
+        }
+
+        .youtube-overlay-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin: 0 0 0.25rem 0;
+        }
+
+        .youtube-overlay-subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin: 0;
+        }
+
+        .intro-video-caption {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--color-text-muted);
+            font-style: italic;
+        }
+
+        .intro-controls-section {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--color-border);
+        }
+
+        .intro-skip-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            user-select: none;
+        }
+
+        .intro-skip-checkbox input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .intro-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .intro-skip-link {
+            background: none;
+            border: none;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            text-decoration: underline;
+            transition: color 0.2s;
+        }
+
+        .intro-skip-link:hover {
+            color: var(--color-text-secondary);
+        }
+
+        .intro-primary-button {
+            background-color: var(--color-primary);
+            color: var(--color-primary-contrast);
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .intro-primary-button:hover {
+            background-color: var(--color-primary-accent);
+        }
+
+        .intro-primary-button:active {
+            transform: scale(0.98);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Mobile responsiveness */
+        @media (max-width: 640px) {
+            .intro-modal-content {
+                padding: 1.5rem;
+                gap: 1.5rem;
+            }
+
+            .intro-title {
+                font-size: 1.5rem;
+            }
+
+            .intro-description {
+                font-size: 1rem;
+            }
+
+            .intro-buttons {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .intro-primary-button,
+            .intro-skip-link {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Prevent body scroll when modal is visible */
+        body.intro-modal-open {
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="p-2 sm:p-4 theme-light layout-desktop">
+    <!-- Intro Modal -->
+    <div id="intro-modal" class="intro-modal-overlay hidden">
+        <div class="intro-modal-container">
+            <div class="intro-modal-content">
+                <!-- Introduction Text Section -->
+                <div class="intro-text-section">
+                    <h2 class="intro-title">Welcome to Order Skew</h2>
+                    <p class="intro-description">
+                        Design and optimize your trading ladder strategies with precision. Order Skew helps you plan staged buy and sell orders, calculate allocations, manage fees, and visualize your trading strategy.
+                    </p>
+                    <div class="intro-features">
+                        <ul class="intro-features-list">
+                            <li>Create buy and sell ladders with customizable rungs and allocation strategies</li>
+                            <li>Calculate fees, profit margins, and ROI for your trading plans</li>
+                            <li>Visualize your strategy with interactive charts and detailed order tables</li>
+                            <li>Export your plans to CSV, XLS, or PDF for execution</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Video Section -->
+                <div class="intro-video-section">
+                    <div class="intro-video-container">
+                        <a href="https://www.youtube.com/watch?v=LPaAtWphx2U" target="_blank" rel="noopener noreferrer" class="youtube-link-wrapper">
+                            <div class="youtube-thumbnail">
+                                <img 
+                                    src="https://img.youtube.com/vi/LPaAtWphx2U/maxresdefault.jpg" 
+                                    alt="Order Skew Tutorial Video Thumbnail"
+                                    class="youtube-thumbnail-image"
+                                    onerror="this.src='https://img.youtube.com/vi/LPaAtWphx2U/hqdefault.jpg'">
+                                <div class="youtube-play-button">
+                                    <svg viewBox="0 0 68 48" width="68" height="48">
+                                        <path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.63-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path>
+                                        <path d="M 45,24 27,14 27,34" fill="#fff"></path>
+                                    </svg>
+                                </div>
+                                <div class="youtube-overlay-text">
+                                    <p class="youtube-overlay-title">Watch Tutorial</p>
+                                    <p class="youtube-overlay-subtitle">Opens on YouTube</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <p class="intro-video-caption">Watch our quick start guide to learn how to use Order Skew</p>
+                </div>
+
+                <!-- Controls Section -->
+                <div class="intro-controls-section">
+                    <label class="intro-skip-checkbox">
+                        <input type="checkbox" id="intro-skip-checkbox" class="form-checkbox h-4 w-4 text-primary-dark rounded focus:ring-0">
+                        <span>Don't show this intro again</span>
+                    </label>
+                    <div class="intro-buttons">
+                        <button type="button" id="intro-skip-button" class="intro-skip-link">Skip</button>
+                        <button type="button" id="intro-get-started-button" class="intro-primary-button">Get Started</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="app" class="max-w-7xl mx-auto">
         <header class="py-6">
             <div class="flex flex-col gap-6">
@@ -762,7 +1121,7 @@
                     </div>
                     <div>
                         <label for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (<span id="depth_display">20</span>%)</label>
-                        <input type="range" id="depth" value="20" min="1" max="99" step="1" class="w-full h-2 rounded-lg cursor-pointer">
+                        <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="w-full h-2 rounded-lg cursor-pointer">
                     </div>
                     <div>
                         <label for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew (<span id="skew_value_display">50</span>)</label>
@@ -774,10 +1133,17 @@
                         </div>
                     </div>
                     <div class="border border-soft rounded-lg p-3 surface-muted space-y-3">
-                        <label class="flex items-center space-x-2 text-xs font-medium text-secondary-dark">
-                            <input id="advanced_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
-                            <span>Advanced mode</span>
-                        </label>
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-2 text-xs font-medium text-secondary-dark cursor-pointer">
+                                <input id="advanced_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
+                                <span>Advanced mode</span>
+                            </label>
+                            <button type="button" id="advanced-settings-toggle" class="hidden items-center justify-center w-6 h-6 text-secondary-dark hover:text-primary-dark transition-colors" aria-label="Toggle advanced settings" aria-expanded="false">
+                                <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
                         <div id="advanced-settings" class="space-y-3 hidden">
                             <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
                                 <div class="sm:col-span-4">
@@ -882,6 +1248,7 @@
                     <div class="summary-card p-4 rounded-lg">
                         <p class="text-sm text-secondary-dark">Total Fees Paid</p>
                         <p id="summary-total-fees" class="text-xl font-bold text-primary-dark">-</p>
+                        <p id="summary-total-fees-percent" class="text-xs text-secondary-dark mt-1">-</p>
                     </div>
                 </div>
             </div>
@@ -976,6 +1343,14 @@
                 ? ladder.map(rung => ({ ...rung }))
                 : [];
 
+            // Intro modal elements
+            const introModal = document.getElementById('intro-modal');
+            const introSkipCheckbox = document.getElementById('intro-skip-checkbox');
+            const introGetStartedButton = document.getElementById('intro-get-started-button');
+            const introSkipButton = document.getElementById('intro-skip-button');
+            const videoIframe = document.querySelector('.intro-video-iframe');
+            const videoErrorMessage = document.getElementById('video-error-message');
+
             const form = document.getElementById('trading-plan-form');
             const skewSlider = document.getElementById('skew_value');
             const skewDisplay = document.getElementById('skew_value_display');
@@ -985,6 +1360,7 @@
             const depthDisplay = document.getElementById('depth_display');
             const advancedToggle = document.getElementById('advanced_mode');
             const advancedSettings = document.getElementById('advanced-settings');
+            const advancedSettingsToggle = document.getElementById('advanced-settings-toggle');
             const feeTypeSelect = document.getElementById('fee_type');
             const feeValueInput = document.getElementById('fee_value');
             const feeSettlementSelect = document.getElementById('fee_settlement');
@@ -1005,138 +1381,11 @@
             const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
             const displayStatusAnnouncer = document.getElementById('display-status-announcer');
 
-            const DEV_TRACKING_ENABLED = true;
+            const trackEvent = () => {};
 
-            const sanitizeForTracking = (value, depth = 0) => {
-                if (depth > 2) {
-                    return Array.isArray(value)
-                        ? `[Array(${value.length})]`
-                        : (value && typeof value === 'object' ? '[Object]' : value);
-                }
-                if (value === null || typeof value === 'number' || typeof value === 'boolean') {
-                    return value;
-                }
-                if (typeof value === 'string') {
-                    return value.length > 160 ? `${value.slice(0, 157)}…` : value;
-                }
-                if (value instanceof Date) {
-                    return value.toISOString();
-                }
-                if (value instanceof Error) {
-                    return {
-                        name: value.name,
-                        message: value.message,
-                        stack: value.stack ? value.stack.split('\n').slice(0, 6).join('\n') : ''
-                    };
-                }
-                if (Array.isArray(value)) {
-                    return value.slice(0, 10).map(item => sanitizeForTracking(item, depth + 1));
-                }
-                if (value && typeof value === 'object') {
-                    const output = {};
-                    Object.keys(value).slice(0, 10).forEach((key) => {
-                        output[key] = sanitizeForTracking(value[key], depth + 1);
-                    });
-                    return output;
-                }
-                return String(value);
-            };
+            const trackInteraction = () => {};
 
-            const createDevTracking = () => {
-                const MAX_EVENTS = 750;
-                const events = [];
-                const subscribers = new Set();
-                const timers = new Map();
-                let sequence = 0;
-
-                const record = ({ channel = 'system', action = 'unknown', details = {}, severity = 'info' }) => {
-                    if (!DEV_TRACKING_ENABLED) {
-                        return null;
-                    }
-                    const entry = {
-                        id: ++sequence,
-                        ts: new Date().toISOString(),
-                        channel,
-                        action,
-                        severity,
-                        details: sanitizeForTracking(details)
-                    };
-                    events.push(entry);
-                    if (events.length > MAX_EVENTS) {
-                        events.shift();
-                    }
-                    subscribers.forEach((callback) => {
-                        if (typeof callback !== 'function') {
-                            return;
-                        }
-                        try {
-                            callback(entry, events);
-                        } catch (callbackError) {
-                            // Tracking callbacks should never break the app.
-                        }
-                    });
-                    return entry;
-                };
-
-                const startTimer = (label, meta = {}) => {
-                    if (!DEV_TRACKING_ENABLED) {
-                        return () => {};
-                    }
-                    const token = `${label}-${Date.now()}-${Math.random().toString(16).slice(2, 8)}`;
-                    timers.set(token, { label, meta, startedAt: performance.now() });
-                    record({
-                        channel: 'timer',
-                        action: `${label}:start`,
-                        details: meta
-                    });
-                    return (extra = {}) => {
-                        const timer = timers.get(token);
-                        if (!timer) {
-                            record({
-                                channel: 'timer',
-                                action: `${label}:missing`,
-                                severity: 'warn',
-                                details: { meta, extra }
-                            });
-                            return null;
-                        }
-                        timers.delete(token);
-                        const duration = performance.now() - timer.startedAt;
-                        return record({
-                            channel: 'timer',
-                            action: `${label}:complete`,
-                            details: {
-                                ...timer.meta,
-                                ...extra,
-                                duration: Number(duration.toFixed(2))
-                            }
-                        });
-                    };
-                };
-
-                const getSnapshot = () => events.slice();
-                const clear = () => {
-                    events.length = 0;
-                    record({ channel: 'system', action: 'log:cleared' });
-                };
-                const subscribe = (callback) => {
-                    if (typeof callback === 'function') {
-                        subscribers.add(callback);
-                    }
-                    return () => subscribers.delete(callback);
-                };
-                const dumpToConsole = () => events.slice();
-
-                return { record, startTimer, getSnapshot, clear, subscribe, dumpToConsole };
-            };
-
-            const devTracking = createDevTracking();
-
-            const trackEvent = (channel, action, details = {}, severity = 'info') => {
-                return devTracking.record({ channel, action, details, severity });
-            };
-
-            const trackInteraction = (action, details = {}) => trackEvent('interaction', action, details);
+            const startTimer = () => () => {};
 
             const safeNumericSummary = (value, digits = 4) => {
                 if (!Number.isFinite(value)) {
@@ -1145,63 +1394,6 @@
                 const precisionFactor = Math.pow(10, digits);
                 return Math.round(value * precisionFactor) / precisionFactor;
             };
-
-            window.devTracking = devTracking;
-
-            const installConsoleBridge = (tracker) => {
-                if (!DEV_TRACKING_ENABLED || !tracker) {
-                    return () => {};
-                }
-                const original = {
-                    error: console.error.bind(console),
-                    warn: console.warn.bind(console),
-                    info: console.info.bind(console)
-                };
-                let forwarding = false;
-
-                const wrap = (method, severity) => (...args) => {
-                    original[method](...args);
-                    if (forwarding) {
-                        return;
-                    }
-                    forwarding = true;
-                    tracker.record({
-                        channel: 'console',
-                        action: method,
-                        severity,
-                        details: { messages: args.map((arg) => sanitizeForTracking(arg)) }
-                    });
-                    forwarding = false;
-                };
-
-                console.error = wrap('error', 'error');
-                console.warn = wrap('warn', 'warn');
-                console.info = wrap('info', 'info');
-
-                return () => {
-                    console.error = original.error;
-                    console.warn = original.warn;
-                    console.info = original.info;
-                };
-            };
-
-            const teardownConsoleBridge = installConsoleBridge(devTracking);
-            window.releaseConsoleBridge = teardownConsoleBridge;
-
-            window.addEventListener('error', (event) => {
-                trackEvent('runtime', 'error', {
-                    message: event.message,
-                    filename: event.filename,
-                    line: event.lineno,
-                    column: event.colno
-                }, 'error');
-            });
-
-            window.addEventListener('unhandledrejection', (event) => {
-                trackEvent('runtime', 'unhandledrejection', {
-                    reason: sanitizeForTracking(event.reason)
-                }, 'error');
-            });
 
             const THEME_STORAGE_KEY = 'tpc-theme-mode';
             const LAYOUT_BREAKPOINT = 1024;
@@ -1276,11 +1468,14 @@
                 console.info(`[Display] Theme mode set to ${normalizedTheme} (${source}).`);
             };
 
-            const formatCurrency = (value) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(Number.isFinite(value) ? value : 0);
+            const formatCurrency = (value, minimumFractionDigits = 2) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits, maximumFractionDigits: 6 }).format(Number.isFinite(value) ? value : 0);
             const formatPercent = (value) => Number.isFinite(value) ? `${value.toFixed(2)}%` : '0.00%';
             const formatNumber = (value, digits = 4) => Number.isFinite(value) ? value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: digits }) : '0';
             const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
             const MAX_SKEW_RATIO = 10;
+
+            // Storage keys
+            const INTRO_SKIP_STORAGE_KEY = 'orderskew_intro_skip';
 
             const getStoredValue = (key) => {
                 try {
@@ -1755,31 +1950,31 @@
                 const buyRows = plan.buyLadder.map(rung => {
                     const cells = [
                         escapeForHtml(rung.rung),
-                        escapeForHtml(formatCurrency(rung.price)),
+                        escapeForHtml(formatCurrency(rung.price, 4)),
                         escapeForHtml(formatNumber(rung.assetSize)),
                         escapeForHtml(formatPercent(rung.allocation)),
-                        escapeForHtml(formatCurrency(rung.capital))
+                        escapeForHtml(formatCurrency(rung.capital, 4))
                     ];
                     if (showFeeColumns) {
                         cells.push(escapeForHtml(feeDisplay(rung)));
                     }
-                    cells.push(escapeForHtml(formatCurrency(rung.progressiveAvgPrice)));
+                    cells.push(escapeForHtml(formatCurrency(rung.progressiveAvgPrice, 4)));
                     return `<tr>${cells.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
                 }).join('');
 
                 const sellRows = plan.sellLadder.map(rung => {
                     const cells = [
                         escapeForHtml(rung.rung),
-                        escapeForHtml(formatCurrency(rung.price)),
+                        escapeForHtml(formatCurrency(rung.price, 4)),
                         escapeForHtml(formatNumber(rung.assetSize)),
                         escapeForHtml(formatPercent(rung.allocation)),
-                        escapeForHtml(formatCurrency(rung.capital))
+                        escapeForHtml(formatCurrency(rung.capital, 4))
                     ];
                     if (showFeeColumns) {
                         cells.push(escapeForHtml(feeDisplay(rung)));
                     }
-                    cells.push(escapeForHtml(formatCurrency(rung.progressiveAvgSellPrice)));
-                    cells.push(escapeForHtml(formatCurrency(rung.netProfit)));
+                    cells.push(escapeForHtml(formatCurrency(rung.progressiveAvgSellPrice, 4)));
+                    cells.push(escapeForHtml(formatCurrency(rung.netProfit, 4)));
                     return `<tr>${cells.map(cell => `<td>${cell}</td>`).join('')}</tr>`;
                 }).join('');
 
@@ -1878,7 +2073,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
             }
 
             function calculatePlan() {
-                const finishCalculation = devTracking.startTimer('calculatePlan', {
+                const finishCalculation = startTimer('calculatePlan', {
                     layout: currentLayoutMode,
                     theme: currentThemeMode
                 });
@@ -2183,19 +2378,23 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
                 let derivedTotals = null;
                 if (sellOnlyMode) {
+                    // Check if user has manually provided existing quantity and avg buy price
+                    const hasManualInputs = existingQuantity > 0 && existingAvgBuyPrice > 0;
+                    
                     if (Number.isFinite(selectedHighestExecutedRung) && selectedHighestExecutedRung !== null) {
                         derivedTotals = deriveExecutedBuyTotals(buyLadder, selectedHighestExecutedRung);
                         if (derivedTotals.quantity > 0 && derivedTotals.avgPrice > 0) {
                             effectiveAssetBought = derivedTotals.quantity;
                             effectiveNetCapitalSpent = derivedTotals.netCapital;
                             effectiveBuyFees = derivedTotals.fees;
-                            applyDerivedSellOnlyInputs(derivedTotals, { force: true });
+                            // Don't prefill inputs - user should enter values manually
                         } else {
                             derivedTotals = null;
                         }
                     }
 
-                    if (!derivedTotals && canReuseBuySnapshot) {
+                    // Only use snapshot if user hasn't provided manual inputs
+                    if (!derivedTotals && canReuseBuySnapshot && !hasManualInputs) {
                         const snapshotQuantity = baselineBuySnapshot.totalAssetBought;
                         const snapshotNetCapital = baselineBuySnapshot.totalNetCapitalSpent;
                         const snapshotFees = baselineBuySnapshot.totalBuyFees;
@@ -2212,10 +2411,11 @@ caption { font-weight: 600; margin-bottom: 6px; }
                             effectiveAssetBought = snapshotQuantity;
                             effectiveNetCapitalSpent = snapshotNetCapital;
                             effectiveBuyFees = snapshotFees;
-                            applyDerivedSellOnlyInputs(derivedTotals);
+                            // Don't prefill inputs - user should enter values manually
                         }
                     }
 
+                    // Use manual inputs if available and no other source
                     if (!derivedTotals) {
                         effectiveAssetBought = existingQuantity > 0 ? existingQuantity : 0;
                         effectiveNetCapitalSpent = existingQuantity > 0 && existingAvgBuyPrice > 0
@@ -2402,9 +2602,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     updateUI(plan);
                 } catch (error) {
                     uiError = error;
-                    trackEvent('ui', 'update:error', {
-                        error: sanitizeForTracking(error)
-                    }, 'error');
+                    console.error('[UI] Update error', error);
                     throw error;
                 } finally {
                     finishCalculation({
@@ -2412,13 +2610,13 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         summary: summarySnapshot,
                         sellOnly: plan.modes.sellOnly,
                         equalQuantity: plan.modes.equalQuantity,
-                        error: uiError ? sanitizeForTracking(uiError) : null
+                        error: uiError || null
                     });
                 }
             }
 
             function updateUI(plan) {
-                const finishUiUpdate = devTracking.startTimer('ui:update', {
+                const finishUiUpdate = startTimer('ui:update', {
                     layout: currentLayoutMode,
                     theme: currentThemeMode
                 });
@@ -2496,6 +2694,12 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 document.getElementById('summary-avg-sell').textContent = formatCurrency(summary.avgSellPrice);
                 document.getElementById('summary-gross-profit').textContent = formatCurrency(summary.grossProfit);
                 document.getElementById('summary-total-fees').textContent = formatCurrency(summary.totalFees);
+                const initialCapital = parseFloat(document.getElementById('starting_capital')?.value || 0);
+                const feesPercent = initialCapital > 0 ? (summary.totalFees / initialCapital) * 100 : 0;
+                const feesPercentElement = document.getElementById('summary-total-fees-percent');
+                if (feesPercentElement) {
+                    feesPercentElement.textContent = Number.isFinite(feesPercent) ? `${formatPercent(feesPercent)} of initial capital` : '-';
+                }
                 document.getElementById('summary-total-quantity').textContent = formatNumber(summary.totalQuantity, 4);
                 document.getElementById('summary-roi').textContent = formatPercent(summary.roi);
                 const formatSummaryPrice = price => (price ? formatCurrency(price) : '-');
@@ -2506,7 +2710,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 if (buyChartCard && buyOrdersCard) {
                     if (plan.modes && plan.modes.sellOnly) {
                         buyChartCard.classList.add('hidden');
-                        buyOrdersCard.classList.remove('hidden');
+                        buyOrdersCard.classList.add('hidden');
                     } else {
                         buyChartCard.classList.remove('hidden');
                         buyOrdersCard.classList.remove('hidden');
@@ -2535,17 +2739,17 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         cellMarkup.push(buildTableCell('Executed', checkbox, ['text-center']));
                     }
                     cellMarkup.push(buildTableCell('Rung', `<span class="font-medium">${escapeForHtml(rung.rung)}</span>`, ['font-medium', 'text-center']));
-                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price, 4), ['text-right', 'whitespace-nowrap']));
                     cellMarkup.push(buildTableCell('Volume', formatNumber(rung.assetSize), ['text-right']));
                     cellMarkup.push(buildTableCell('Allocation', formatPercent(rung.allocation), ['text-right']));
-                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital, 4), ['text-right', 'whitespace-nowrap']));
                     if (showFeeColumns) {
                         const feeCellValue = plan.feeSettings.type === 'percent'
                             ? formatCurrency(rung.fee)
                             : formatPercent(rung.capital > 0 ? (rung.fee / rung.capital) * 100 : 0);
                         cellMarkup.push(buildTableCell(feeHeaderLabel, feeCellValue, ['text-right', 'whitespace-nowrap']));
                     }
-                    cellMarkup.push(buildTableCell('Avg Buy Price', formatCurrency(rung.progressiveAvgPrice), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Avg Buy Price', formatCurrency(rung.progressiveAvgPrice, 4), ['text-right', 'whitespace-nowrap']));
                     const executedClass = Number.isFinite(highestExecuted) && highestExecuted !== null && rung.rung <= highestExecuted
                         ? ' executed-rung'
                         : '';
@@ -2556,18 +2760,18 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     const rowClass = i % 2 === 0 ? 'table-row-even' : 'table-row-odd';
                     const cellMarkup = [];
                     cellMarkup.push(buildTableCell('Rung', `<span class="font-medium">${escapeForHtml(rung.rung)}</span>`, ['font-medium', 'text-center']));
-                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Price', formatCurrency(rung.price, 4), ['text-right', 'whitespace-nowrap']));
                     cellMarkup.push(buildTableCell('Volume', formatNumber(rung.assetSize), ['text-right']));
                     cellMarkup.push(buildTableCell('Allocation', formatPercent(rung.allocation), ['text-right']));
-                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Value', formatCurrency(rung.capital, 4), ['text-right', 'whitespace-nowrap']));
                     if (showFeeColumns) {
                         const feeCellValue = plan.feeSettings.type === 'percent'
                             ? formatCurrency(rung.fee)
                             : formatPercent(rung.capital > 0 ? (rung.fee / rung.capital) * 100 : 0);
                         cellMarkup.push(buildTableCell(feeHeaderLabel, feeCellValue, ['text-right', 'whitespace-nowrap']));
                     }
-                    cellMarkup.push(buildTableCell('Avg Sell Price', formatCurrency(rung.progressiveAvgSellPrice), ['text-right', 'whitespace-nowrap']));
-                    cellMarkup.push(buildTableCell('Net Profit', formatCurrency(rung.netProfit), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Avg Sell Price', formatCurrency(rung.progressiveAvgSellPrice, 4), ['text-right', 'whitespace-nowrap']));
+                    cellMarkup.push(buildTableCell('Net Profit', formatCurrency(rung.netProfit, 4), ['text-right', 'whitespace-nowrap']));
                     sellBody.innerHTML += `<tr class="${rowClass}">${cellMarkup.join('')}</tr>`;
                 });
 
@@ -2907,10 +3111,55 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackInteraction('depth-adjust', {
                         value: e.target.value
                     });
-                    depthDisplay.textContent = e.target.value;
+                    let value = parseFloat(e.target.value);
+                    // Variable step logic: 0.1% steps from 0.1% to 2%, 1% steps from 2% upwards
+                    if (value >= 2) {
+                        // Round to nearest 1% for values >= 2%
+                        value = Math.round(value);
+                    } else {
+                        // Round to nearest 0.1% for values < 2%
+                        value = Math.round(value * 10) / 10;
+                    }
+                    // Clamp value to valid range
+                    value = Math.max(0.1, Math.min(99, value));
+                    // Update slider value if it changed
+                    if (parseFloat(e.target.value) !== value) {
+                        depthSlider.value = value;
+                    }
+                    // Format display: show one decimal place when < 2%, no decimals when >= 2%
+                    depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
                     calculatePlan();
                 });
-                depthDisplay.textContent = depthSlider.value;
+                // Initialize display with proper formatting
+                const initialValue = parseFloat(depthSlider.value);
+                depthDisplay.textContent = initialValue < 2 ? initialValue.toFixed(1) : Math.round(initialValue);
+            }
+
+            // Toggle advanced settings collapse/expand (independent of checkbox state)
+            if (advancedSettingsToggle && advancedSettings) {
+                advancedSettingsToggle.addEventListener('click', () => {
+                    const isExpanded = advancedSettingsToggle.getAttribute('aria-expanded') === 'true';
+                    const shouldExpand = !isExpanded;
+                    
+                    // Only allow collapsing/expanding if advanced mode is enabled
+                    if (!advancedToggle || !advancedToggle.checked) {
+                        return;
+                    }
+                    
+                    if (shouldExpand) {
+                        advancedSettings.classList.remove('hidden');
+                        advancedSettingsToggle.setAttribute('aria-expanded', 'true');
+                        advancedSettingsToggle.querySelector('svg').classList.add('rotate-180');
+                    } else {
+                        advancedSettings.classList.add('hidden');
+                        advancedSettingsToggle.setAttribute('aria-expanded', 'false');
+                        advancedSettingsToggle.querySelector('svg').classList.remove('rotate-180');
+                    }
+                    
+                    trackInteraction('advanced-settings-toggle', {
+                        expanded: shouldExpand
+                    });
+                });
             }
 
             if (advancedToggle) {
@@ -2919,14 +3168,31 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         enabled: advancedToggle.checked
                     });
                     if (advancedToggle.checked) {
+                        // Show settings and expand by default when enabling advanced mode
                         advancedSettings?.classList.remove('hidden');
+                        if (advancedSettingsToggle) {
+                            advancedSettingsToggle.classList.remove('hidden');
+                            advancedSettingsToggle.classList.add('flex');
+                            advancedSettingsToggle.setAttribute('aria-expanded', 'true');
+                            advancedSettingsToggle.querySelector('svg')?.classList.add('rotate-180');
+                        }
                         if (equalQuantityCheckbox) {
                             setSkewDisabled(equalQuantityCheckbox.checked);
                         }
                     } else {
+                        // Hide settings when disabling advanced mode
                         advancedSettings?.classList.add('hidden');
+                        if (advancedSettingsToggle) {
+                            advancedSettingsToggle.classList.add('hidden');
+                            advancedSettingsToggle.classList.remove('flex');
+                            advancedSettingsToggle.setAttribute('aria-expanded', 'false');
+                            advancedSettingsToggle.querySelector('svg')?.classList.remove('rotate-180');
+                        }
                         if (sellOnlyCheckbox) {
                             sellOnlyCheckbox.checked = false;
+                            // Reset sell-only state when advanced mode is disabled
+                            setSellOnlyHighestExecutedRung(null);
+                            sellOnlyState.checkboxElements = [];
                         }
                         if (sellOnlyInputs) {
                             sellOnlyInputs.classList.add('hidden');
@@ -2943,9 +3209,24 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 });
                 if (!advancedToggle.checked) {
                     advancedSettings?.classList.add('hidden');
+                    if (advancedSettingsToggle) {
+                        advancedSettingsToggle.classList.add('hidden');
+                        advancedSettingsToggle.setAttribute('aria-expanded', 'false');
+                        advancedSettingsToggle.querySelector('svg')?.classList.remove('rotate-180');
+                    }
                     setSkewDisabled(false);
-                } else if (equalQuantityCheckbox) {
-                    setSkewDisabled(equalQuantityCheckbox.checked);
+                } else {
+                    // Advanced mode is enabled on load, show settings expanded
+                    advancedSettings?.classList.remove('hidden');
+                    if (advancedSettingsToggle) {
+                        advancedSettingsToggle.classList.remove('hidden');
+                        advancedSettingsToggle.classList.add('flex');
+                        advancedSettingsToggle.setAttribute('aria-expanded', 'true');
+                        advancedSettingsToggle.querySelector('svg')?.classList.add('rotate-180');
+                    }
+                    if (equalQuantityCheckbox) {
+                        setSkewDisabled(equalQuantityCheckbox.checked);
+                    }
                 }
             }
 
@@ -3184,6 +3465,82 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     }
                 }, 250);
             });
+
+            // Intro modal functionality
+            const showIntroModal = () => {
+                if (introModal) {
+                    introModal.classList.remove('hidden');
+                    document.body.classList.add('intro-modal-open');
+                }
+            };
+
+            const hideIntroModal = () => {
+                if (introModal) {
+                    introModal.classList.add('hidden');
+                    document.body.classList.remove('intro-modal-open');
+                }
+            };
+
+            const closeIntroAndSavePreference = () => {
+                const skipIntro = introSkipCheckbox && introSkipCheckbox.checked;
+                if (skipIntro) {
+                    setStoredValue(INTRO_SKIP_STORAGE_KEY, 'true');
+                }
+                hideIntroModal();
+            };
+
+            // Check if intro should be shown
+            const shouldShowIntro = () => {
+                const skipValue = getStoredValue(INTRO_SKIP_STORAGE_KEY);
+                return skipValue !== 'true';
+            };
+
+            // Show intro modal if preference allows
+            if (shouldShowIntro()) {
+                showIntroModal();
+            }
+
+            // Event handlers for intro modal
+            if (introGetStartedButton) {
+                introGetStartedButton.addEventListener('click', () => {
+                    closeIntroAndSavePreference();
+                    trackInteraction('intro', 'get-started', {
+                        skipIntro: introSkipCheckbox?.checked || false
+                    });
+                });
+            }
+
+            if (introSkipButton) {
+                introSkipButton.addEventListener('click', () => {
+                    closeIntroAndSavePreference();
+                    trackInteraction('intro', 'skip', {
+                        skipIntro: introSkipCheckbox?.checked || false
+                    });
+                });
+            }
+
+            // Allow closing modal by clicking outside (optional - only if user clicks backdrop)
+            if (introModal) {
+                introModal.addEventListener('click', (e) => {
+                    if (e.target === introModal) {
+                        closeIntroAndSavePreference();
+                        trackInteraction('intro', 'close-backdrop', {
+                            skipIntro: introSkipCheckbox?.checked || false
+                        });
+                    }
+                });
+            }
+
+            // Prevent modal content clicks from closing the modal
+            if (introModal) {
+                const modalContainer = introModal.querySelector('.intro-modal-container');
+                if (modalContainer) {
+                    modalContainer.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                    });
+                }
+            }
+
 
             // Initial calculation on page load
             calculatePlan();
