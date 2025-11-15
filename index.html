@@ -6,7 +6,6 @@
     <title>Order Skew | Trading Plan Calculator</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -422,6 +421,12 @@
             align-self: flex-start;
         }
 
+        .header-controls-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .theme-toggle-group {
             display: inline-flex;
             align-items: center;
@@ -431,6 +436,56 @@
             border: 1px solid rgba(186, 198, 234, 0.6);
             background-color: rgba(237, 252, 255, 0.6);
             box-shadow: var(--color-control-shadow);
+        }
+
+        .header-icons-group {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem;
+            border-radius: 999px;
+            opacity: 0.5;
+            transition: opacity 0.2s ease;
+        }
+
+        .header-icons-group:hover {
+            opacity: 0.8;
+        }
+
+        .header-icon-btn {
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            color: var(--color-text-muted);
+            text-decoration: none;
+        }
+
+        .header-icon-btn:hover {
+            transform: scale(1.1);
+            opacity: 1;
+            background: rgba(186, 198, 234, 0.2);
+        }
+
+        .header-icon-btn:active {
+            transform: scale(0.95);
+        }
+
+        .header-solana-icon {
+            width: 18px;
+            height: 14px;
+        }
+
+        .header-github-icon {
+            width: 16px;
+            height: 16px;
         }
 
         .theme-toggle-button {
@@ -480,6 +535,7 @@
             flex-direction: column;
             align-items: center;
             gap: 0.75rem;
+            position: relative;
         }
 
         .donation-link {
@@ -682,18 +738,208 @@
         }
 
         .qr-code-container {
-            display: flex;
-            justify-content: center;
-            padding: 0.75rem;
-            margin-top: 0.5rem;
-            background: white;
-            border: 1px solid var(--color-border);
-            border-radius: 4px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: 400px;
+            width: 90%;
+            z-index: 10000;
+            animation: fadeIn 0.2s ease;
         }
 
-        .qr-code-container canvas {
+        .qr-code-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+            animation: fadeIn 0.2s ease;
+        }
+
+        .qr-code-content {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            padding: 2rem;
+            background: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15), 0 4px 12px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .qr-code-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: rgba(186, 198, 234, 0.2);
+            border: none;
+            border-radius: 8px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .qr-code-close-btn:hover {
+            background: rgba(186, 198, 234, 0.4);
+            color: var(--color-text);
+            transform: scale(1.05);
+        }
+
+        .qr-code-close-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qr-code-close-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .donation-message {
+            margin: 0;
+            font-size: 0.875rem;
+            color: var(--color-text-secondary);
+            text-align: center;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(153, 69, 255, 0.1), rgba(20, 241, 149, 0.1));
+            border-radius: 8px;
+            width: 100%;
+        }
+
+        .qr-code-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fafa 100%);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            min-height: 240px;
+            width: 100%;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .qr-code-wrapper canvas,
+        .qr-code-wrapper img {
             max-width: 100%;
             height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        .qr-code-image {
+            width: 220px;
+            height: 220px;
+        }
+
+        .donation-address-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            width: 100%;
+        }
+
+        .donation-network-label {
+            margin: 0;
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.25rem 0.75rem;
+            background: rgba(153, 69, 255, 0.1);
+            border-radius: 6px;
+        }
+
+        .donation-address-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: var(--color-card-muted);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            width: 100%;
+            max-width: 340px;
+            min-width: 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .donation-address-code {
+            flex: 1;
+            padding: 0;
+            background: transparent;
+            border: none;
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            color: var(--color-text);
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            overflow: visible;
+            text-align: left;
+            margin: 0;
+            line-height: 1.5;
+            min-width: 0;
+        }
+
+        .donation-address-copy-btn {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            background: rgba(186, 198, 234, 0.2);
+            border: none;
+            border-radius: 6px;
+            color: var(--color-text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .donation-address-copy-btn:hover {
+            background: rgba(186, 198, 234, 0.4);
+            color: var(--color-text);
+            transform: scale(1.05);
+        }
+
+        .donation-address-copy-btn:active {
+            transform: scale(0.95);
+        }
+
+        .donation-address-copy-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .donation-address-copy-btn.copied {
+            background: var(--color-secondary);
+            color: white;
+        }
+
+        .donation-address-copy-btn.copied svg {
+            display: none;
+        }
+
+        .donation-address-copy-btn.copied::after {
+            content: '✓';
+            font-size: 1rem;
+            font-weight: bold;
         }
 
         .github-link {
@@ -1293,31 +1539,60 @@
                         <p class="brand-subtitle">Design your buy and sell ladders with precision at OrderSkew.com.</p>
                     </div>
                     <div class="header-controls">
-                        <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
-                            <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="5"></circle>
-                                    <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
-                                    <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
-                                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
-                                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
-                                    <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
-                                    <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
-                                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
-                                    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
-                                </svg>
-                            </button>
-                            <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                                </svg>
-                            </button>
+                        <div class="header-controls-group">
+                            <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
+                                <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
+                                        <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
+                                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                                        <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
+                                        <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
+                                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                                    </svg>
+                                </button>
+                                <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Understated Icons -->
+                            <div class="header-icons-group">
+                                <button type="button" id="solana-logo-btn-header" class="header-icon-btn" aria-label="Show QR code for Solana address">
+                                    <svg viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg" class="header-solana-icon">
+                                        <linearGradient id="solanaGradientHeader" x1="360.879" y1="351.455" x2="141.213" y2="69.836" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0" stop-color="#9945FF"/>
+                                            <stop offset="1" stop-color="#14F195"/>
+                                        </linearGradient>
+                                        <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#solanaGradientHeader)"/>
+                                        <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#solanaGradientHeader)"/>
+                                        <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#solanaGradientHeader)"/>
+                                    </svg>
+                                </button>
+                                <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="View project on GitHub">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" class="header-github-icon">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <details id="export-collapse" class="relative self-center sm:self-auto">
                         <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
-                            Export Options
+                            <div class="flex items-center gap-2">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                    <polyline points="7 3 7 8 15 8"></polyline>
+                                </svg>
+                                <span>Export Options</span>
+                            </div>
                             <span class="text-xs opacity-80 tracking-wide">▼</span>
                         </summary>
                         <div class="mt-3 sm:mt-2 flex flex-col sm:flex-row gap-2 export-panel">
@@ -1558,30 +1833,33 @@
                 </button>
             </div>
             
-            <!-- Solana Logo - Always Visible -->
-            <div class="donation-section">
-                <button type="button" id="solana-logo-btn" class="solana-logo-btn-footer" aria-label="Show QR code for Solana address">
-                    <svg viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg" class="solana-logo-footer">
-                        <linearGradient id="solanaGradient" x1="360.879" y1="351.455" x2="141.213" y2="69.836" gradientUnits="userSpaceOnUse">
-                            <stop offset="0" stop-color="#9945FF"/>
-                            <stop offset="1" stop-color="#14F195"/>
-                        </linearGradient>
-                        <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#solanaGradient)"/>
-                        <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#solanaGradient)"/>
-                        <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#solanaGradient)"/>
-                    </svg>
-                </button>
-                <div id="qr-code-container" class="qr-code-container hidden"></div>
-            </div>
-
-            <!-- GitHub Link -->
-            <div class="donation-section">
-                <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener noreferrer" class="donation-link github-link" aria-label="View project on GitHub">
-                    <svg viewBox="0 0 24 24" fill="currentColor" class="donation-icon github-icon">
-                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                    <span>View on GitHub</span>
-                </a>
+            <!-- QR Code Modal -->
+            <div id="qr-code-overlay" class="qr-code-overlay hidden"></div>
+            <div id="qr-code-container" class="qr-code-container hidden">
+                <div class="qr-code-content">
+                    <button type="button" id="qr-code-close-btn" class="qr-code-close-btn" aria-label="Close QR code">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </button>
+                    <p class="donation-message">Donations are much appreciated! 💜</p>
+                    <div class="qr-code-wrapper">
+                        <img src="QRcode.jpg" alt="Solana QR Code" class="qr-code-image" />
+                    </div>
+                    <div class="donation-address-display">
+                        <p class="donation-network-label">Solana (SOL) Network</p>
+                        <div class="donation-address-row">
+                            <code class="donation-address-code" id="donation-address-display">F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1</code>
+                            <button type="button" id="donation-address-copy-btn" class="donation-address-copy-btn" aria-label="Copy Solana address">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <span id="display-status-announcer" class="sr-only" aria-live="polite"></span>
@@ -4042,44 +4320,106 @@ caption { font-weight: 600; margin-bottom: 6px; }
             runDisplayTests();
 
             // Solana logo QR code functionality
-            const solanaLogoBtn = document.getElementById('solana-logo-btn');
+            const solanaLogoBtnHeader = document.getElementById('solana-logo-btn-header');
+            const solanaLogoBtnFooter = document.getElementById('solana-logo-btn');
             const qrCodeContainer = document.getElementById('qr-code-container');
+            const qrCodeOverlay = document.getElementById('qr-code-overlay');
+            const qrCodeCloseBtn = document.getElementById('qr-code-close-btn');
+            const donationAddressCopyBtn = document.getElementById('donation-address-copy-btn');
             const SOL_ADDRESS = 'F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1';
-            let qrCodeGenerated = false;
 
-            // Generate QR code when Solana logo is clicked
-            if (solanaLogoBtn && qrCodeContainer) {
-                solanaLogoBtn.addEventListener('click', () => {
-                    // Toggle QR code visibility
-                    const isHidden = qrCodeContainer.classList.contains('hidden');
-                    
-                    if (isHidden) {
-                        // Show QR code
-                        if (!qrCodeGenerated) {
-                            // Generate QR code only once
-                            const canvas = document.createElement('canvas');
-                            qrCodeContainer.appendChild(canvas);
+            // Function to show QR code modal
+            const showQRCode = () => {
+                if (qrCodeContainer && qrCodeOverlay) {
+                    qrCodeOverlay.classList.remove('hidden');
+                    qrCodeContainer.classList.remove('hidden');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                }
+            };
+
+            // Function to hide QR code modal
+            const hideQRCode = () => {
+                if (qrCodeContainer && qrCodeOverlay) {
+                    qrCodeOverlay.classList.add('hidden');
+                    qrCodeContainer.classList.add('hidden');
+                    document.body.style.overflow = ''; // Restore scrolling
+                }
+            };
+
+            // Show QR code when Solana logo is clicked (header or footer)
+            if (solanaLogoBtnHeader) {
+                solanaLogoBtnHeader.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showQRCode();
+                });
+            }
+            if (solanaLogoBtnFooter) {
+                solanaLogoBtnFooter.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showQRCode();
+                });
+            }
+
+            // Close QR code when close button is clicked
+            if (qrCodeCloseBtn) {
+                qrCodeCloseBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    hideQRCode();
+                });
+            }
+
+            // Close QR code when overlay is clicked
+            if (qrCodeOverlay) {
+                qrCodeOverlay.addEventListener('click', (e) => {
+                    if (e.target === qrCodeOverlay) {
+                        hideQRCode();
+                    }
+                });
+            }
+
+            // Close QR code when Escape key is pressed
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && qrCodeContainer && !qrCodeContainer.classList.contains('hidden')) {
+                    hideQRCode();
+                }
+            });
+
+            // Copy address button functionality
+            if (donationAddressCopyBtn) {
+                donationAddressCopyBtn.addEventListener('click', async () => {
+                    try {
+                        await navigator.clipboard.writeText(SOL_ADDRESS);
+                        donationAddressCopyBtn.classList.add('copied');
+                        donationAddressCopyBtn.setAttribute('aria-label', 'Address copied!');
+                        
+                        setTimeout(() => {
+                            donationAddressCopyBtn.classList.remove('copied');
+                            donationAddressCopyBtn.setAttribute('aria-label', 'Copy Solana address');
+                        }, 2000);
+                    } catch (err) {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = SOL_ADDRESS;
+                        textArea.style.position = 'fixed';
+                        textArea.style.opacity = '0';
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        try {
+                            document.execCommand('copy');
+                            donationAddressCopyBtn.classList.add('copied');
+                            donationAddressCopyBtn.setAttribute('aria-label', 'Address copied!');
                             
-                            QRCode.toCanvas(canvas, SOL_ADDRESS, {
-                                width: 200,
-                                margin: 2,
-                                color: {
-                                    dark: '#000000',
-                                    light: '#FFFFFF'
-                                }
-                            }, (error) => {
-                                if (error) {
-                                    console.error('Error generating QR code:', error);
-                                    qrCodeContainer.removeChild(canvas);
-                                } else {
-                                    qrCodeGenerated = true;
-                                }
-                            });
+                            setTimeout(() => {
+                                donationAddressCopyBtn.classList.remove('copied');
+                                donationAddressCopyBtn.setAttribute('aria-label', 'Copy Solana address');
+                            }, 2000);
+                        } catch (fallbackErr) {
+                            console.warn('Failed to copy address:', fallbackErr);
                         }
-                        qrCodeContainer.classList.remove('hidden');
-                    } else {
-                        // Hide QR code
-                        qrCodeContainer.classList.add('hidden');
+                        document.body.removeChild(textArea);
                     }
                 });
             }
