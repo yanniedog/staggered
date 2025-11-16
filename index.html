@@ -50,6 +50,8 @@
             --color-control-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.18);
             --focus-ring-color: rgba(0, 66, 74, 0.2);
             --shadow-base: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.06);
+            --color-warning-bg: rgba(185, 28, 28, 0.08);
+            --color-warning-border: rgba(185, 28, 28, 0.35);
         }
 
         body.theme-dark {
@@ -92,13 +94,35 @@
             --color-control-shadow: 0 10px 24px -12px rgba(2, 6, 23, 0.65);
             --focus-ring-color: rgba(56, 189, 248, 0.35);
             --shadow-base: 0 18px 28px -12px rgba(2, 6, 23, 0.65), 0 10px 16px -8px rgba(2, 6, 23, 0.55);
+            --color-warning-bg: rgba(248, 113, 113, 0.16);
+            --color-warning-border: rgba(248, 113, 113, 0.45);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--color-bg);
             color: var(--color-text);
-            transition: background-color 0.3s ease, color 0.3s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        section[id] {
+            scroll-margin-top: 120px;
+        }
+
+        @media (max-width: 640px) {
+            section[id] {
+                scroll-margin-top: 96px;
+            }
         }
 
         .sr-only {
@@ -172,6 +196,21 @@
             border-left: 4px solid var(--color-summary-border);
         }
 
+        #summary {
+            grid-auto-rows: minmax(150px, auto);
+        }
+
+        .summary-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 0.35rem;
+        }
+
+        .summary-card p {
+            margin: 0;
+        }
+
         .surface-muted {
             background-color: var(--color-card-muted);
         }
@@ -222,6 +261,13 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        #buy-orders-card table th,
+        #buy-orders-card table td,
+        #sell-orders-card table th,
+        #sell-orders-card table td {
+            padding: 0.35rem 0.5rem;
         }
 
         .label-with-info .info-button {
@@ -306,6 +352,387 @@
             border: 2px solid var(--color-primary-contrast);
         }
 
+        .slider-control {
+            display: flex;
+            flex-direction: column;
+            gap: 0.65rem;
+        }
+
+        .slider-headline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .slider-value-cluster {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.15rem 0.35rem;
+            border-radius: 999px;
+            background-color: var(--color-control-bg);
+            border: 1px solid var(--color-control-border);
+            box-shadow: var(--color-control-shadow);
+        }
+
+        .slider-number-wrapper {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .slider-value-input {
+            width: 88px;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            padding-right: 1.5rem;
+            background-color: transparent;
+            border: none;
+            box-shadow: none;
+            color: var(--color-control-text);
+            font-weight: 600;
+        }
+
+        .slider-value-input:focus {
+            outline: none;
+            box-shadow: none;
+        }
+
+        .slider-value-input::-webkit-outer-spin-button,
+        .slider-value-input::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .slider-value-input[type=number] {
+            appearance: textfield;
+            -moz-appearance: textfield;
+        }
+
+        .slider-value-suffix {
+            position: absolute;
+            right: 0.5rem;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            pointer-events: none;
+        }
+
+        .slider-stepper {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid transparent;
+            background: var(--color-control-active);
+            color: var(--color-control-active-text);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: transform 0.15s ease, background-color 0.2s ease;
+        }
+
+        .slider-stepper:hover {
+            transform: scale(1.05);
+        }
+
+        .slider-stepper:active {
+            transform: scale(0.95);
+        }
+
+        .slider-stepper:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slider-track-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .slider-track-row input[type=range] {
+            width: 100%;
+        }
+
+        .plan-alerts {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .plan-alerts.hidden {
+            display: none;
+        }
+
+        .alert-banner {
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-warning-border);
+            background-color: var(--color-warning-bg);
+            color: var(--color-text);
+            padding: 0.85rem 1rem;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-banner svg {
+            flex-shrink: 0;
+            width: 18px;
+            height: 18px;
+            color: var(--color-invalid);
+        }
+
+        .plan-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 640px) {
+            .plan-actions {
+                flex-direction: row;
+                align-items: center;
+            }
+        }
+
+        .plan-select {
+            flex: 1;
+            min-height: 48px;
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-card-muted);
+            color: var(--color-text);
+            padding: 0.4rem 0.85rem;
+            font-weight: 600;
+        }
+
+        .plan-actions-buttons {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .plan-action-button {
+            min-height: 48px;
+            border-radius: 0.75rem;
+            border: 1px solid var(--color-control-border);
+            background-color: var(--color-control-bg);
+            color: var(--color-control-text);
+            font-weight: 600;
+            padding: 0.4rem 1.25rem;
+            cursor: pointer;
+        }
+
+        .plan-action-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .plan-action-link {
+            background: none;
+            border: none;
+            color: var(--color-secondary);
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .order-toggle-bar {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-bottom: -0.5rem;
+        }
+
+        .order-toggle-button {
+            border-radius: 999px;
+            border: 1px solid var(--color-control-border);
+            background-color: var(--color-card-muted);
+            color: var(--color-control-text);
+            padding: 0.35rem 0.85rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .order-toggle-button:hover,
+        .order-toggle-button:focus-visible {
+            border-color: var(--color-control-active);
+            color: var(--color-control-active-text);
+            background-color: var(--color-control-active);
+        }
+
+        .order-card .overflow-x-auto {
+            overflow-x: hidden;
+        }
+
+        .export-sheet-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.45);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 970;
+        }
+
+        .export-sheet-overlay.is-visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .export-sheet {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--color-card);
+            border-top-left-radius: 1.5rem;
+            border-top-right-radius: 1.5rem;
+            box-shadow: 0 -20px 35px rgba(15, 23, 42, 0.25);
+            transform: translateY(100%);
+            transition: transform 0.25s ease;
+            padding: 1.5rem;
+            z-index: 980;
+        }
+
+        .export-sheet.is-visible {
+            transform: translateY(0);
+        }
+
+        .export-sheet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .export-sheet-subtitle {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--color-text-muted);
+            margin: 0 0 0.35rem 0;
+        }
+
+        .export-sheet h2 {
+            margin: 0;
+            font-size: 1.35rem;
+            color: var(--color-text);
+        }
+
+        .export-sheet-close {
+            border: none;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 999px;
+            width: 36px;
+            height: 36px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--color-text);
+            cursor: pointer;
+        }
+
+        .export-sheet-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        @media (min-width: 640px) {
+            .export-sheet-actions {
+                flex-direction: row;
+            }
+        }
+
+        .export-sheet-button {
+            flex: 1;
+            min-height: 56px;
+            border-radius: 1rem;
+            border: 1px solid var(--color-control-border);
+            background-color: var(--color-card-muted);
+            color: var(--color-control-text);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s ease, border-color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .export-sheet-button:hover,
+        .export-sheet-button:focus-visible {
+            outline: none;
+            border-color: var(--color-control-active);
+            background-color: var(--color-control-active);
+            color: var(--color-control-active-text);
+        }
+
+        .export-sheet-button:active {
+            transform: scale(0.98);
+        }
+
+        .export-sheet-status {
+            margin-top: 1rem;
+            display: none;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--color-text-muted);
+        }
+
+        .export-sheet-status.active {
+            display: flex;
+        }
+
+        .export-sheet-spinner {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--color-primary);
+            animation: spin 0.8s linear infinite;
+        }
+
+        .export-sheet-spinner.hidden {
+            display: none;
+        }
+
+        .export-sheet-status-text {
+            font-weight: 600;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .order-card.collapsed table,
+        .order-card.collapsed .overflow-x-auto {
+            display: none;
+        }
+
+        .order-collapsed-message {
+            display: none;
+            color: var(--color-text-muted);
+            font-size: 0.875rem;
+            margin: 0;
+        }
+
+        .order-card.collapsed .order-collapsed-message {
+            display: block;
+        }
+
         .d3-chart .domain {
             stroke: var(--color-chart-axis-text);
         }
@@ -323,6 +750,25 @@
             stroke: var(--color-grid-line);
             stroke-opacity: 0.6;
             shape-rendering: crispEdges;
+        }
+
+        .chart-scroll-container {
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-overflow-scrolling: touch;
+            touch-action: pan-x;
+            overscroll-behavior: contain;
+            padding-bottom: 0.5rem;
+            margin: 0 -0.25rem;
+        }
+
+        .chart-scroll-container:focus-within {
+            outline: 2px solid var(--color-primary);
+            outline-offset: 6px;
+        }
+
+        .d3-chart {
+            min-height: 320px;
         }
 
         .d3-chart .buy-bar {
@@ -421,6 +867,92 @@
             align-self: flex-start;
         }
 
+        .section-nav-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 80;
+            margin-top: 1.5rem;
+        }
+
+        .section-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 999px;
+            background-color: var(--color-card);
+            box-shadow: var(--shadow-base);
+            overflow-x: auto;
+            scrollbar-width: none;
+            backdrop-filter: blur(12px);
+        }
+
+        .section-nav::-webkit-scrollbar {
+            display: none;
+        }
+
+        .section-nav-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.4rem 0.95rem;
+            border-radius: 999px;
+            border: 1px solid transparent;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-control-text);
+            background-color: transparent;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .section-nav-link:hover {
+            border-color: var(--color-control-border);
+        }
+
+        .section-nav-link.active {
+            background-color: var(--color-control-active);
+            color: var(--color-control-active-text);
+            border-color: var(--color-control-active);
+            box-shadow: var(--color-control-shadow);
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            width: 48px;
+            height: 48px;
+            border-radius: 999px;
+            border: none;
+            background-color: var(--color-primary);
+            color: var(--color-primary-contrast);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-base);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            z-index: 95;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .back-to-top:active {
+            transform: scale(0.96);
+        }
+
+        @media (min-width: 768px) {
+            .back-to-top {
+                bottom: 2.25rem;
+                right: 2.25rem;
+            }
+        }
+
         .header-controls-group {
             display: inline-flex;
             align-items: center;
@@ -500,6 +1032,33 @@
             color: var(--color-control-text);
             cursor: pointer;
             transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+            position: relative;
+        }
+
+        #theme-toggle .theme-icon {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        body[data-theme-mode="light"] #theme-toggle .theme-icon--sun {
+            opacity: 1;
+        }
+
+        body[data-theme-mode="light"] #theme-toggle .theme-icon--moon {
+            opacity: 0;
+        }
+
+        body[data-theme-mode="dark"] #theme-toggle .theme-icon--moon {
+            opacity: 1;
+        }
+
+        body[data-theme-mode="dark"] #theme-toggle .theme-icon--sun {
+            opacity: 0;
         }
 
         .theme-toggle-button svg {
@@ -1062,6 +1621,18 @@
             .summary-mobile-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
+            input[type=range] {
+                height: 5.5px;
+            }
+            input[type=range]::-webkit-slider-thumb,
+            input[type=range]::-moz-range-thumb {
+                width: 25px;
+                height: 25px;
+            }
+            .slider-stepper {
+                width: 38px;
+                height: 38px;
+            }
         }
 
         body.layout-mobile {
@@ -1148,8 +1719,11 @@
 
         body.layout-mobile table tbody tr td::before {
             content: attr(data-label);
-            font-weight: 600;
-            color: var(--color-text-secondary);
+            font-weight: 700;
+            color: var(--color-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         body.layout-mobile table tbody tr td input[type="checkbox"] {
@@ -1194,10 +1768,11 @@
             border-radius: 1rem;
             max-width: 900px;
             width: 100%;
-            max-height: 90vh;
+            max-height: min(80vh, 760px);
             overflow-y: auto;
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
             animation: slideUp 0.3s ease-out;
+            position: relative;
         }
 
         .intro-modal-content {
@@ -1441,6 +2016,10 @@
                 gap: 1.5rem;
             }
 
+            .intro-modal-container {
+                max-height: 60vh;
+            }
+
             .intro-title {
                 font-size: 1.5rem;
             }
@@ -1461,6 +2040,30 @@
             }
         }
 
+        .intro-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 999px;
+            border: 1px solid var(--color-border);
+            background-color: var(--color-card-muted);
+            color: var(--color-text);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .intro-modal-close:hover,
+        .intro-modal-close:focus-visible {
+            outline: none;
+            background-color: var(--color-card-alt);
+            border-color: var(--color-border-strong);
+        }
+
         /* Prevent body scroll when modal is visible */
         body.intro-modal-open {
             overflow: hidden;
@@ -1476,12 +2079,18 @@
 </head>
 <body class="p-2 sm:p-4 theme-light layout-desktop">
     <!-- Intro Modal -->
-    <div id="intro-modal" class="intro-modal-overlay hidden">
+    <div id="intro-modal" class="intro-modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="intro-modal-title" aria-hidden="true">
         <div class="intro-modal-container">
+            <button type="button" id="intro-modal-close" class="intro-modal-close" aria-label="Close introduction modal">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
             <div class="intro-modal-content">
                 <!-- Introduction Text Section -->
                 <div class="intro-text-section">
-                    <h2 class="intro-title">Welcome to Order Skew</h2>
+                    <h2 class="intro-title" id="intro-modal-title">Welcome to Order Skew</h2>
                     <p class="intro-description">
                         Design and optimize your trading ladder strategies with precision. Order Skew helps you plan staged buy and sell orders, calculate allocations, manage fees, and visualize your trading strategy.
                     </p>
@@ -1547,24 +2156,26 @@
                     </div>
                     <div class="header-controls">
                         <div class="header-controls-group">
-                            <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
-                                <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <circle cx="12" cy="12" r="5"></circle>
-                                        <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
-                                        <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
-                                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
-                                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
-                                        <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
-                                        <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
-                                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
-                                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
-                                    </svg>
-                                </button>
-                                <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                                    </svg>
+                            <div class="theme-toggle-group" id="theme-toggle-group">
+                                <button type="button" id="theme-toggle" class="theme-toggle-button" aria-pressed="false" aria-label="Toggle theme">
+                                    <span class="theme-icon theme-icon--sun">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <circle cx="12" cy="12" r="5"></circle>
+                                            <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
+                                            <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
+                                            <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                                            <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                                            <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
+                                            <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
+                                            <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                                            <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                                        </svg>
+                                    </span>
+                                    <span class="theme-icon theme-icon--moon">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                        </svg>
+                                    </span>
                                 </button>
                             </div>
                             
@@ -1590,34 +2201,41 @@
                         </div>
                     </div>
                 </div>
-                <details id="export-collapse" class="relative self-center sm:self-auto">
-                        <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-2">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                    <polyline points="7 3 7 8 15 8"></polyline>
-                                </svg>
-                                <span>Export Options</span>
-                            </div>
-                            <span class="text-xs opacity-80 tracking-wide">▼</span>
-                        </summary>
-                        <div class="mt-3 sm:mt-2 flex flex-col sm:flex-row gap-2 export-panel">
-                            <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Download CSV
-                            </button>
-                            <button id="download-xls-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Download XLS
-                            </button>
-                        </div>
-                    </details>
+                    <button id="export-trigger" type="button" class="btn-secondary text-sm font-semibold py-2 px-4 rounded-lg cursor-pointer inline-flex items-center gap-2 min-h-[48px]">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        <span>Export Plan</span>
+                    </button>
+                    <div class="section-nav-wrapper">
+                        <nav class="section-nav" aria-label="Page navigation">
+                            <a href="#configuration" class="section-nav-link" data-nav-target="configuration">Configuration</a>
+                            <a href="#plan-summary" class="section-nav-link" data-nav-target="plan-summary">Plan Summary</a>
+                            <a href="#buy-ladder" class="section-nav-link" data-nav-target="buy-ladder">Buy Ladder</a>
+                            <a href="#sell-ladder" class="section-nav-link" data-nav-target="sell-ladder">Sell Ladder</a>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </header>
 
         <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 auto-rows-min">
-            <div class="card p-6">
-                <h2 class="text-2xl font-semibold text-primary-dark mb-6">Configuration</h2>
+            <section id="configuration" class="card p-6" tabindex="-1" aria-labelledby="configuration-heading">
+                <h2 id="configuration-heading" class="text-2xl font-semibold text-primary-dark mb-6">Configuration</h2>
+                <div id="plan-alerts" class="plan-alerts hidden" role="status" aria-live="polite"></div>
+                <div class="plan-actions">
+                    <label for="saved-plan-select" class="sr-only">Saved plans</label>
+                    <select id="saved-plan-select" class="plan-select" aria-label="Saved plans">
+                        <option value="" disabled selected>No saved plans</option>
+                    </select>
+                    <div class="plan-actions-buttons">
+                        <button type="button" id="save-plan-btn" class="plan-action-button">Save Plan</button>
+                        <button type="button" id="load-plan-btn" class="plan-action-button" disabled>Load Plan</button>
+                        <button type="button" id="reset-plan-btn" class="plan-action-link">Reset Defaults</button>
+                    </div>
+                </div>
                 <form id="trading-plan-form" class="space-y-5">
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
@@ -1629,17 +2247,52 @@
                             <input type="number" id="current_price" value="100" class="form-input w-full rounded-md p-2">
                         </div>
                     </div>
-                    <div>
-                        <label for="number_of_rungs" class="block text-sm font-medium text-secondary-dark mb-1">Number of Rungs (<span id="number_of_rungs_display">10</span>)</label>
-                        <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="w-full h-2 rounded-lg cursor-pointer">
+                    <div class="slider-control" data-slider-field="number_of_rungs">
+                        <div class="slider-headline">
+                            <label id="number_of_rungs_label" for="number_of_rungs" class="block text-sm font-medium text-secondary-dark mb-1">Number of Rungs (<span id="number_of_rungs_display">10</span>)</label>
+                            <div class="slider-value-cluster" role="group" aria-label="Adjust number of rungs precisely">
+                                <button type="button" class="slider-stepper" data-step-target="number_of_rungs" data-step="-1" aria-label="Decrease number of rungs">-</button>
+                                <div class="slider-number-wrapper">
+                                    <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" step="1" inputmode="numeric" aria-labelledby="number_of_rungs_label" class="slider-value-input">
                     </div>
-                    <div>
-                        <label for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (<span id="depth_display">20</span>%)</label>
-                        <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="w-full h-2 rounded-lg cursor-pointer">
+                                <button type="button" class="slider-stepper" data-step-target="number_of_rungs" data-step="1" aria-label="Increase number of rungs">+</button>
                     </div>
-                    <div>
-                        <label for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew (<span id="skew_value_display">50</span>)</label>
-                        <input type="range" id="skew_value" min="0" max="100" value="50" class="w-full h-2 rounded-lg cursor-pointer">
+                        </div>
+                        <div class="slider-track-row">
+                            <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="w-full h-2 rounded-lg cursor-pointer" aria-labelledby="number_of_rungs_label">
+                        </div>
+                    </div>
+                    <div class="slider-control" data-slider-field="depth">
+                        <div class="slider-headline">
+                            <label id="depth_label" for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (<span id="depth_display">20</span>%)</label>
+                            <div class="slider-value-cluster" role="group" aria-label="Adjust width precisely">
+                                <button type="button" class="slider-stepper" data-step-target="depth" data-step="-0.1" aria-label="Decrease width">-</button>
+                                <div class="slider-number-wrapper">
+                                    <input type="number" id="depth_input" value="20" min="0.1" max="99" step="0.1" inputmode="decimal" aria-labelledby="depth_label" class="slider-value-input">
+                                    <span class="slider-value-suffix">%</span>
+                                </div>
+                                <button type="button" class="slider-stepper" data-step-target="depth" data-step="0.1" aria-label="Increase width">+</button>
+                            </div>
+                        </div>
+                        <div class="slider-track-row">
+                            <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="w-full h-2 rounded-lg cursor-pointer" aria-labelledby="depth_label">
+                        </div>
+                    </div>
+                    <div class="slider-control" data-slider-field="skew_value">
+                        <div class="slider-headline">
+                            <label id="skew_value_label" for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew (<span id="skew_value_display">50</span>)</label>
+                            <div class="slider-value-cluster" role="group" aria-label="Adjust allocation skew precisely">
+                                <button type="button" class="slider-stepper" data-step-target="skew_value" data-step="-1" aria-label="Decrease allocation skew">-</button>
+                                <div class="slider-number-wrapper">
+                                    <input type="number" id="skew_value_input" value="50" min="0" max="100" step="1" inputmode="numeric" aria-labelledby="skew_value_label" class="slider-value-input">
+                                    <span class="slider-value-suffix">%</span>
+                                </div>
+                                <button type="button" class="slider-stepper" data-step-target="skew_value" data-step="1" aria-label="Increase allocation skew">+</button>
+                            </div>
+                        </div>
+                        <div class="slider-track-row">
+                            <input type="range" id="skew_value" min="0" max="100" value="50" class="w-full h-2 rounded-lg cursor-pointer" aria-labelledby="skew_value_label">
+                        </div>
                         <div class="flex justify-between text-xs text-tertiary-dark mt-1">
                             <span>None</span>
                             <span>Moderate</span>
@@ -1726,13 +2379,12 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Removed Generate Plan button -->
                 </form>
-            </div>
+            </section>
 
-            <div class="card p-6">
+            <section id="plan-summary" class="card p-5" tabindex="-1" aria-labelledby="plan-summary-heading">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold text-primary-dark">Plan Summary</h2>
+                    <h2 id="plan-summary-heading" class="text-2xl font-semibold text-primary-dark">Plan Summary</h2>
                 </div>
                 <div id="summary" class="grid summary-mobile-grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
                     <div class="summary-card p-4 rounded-lg">
@@ -1765,26 +2417,36 @@
                         <p id="summary-total-fees-percent" class="text-xs text-secondary-dark mt-1">-</p>
                     </div>
                 </div>
-            </div>
+            </section>
 
             <!-- Buy Chart -->
-            <div class="card p-6" id="buy-chart-card">
-                <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Ladder</h3>
+            <section class="card p-5" id="buy-ladder" tabindex="-1" aria-labelledby="buy-ladder-heading">
+                <h3 id="buy-ladder-heading" class="text-xl font-semibold text-primary-dark mb-4">Buy Ladder</h3>
+                <div class="chart-scroll-container">
                 <div id="visualization" class="d3-chart">
                     <svg id="allocation-chart"></svg>
                 </div>
             </div>
+            </section>
             
             <!-- Sell Chart -->
-            <div class="card p-6" id="sell-chart-card">
-                <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Ladder</h3>
+            <section class="card p-5" id="sell-ladder" tabindex="-1" aria-labelledby="sell-ladder-heading">
+                <h3 id="sell-ladder-heading" class="text-xl font-semibold text-primary-dark mb-4">Sell Ladder</h3>
+                <div class="chart-scroll-container">
                 <div id="sell-visualization" class="d3-chart">
                     <svg id="sell-allocation-chart"></svg>
                 </div>
             </div>
+            </section>
 
-            <div class="card p-6" id="buy-orders-card">
+            <div class="order-toggle-bar w-full col-span-full">
+                <button type="button" class="order-toggle-button" data-order-toggle="collapse">Collapse All</button>
+                <button type="button" class="order-toggle-button" data-order-toggle="expand">Expand All</button>
+            </div>
+
+            <div class="card p-5 order-card" id="buy-orders-card">
                 <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Orders</h3>
+                <p class="order-collapsed-message">Orders hidden. Use “Expand All” to view details.</p>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-primary-dark uppercase table-header">
@@ -1801,8 +2463,9 @@
                     </table>
                 </div>
             </div>
-            <div class="card p-6" id="sell-orders-card">
+            <div class="card p-5 order-card" id="sell-orders-card">
                 <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Orders</h3>
+                <p class="order-collapsed-message">Orders hidden. Use “Expand All” to view details.</p>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-primary-dark uppercase table-header">
@@ -1821,6 +2484,13 @@
                 </div>
             </div>
         </main>
+
+        <button type="button" id="back-to-top" class="back-to-top" aria-label="Back to top">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+                <line x1="12" y1="9" x2="12" y2="21"></line>
+            </svg>
+        </button>
 
         <footer class="display-footer">
             <span class="text-[10px] font-semibold tracking-[0.3em] uppercase opacity-70">Layout</span>
@@ -1871,6 +2541,30 @@
             
             <span id="display-status-announcer" class="sr-only" aria-live="polite"></span>
         </footer>
+        <div id="export-sheet-overlay" class="export-sheet-overlay hidden" aria-hidden="true"></div>
+        <section id="export-sheet" class="export-sheet hidden" role="dialog" aria-modal="true" aria-labelledby="export-sheet-title" aria-hidden="true">
+            <div class="export-sheet-header">
+                <div>
+                    <p class="export-sheet-subtitle">Share or download your current plan.</p>
+                    <h2 id="export-sheet-title">Export Plan</h2>
+                </div>
+                <button type="button" id="export-sheet-close" class="export-sheet-close" aria-label="Close export options">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="export-sheet-actions">
+                <button type="button" class="export-sheet-button" data-export-format="csv">Download CSV</button>
+                <button type="button" class="export-sheet-button" data-export-format="xls">Download XLS</button>
+                <button type="button" class="export-sheet-button" data-export-format="pdf">Download PDF</button>
+            </div>
+            <div id="export-sheet-status" class="export-sheet-status" aria-live="polite">
+                <span id="export-sheet-spinner" class="export-sheet-spinner hidden" aria-hidden="true"></span>
+                <span class="export-sheet-status-text">Preparing export…</span>
+            </div>
+        </section>
     </div>
     <div id="tooltip" class="tooltip"></div>
 
@@ -1892,16 +2586,15 @@
             const introSkipCheckbox = document.getElementById('intro-skip-checkbox');
             const introGetStartedButton = document.getElementById('intro-get-started-button');
             const introSkipButton = document.getElementById('intro-skip-button');
+            const introCloseButton = document.getElementById('intro-modal-close');
             const videoIframe = document.querySelector('.intro-video-iframe');
             const videoErrorMessage = document.getElementById('video-error-message');
 
             const form = document.getElementById('trading-plan-form');
             const skewSlider = document.getElementById('skew_value');
-            const skewDisplay = document.getElementById('skew_value_display');
             const rungSlider = document.getElementById('number_of_rungs');
             const depthSlider = document.getElementById('depth');
-            const rungDisplay = document.getElementById('number_of_rungs_display');
-            const depthDisplay = document.getElementById('depth_display');
+            const skewNumericInput = document.getElementById('skew_value_input');
             const advancedToggle = document.getElementById('advanced_mode');
             const advancedSettings = document.getElementById('advanced-settings');
             const advancedSettingsToggle = document.getElementById('advanced-settings-toggle');
@@ -1914,22 +2607,65 @@
             const existingAvgPriceInput = document.getElementById('existing_avg_price');
             const spacingModeSelect = document.getElementById('spacing_mode');
             const equalQuantityCheckbox = document.getElementById('equal_quantity_mode');
-            const buyChartCard = document.getElementById('buy-chart-card');
+            const buyChartCard = document.getElementById('buy-ladder');
             const buyOrdersCard = document.getElementById('buy-orders-card');
             const buyHeaderRow = document.getElementById('buy-table-header-row');
             const sellHeaderRow = document.getElementById('sell-table-header-row');
-            const exportCollapse = document.getElementById('export-collapse');
-            const downloadCsvBtn = document.getElementById('download-csv-btn');
-            const downloadXlsBtn = document.getElementById('download-xls-btn');
             const layoutToggleButtons = Array.from(document.querySelectorAll('[data-layout-toggle]'));
-            const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
+            const themeToggleButton = document.getElementById('theme-toggle');
             const displayStatusAnnouncer = document.getElementById('display-status-announcer');
+            const planAlertsContainer = document.getElementById('plan-alerts');
+            const navLinks = Array.from(document.querySelectorAll('.section-nav-link'));
+            const backToTopButton = document.getElementById('back-to-top');
+            const orderCards = Array.from(document.querySelectorAll('.order-card'));
+            const orderToggleButtons = Array.from(document.querySelectorAll('[data-order-toggle]'));
+            const exportSheet = document.getElementById('export-sheet');
+            const exportSheetOverlay = document.getElementById('export-sheet-overlay');
+            const exportSheetCloseBtn = document.getElementById('export-sheet-close');
+            const exportSheetStatus = document.getElementById('export-sheet-status');
+            const exportStatusText = exportSheetStatus?.querySelector('.export-sheet-status-text');
+            const exportSheetSpinner = document.getElementById('export-sheet-spinner');
+            const exportTriggerButton = document.getElementById('export-trigger');
+            const exportFormatButtons = Array.from(document.querySelectorAll('[data-export-format]'));
+            const savedPlanSelect = document.getElementById('saved-plan-select');
+            const savePlanButton = document.getElementById('save-plan-btn');
+            const loadPlanButton = document.getElementById('load-plan-btn');
+            const resetPlanButton = document.getElementById('reset-plan-btn');
 
             const trackEvent = () => {};
 
             const trackInteraction = () => {};
 
             const startTimer = () => () => {};
+
+            function debounce(func, wait = 200) {
+                let timeout;
+                return function debounced(...args) {
+                    const context = this;
+                    clearTimeout(timeout);
+                    timeout = setTimeout(() => func.apply(context, args), wait);
+                };
+            }
+
+            const PLAN_UPDATE_DELAY_MS = 200;
+            const schedulePlanUpdate = debounce(() => calculatePlan(), PLAN_UPDATE_DELAY_MS);
+            const DEFAULT_PLAN_VALUES = {
+                startingCapital: '50000',
+                currentPrice: '100',
+                numberOfRungs: '10',
+                depth: '20',
+                skewValue: '50',
+                advancedMode: false,
+                sellOnlyMode: false,
+                feeType: 'percent',
+                feeValue: '0',
+                feeSettlement: 'netted',
+                spacingMode: 'absolute',
+                equalQuantityMode: false,
+                existingQuantity: '0',
+                existingAvgPrice: '0',
+                sellOnlyHighestRung: null
+            };
 
             const safeNumericSummary = (value, digits = 4) => {
                 if (!Number.isFinite(value)) {
@@ -1944,6 +2680,7 @@
 
             const detectLayoutMode = (width = window.innerWidth) => (width < LAYOUT_BREAKPOINT ? 'mobile' : 'desktop');
             const detectThemePreference = () => (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            const prefersReducedMotionQuery = window.matchMedia ? window.matchMedia('(prefers-reduced-motion: reduce)') : { matches: false, addEventListener: () => {} };
 
             const getCssVariable = (name, fallback = '') => {
                 const value = getComputedStyle(document.body).getPropertyValue(name);
@@ -1987,6 +2724,7 @@
                 if (announce) {
                     announceDisplayStatus();
                 }
+                updateBackToTopVisibility();
                 trackEvent('display', 'layout:apply', {
                     mode: normalizedMode,
                     source
@@ -2001,7 +2739,10 @@
                 document.body.classList.toggle('theme-dark', normalizedTheme === 'dark');
                 document.body.classList.toggle('theme-light', normalizedTheme === 'light');
                 document.body.dataset.themeMode = normalizedTheme;
-                updateToggleGroup(themeToggleButtons, 'data-theme-toggle', normalizedTheme);
+                if (themeToggleButton) {
+                    themeToggleButton.setAttribute('aria-pressed', normalizedTheme === 'dark' ? 'true' : 'false');
+                    themeToggleButton.setAttribute('aria-label', normalizedTheme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+                }
                 if (announce) {
                     announceDisplayStatus();
                 }
@@ -2012,7 +2753,7 @@
                 console.info(`[Display] Theme mode set to ${normalizedTheme} (${source}).`);
             };
 
-            const formatCurrency = (value, minimumFractionDigits = 2) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits, maximumFractionDigits: 6 }).format(Number.isFinite(value) ? value : 0);
+            const formatCurrency = (value, minimumFractionDigits = 2) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits, maximumFractionDigits: 4 }).format(Number.isFinite(value) ? value : 0);
             const formatPercent = (value) => Number.isFinite(value) ? `${value.toFixed(2)}%` : '0.00%';
             const formatNumber = (value, digits = 4) => Number.isFinite(value) ? value.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: digits }) : '0';
             
@@ -2052,10 +2793,37 @@
             };
             const clampNumber = (value, min, max) => Math.min(Math.max(value, min), max);
             const MAX_SKEW_RATIO = 10;
+            const ALERT_ICON_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>`;
+
+            const renderPlanAlerts = (messages = []) => {
+                if (!planAlertsContainer) {
+                    return;
+                }
+                if (!messages || messages.length === 0) {
+                    planAlertsContainer.classList.add('hidden');
+                    planAlertsContainer.innerHTML = '';
+                    return;
+                }
+                planAlertsContainer.classList.remove('hidden');
+                planAlertsContainer.innerHTML = '';
+                messages.forEach((message) => {
+                    const banner = document.createElement('div');
+                    banner.className = 'alert-banner';
+                    banner.setAttribute('role', 'alert');
+                    banner.innerHTML = `${ALERT_ICON_SVG}<span class="alert-message"></span>`;
+                    const textEl = banner.querySelector('.alert-message');
+                    if (textEl) {
+                        textEl.textContent = message;
+                    }
+                    planAlertsContainer.appendChild(banner);
+                });
+            };
 
             // Storage keys
-            const INTRO_SKIP_STORAGE_KEY = 'orderskew_intro_skip';
+            const LEGACY_INTRO_SKIP_KEY = 'orderskew_intro_skip';
+            const INTRO_DISMISS_STORAGE_KEY = 'onboardingDismissed';
             const STORAGE_PREFIX = 'orderskew_';
+            const SAVED_PLANS_KEY = STORAGE_PREFIX + 'saved_plans';
             const STORAGE_KEYS = {
                 startingCapital: STORAGE_PREFIX + 'starting_capital',
                 currentPrice: STORAGE_PREFIX + 'current_price',
@@ -2110,6 +2878,499 @@
                 return stored !== null ? stored : defaultValue;
             };
 
+            const sliderControlConfigs = [
+                {
+                    id: 'number_of_rungs',
+                    numericInputId: 'number_of_rungs_input',
+                    displayId: 'number_of_rungs_display',
+                    labelId: 'number_of_rungs_label',
+                    min: 2,
+                    max: 50,
+                    step: 1,
+                    shiftStep: 5,
+                    storageKey: STORAGE_KEYS.numberOfRungs,
+                    displayFormatter: (value) => Math.round(value),
+                    normalize: (value) => {
+                        const parsed = Number(value);
+                        const numeric = Number.isFinite(parsed) ? parsed : 2;
+                        return clampNumber(Math.round(numeric), 2, 50);
+                    }
+                },
+                {
+                    id: 'depth',
+                    numericInputId: 'depth_input',
+                    displayId: 'depth_display',
+                    labelId: 'depth_label',
+                    min: 0.1,
+                    max: 99,
+                    step: 0.1,
+                    shiftStep: 1,
+                    storageKey: STORAGE_KEYS.depth,
+                    displayFormatter: (value) => (value < 2 ? value.toFixed(1) : Math.round(value)),
+                    normalize: (value) => {
+                        let numeric = parseFloat(value);
+                        if (!Number.isFinite(numeric)) {
+                            numeric = 0.1;
+                        }
+                        if (numeric >= 2) {
+                            numeric = Math.round(numeric);
+                        } else {
+                            numeric = Math.round(numeric * 10) / 10;
+                        }
+                        return clampNumber(numeric, 0.1, 99);
+                    }
+                },
+                {
+                    id: 'skew_value',
+                    numericInputId: 'skew_value_input',
+                    displayId: 'skew_value_display',
+                    labelId: 'skew_value_label',
+                    min: 0,
+                    max: 100,
+                    step: 1,
+                    shiftStep: 10,
+                    storageKey: STORAGE_KEYS.skewValue,
+                    displayFormatter: (value) => Math.round(value),
+                    normalize: (value) => {
+                        const parsed = Number(value);
+                        const numeric = Number.isFinite(parsed) ? parsed : 0;
+                        return clampNumber(Math.round(numeric), 0, 100);
+                    }
+                }
+            ];
+
+            const sliderControlInstances = new Map();
+
+            const updateSliderAriaAttributes = (sliderElement, config, value, formattedText) => {
+                if (!sliderElement) {
+                    return;
+                }
+                if (typeof config.min === 'number') {
+                    sliderElement.setAttribute('aria-valuemin', String(config.min));
+                }
+                if (typeof config.max === 'number') {
+                    sliderElement.setAttribute('aria-valuemax', String(config.max));
+                }
+                sliderElement.setAttribute('aria-valuenow', String(value));
+                if (formattedText !== undefined) {
+                    sliderElement.setAttribute('aria-valuetext', String(formattedText));
+                }
+                sliderElement.setAttribute('role', 'slider');
+            };
+
+            const createSliderControl = (config) => {
+                const slider = document.getElementById(config.id);
+                const numericInput = document.getElementById(config.numericInputId);
+                const display = document.getElementById(config.displayId);
+                if (!slider || !numericInput || !display) {
+                    return null;
+                }
+
+                const stepperButtons = Array.from(document.querySelectorAll(`[data-step-target="${config.id}"]`));
+                const shiftStep = typeof config.shiftStep === 'number'
+                    ? config.shiftStep
+                    : Math.max((config.step || 1) * 5, 1);
+                const formatDisplay = (value) => {
+                    if (typeof config.displayFormatter === 'function') {
+                        return config.displayFormatter(value);
+                    }
+                    return Number.isFinite(value) ? value : '';
+                };
+                const normalize = (value) => {
+                    if (typeof config.normalize === 'function') {
+                        return config.normalize(value);
+                    }
+                    let numeric = parseFloat(value);
+                    if (!Number.isFinite(numeric)) {
+                        numeric = typeof config.min === 'number' ? config.min : 0;
+                    }
+                    if (!config.decimals && (config.step && config.step >= 1)) {
+                        numeric = Math.round(numeric);
+                    } else if (typeof config.decimals === 'number') {
+                        const factor = Math.pow(10, config.decimals);
+                        numeric = Math.round(numeric * factor) / factor;
+                    }
+                    if (typeof config.min === 'number') {
+                        numeric = Math.max(config.min, numeric);
+                    }
+                    if (typeof config.max === 'number') {
+                        numeric = Math.min(config.max, numeric);
+                    }
+                    return numeric;
+                };
+
+                const label = config.labelId
+                    ? document.getElementById(config.labelId)
+                    : document.querySelector(`label[for="${config.id}"]`);
+                if (label) {
+                    const labelText = label.textContent?.trim();
+                    if (labelText) {
+                        slider.setAttribute('aria-label', labelText);
+                    }
+                }
+
+                const state = {
+                    value: normalize(slider.value)
+                };
+
+                const applyValue = (rawValue, options = {}) => {
+                    const normalized = normalize(rawValue);
+                    if (!options.force && state.value === normalized) {
+                        return normalized;
+                    }
+                    state.value = normalized;
+                    slider.value = normalized;
+                    numericInput.value = normalized;
+                    const formatted = formatDisplay(normalized);
+                    display.textContent = formatted;
+                    updateSliderAriaAttributes(slider, config, normalized, formatted);
+                    if (options.persist !== false && config.storageKey) {
+                        saveFormValue(config.storageKey, normalized);
+                    }
+                    if (options.schedule !== false) {
+                        schedulePlanUpdate();
+                    }
+                    return normalized;
+                };
+
+                const handleSliderInput = (event) => {
+                    applyValue(event.target.value);
+                    trackInteraction('slider-adjust', {
+                        id: config.id,
+                        source: 'slider',
+                        value: Number(event.target.value)
+                    });
+                };
+
+                slider.addEventListener('input', handleSliderInput);
+
+                numericInput.addEventListener('input', (event) => {
+                    const raw = event.target.value;
+                    if (raw === '' || raw === '-' || raw === '.') {
+                        return;
+                    }
+                    applyValue(raw);
+                    trackInteraction('slider-adjust', {
+                        id: config.id,
+                        source: 'input',
+                        value: Number(raw)
+                    });
+                });
+
+                numericInput.addEventListener('blur', () => {
+                    applyValue(numericInput.value);
+                });
+
+                const adjustByDelta = (delta) => {
+                    if (!Number.isFinite(delta)) {
+                        return;
+                    }
+                    applyValue(state.value + delta, { force: true });
+                };
+
+                stepperButtons.forEach((button) => {
+                    button.addEventListener('click', () => {
+                        const explicitStep = parseFloat(button.dataset.step);
+                        const delta = Number.isFinite(explicitStep) ? explicitStep : (config.step || 1);
+                        adjustByDelta(delta);
+                        trackInteraction('slider-stepper', {
+                            id: config.id,
+                            delta
+                        });
+                    });
+                });
+
+                const handleKeyControl = (event) => {
+                    const { key } = event;
+                    const baseStep = config.step || 1;
+                    const largerStep = shiftStep || baseStep * 5;
+                    let delta = 0;
+                    if (key === 'ArrowRight' || key === 'ArrowUp') {
+                        delta = event.shiftKey ? largerStep : baseStep;
+                    } else if (key === 'ArrowLeft' || key === 'ArrowDown') {
+                        delta = event.shiftKey ? -largerStep : -baseStep;
+                    } else if (key === 'Home' && typeof config.min === 'number') {
+                        event.preventDefault();
+                        applyValue(config.min, { force: true });
+                        return;
+                    } else if (key === 'End' && typeof config.max === 'number') {
+                        event.preventDefault();
+                        applyValue(config.max, { force: true });
+                        return;
+                    } else if (key === 'PageUp') {
+                        delta = largerStep;
+                    } else if (key === 'PageDown') {
+                        delta = -largerStep;
+                    } else {
+                        return;
+                    }
+                    event.preventDefault();
+                    adjustByDelta(delta);
+                };
+
+                slider.addEventListener('keydown', handleKeyControl);
+                numericInput.addEventListener('keydown', handleKeyControl);
+
+                const storedValue = config.storageKey ? loadFormValue(config.storageKey) : null;
+                if (storedValue !== null) {
+                    applyValue(storedValue, { schedule: false, persist: false, force: true });
+                } else {
+                    applyValue(slider.value, { schedule: false, persist: false, force: true });
+                }
+
+                return {
+                    id: config.id,
+                    get value() {
+                        return state.value;
+                    },
+                    setValue: (value, options = {}) => applyValue(value, { ...options, force: true }),
+                    disable: (disabled) => {
+                        if (disabled) {
+                            slider.setAttribute('disabled', 'true');
+                            numericInput.setAttribute('disabled', 'true');
+                            slider.classList.add('opacity-50', 'cursor-not-allowed');
+                            numericInput.classList.add('cursor-not-allowed');
+                            stepperButtons.forEach(btn => btn.setAttribute('disabled', 'true'));
+                        } else {
+                            slider.removeAttribute('disabled');
+                            numericInput.removeAttribute('disabled');
+                            slider.classList.remove('opacity-50', 'cursor-not-allowed');
+                            numericInput.classList.remove('cursor-not-allowed');
+                            stepperButtons.forEach(btn => btn.removeAttribute('disabled'));
+                        }
+                    }
+                };
+            };
+
+            const initializeSliderControls = () => {
+                sliderControlConfigs.forEach((config) => {
+                    const instance = createSliderControl(config);
+                    if (instance) {
+                        sliderControlInstances.set(config.id, instance);
+                    }
+                });
+            };
+
+            const getSavedPlans = () => {
+                const raw = getStoredValue(SAVED_PLANS_KEY);
+                if (!raw) {
+                    return {};
+                }
+                try {
+                    return JSON.parse(raw);
+                } catch (error) {
+                    console.warn('[Storage] Unable to parse saved plans', error);
+                    return {};
+                }
+            };
+
+            const persistSavedPlans = (plans) => {
+                setStoredValue(SAVED_PLANS_KEY, JSON.stringify(plans));
+            };
+
+            const refreshSavedPlansOptions = (activeName = '') => {
+                if (!savedPlanSelect) {
+                    return;
+                }
+                const plans = getSavedPlans();
+                savedPlanSelect.innerHTML = '';
+                const names = Object.keys(plans);
+                if (names.length === 0) {
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'No saved plans';
+                    option.disabled = true;
+                    option.selected = true;
+                    savedPlanSelect.appendChild(option);
+                    loadPlanButton?.setAttribute('disabled', 'true');
+                    return;
+                }
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Select a plan';
+                placeholder.disabled = true;
+                placeholder.selected = !activeName;
+                savedPlanSelect.appendChild(placeholder);
+                names.forEach((name) => {
+                    const option = document.createElement('option');
+                    option.value = name;
+                    option.textContent = name;
+                    if (activeName === name) {
+                        option.selected = true;
+                    }
+                    savedPlanSelect.appendChild(option);
+                });
+                if (activeName && savedPlanSelect.value !== activeName) {
+                    savedPlanSelect.value = activeName;
+                }
+                if (savedPlanSelect.value) {
+                    loadPlanButton?.removeAttribute('disabled');
+                } else {
+                    loadPlanButton?.setAttribute('disabled', 'true');
+                }
+            };
+
+            const collectPlanStateFromForm = () => ({
+                startingCapital: document.getElementById('starting_capital')?.value ?? DEFAULT_PLAN_VALUES.startingCapital,
+                currentPrice: document.getElementById('current_price')?.value ?? DEFAULT_PLAN_VALUES.currentPrice,
+                numberOfRungs: document.getElementById('number_of_rungs')?.value ?? DEFAULT_PLAN_VALUES.numberOfRungs,
+                depth: document.getElementById('depth')?.value ?? DEFAULT_PLAN_VALUES.depth,
+                skewValue: document.getElementById('skew_value')?.value ?? DEFAULT_PLAN_VALUES.skewValue,
+                advancedMode: !!advancedToggle?.checked,
+                sellOnlyMode: !!sellOnlyCheckbox?.checked,
+                feeType: feeTypeSelect?.value ?? DEFAULT_PLAN_VALUES.feeType,
+                feeValue: feeValueInput?.value ?? DEFAULT_PLAN_VALUES.feeValue,
+                feeSettlement: feeSettlementSelect?.value ?? DEFAULT_PLAN_VALUES.feeSettlement,
+                spacingMode: spacingModeSelect?.value ?? DEFAULT_PLAN_VALUES.spacingMode,
+                equalQuantityMode: !!equalQuantityCheckbox?.checked,
+                existingQuantity: existingQuantityInput?.value ?? DEFAULT_PLAN_VALUES.existingQuantity,
+                existingAvgPrice: existingAvgPriceInput?.value ?? DEFAULT_PLAN_VALUES.existingAvgPrice,
+                sellOnlyHighestRung: sellOnlyState.highestExecutedRung
+            });
+
+            const applyPlanStateToForm = (state) => {
+                const applyInputValue = (id, value, storageKey) => {
+                    const element = document.getElementById(id);
+                    if (!element || value === undefined || value === null) {
+                        return;
+                    }
+                    element.value = value;
+                    if (storageKey) {
+                        saveFormValue(storageKey, value);
+                    }
+                };
+
+                applyInputValue('starting_capital', state.startingCapital ?? DEFAULT_PLAN_VALUES.startingCapital, STORAGE_KEYS.startingCapital);
+                applyInputValue('current_price', state.currentPrice ?? DEFAULT_PLAN_VALUES.currentPrice, STORAGE_KEYS.currentPrice);
+                sliderControlInstances.get('number_of_rungs')?.setValue(state.numberOfRungs ?? DEFAULT_PLAN_VALUES.numberOfRungs, { schedule: false, persist: true });
+                sliderControlInstances.get('depth')?.setValue(state.depth ?? DEFAULT_PLAN_VALUES.depth, { schedule: false, persist: true });
+                sliderControlInstances.get('skew_value')?.setValue(state.skewValue ?? DEFAULT_PLAN_VALUES.skewValue, { schedule: false, persist: true });
+                applyInputValue('fee_value', state.feeValue ?? DEFAULT_PLAN_VALUES.feeValue, STORAGE_KEYS.feeValue);
+                applyInputValue('existing_quantity', state.existingQuantity ?? DEFAULT_PLAN_VALUES.existingQuantity, STORAGE_KEYS.existingQuantity);
+                applyInputValue('existing_avg_price', state.existingAvgPrice ?? DEFAULT_PLAN_VALUES.existingAvgPrice, STORAGE_KEYS.existingAvgPrice);
+                if (feeTypeSelect && state.feeType) {
+                    feeTypeSelect.value = state.feeType;
+                    saveFormValue(STORAGE_KEYS.feeType, state.feeType);
+                }
+                if (feeSettlementSelect && state.feeSettlement) {
+                    feeSettlementSelect.value = state.feeSettlement;
+                    saveFormValue(STORAGE_KEYS.feeSettlement, state.feeSettlement);
+                }
+                if (spacingModeSelect && state.spacingMode) {
+                    spacingModeSelect.value = state.spacingMode;
+                    saveFormValue(STORAGE_KEYS.spacingMode, state.spacingMode);
+                }
+
+                if (advancedToggle) {
+                    advancedToggle.checked = !!state.advancedMode;
+                    if (advancedToggle.checked) {
+                        advancedSettings?.classList.remove('hidden');
+                        if (advancedSettingsToggle) {
+                            advancedSettingsToggle.classList.remove('hidden');
+                            advancedSettingsToggle.classList.add('flex');
+                            advancedSettingsToggle.setAttribute('aria-expanded', 'true');
+                            advancedSettingsToggle.querySelector('svg')?.classList.add('rotate-180');
+                        }
+                    } else {
+                        advancedSettings?.classList.add('hidden');
+                        if (advancedSettingsToggle) {
+                            advancedSettingsToggle.classList.add('hidden');
+                            advancedSettingsToggle.classList.remove('flex');
+                            advancedSettingsToggle.setAttribute('aria-expanded', 'false');
+                            advancedSettingsToggle.querySelector('svg')?.classList.remove('rotate-180');
+                        }
+                    }
+                    saveFormValue(STORAGE_KEYS.advancedMode, advancedToggle.checked);
+                }
+
+                if (sellOnlyCheckbox) {
+                    sellOnlyCheckbox.checked = !!state.sellOnlyMode;
+                    if (sellOnlyCheckbox.checked) {
+                        sellOnlyInputs?.classList.remove('hidden');
+                    } else {
+                        sellOnlyInputs?.classList.add('hidden');
+                    }
+                    saveFormValue(STORAGE_KEYS.sellOnlyMode, sellOnlyCheckbox.checked);
+                }
+
+                if (equalQuantityCheckbox) {
+                    equalQuantityCheckbox.checked = !!state.equalQuantityMode;
+                    setSkewDisabled(equalQuantityCheckbox.checked);
+                    saveFormValue(STORAGE_KEYS.equalQuantityMode, equalQuantityCheckbox.checked);
+                }
+
+                setSellOnlyHighestExecutedRung(state.sellOnlyHighestRung ?? null);
+                calculatePlan();
+            };
+
+            const resetPlanToDefaults = () => {
+                Object.values(STORAGE_KEYS).forEach((key) => removeStoredValue(key));
+                applyPlanStateToForm(DEFAULT_PLAN_VALUES);
+                if (savedPlanSelect) {
+                    savedPlanSelect.value = '';
+                }
+                loadPlanButton?.setAttribute('disabled', 'true');
+            };
+
+            savePlanButton?.addEventListener('click', () => {
+                const plans = getSavedPlans();
+                const suggestedName = savedPlanSelect?.value && getSavedPlans()[savedPlanSelect.value]
+                    ? savedPlanSelect.value
+                    : `Plan ${Object.keys(plans).length + 1}`;
+                const name = window.prompt('Name this plan', suggestedName);
+                if (!name) {
+                    return;
+                }
+                const trimmed = name.trim();
+                if (!trimmed) {
+                    alert('Please provide a valid plan name.');
+                    return;
+                }
+                if (plans[trimmed] && !window.confirm(`Overwrite "${trimmed}"?`)) {
+                    return;
+                }
+                plans[trimmed] = collectPlanStateFromForm();
+                persistSavedPlans(plans);
+                refreshSavedPlansOptions(trimmed);
+                trackEvent('plan', 'save', { name: trimmed });
+            });
+
+            loadPlanButton?.addEventListener('click', () => {
+                if (!savedPlanSelect) {
+                    return;
+                }
+                const selected = savedPlanSelect.value;
+                if (!selected) {
+                    return;
+                }
+                const plans = getSavedPlans();
+                if (!plans[selected]) {
+                    alert('Unable to find that saved plan.');
+                    refreshSavedPlansOptions();
+                    return;
+                }
+                applyPlanStateToForm(plans[selected]);
+                trackEvent('plan', 'load', { name: selected });
+            });
+
+            resetPlanButton?.addEventListener('click', () => {
+                if (window.confirm('Reset configuration to defaults?')) {
+                    resetPlanToDefaults();
+                    trackEvent('plan', 'reset', {});
+                }
+            });
+
+            savedPlanSelect?.addEventListener('change', () => {
+                if (!loadPlanButton) {
+                    return;
+                }
+                if (savedPlanSelect.value) {
+                    loadPlanButton.removeAttribute('disabled');
+                } else {
+                    loadPlanButton.setAttribute('disabled', 'true');
+                }
+            });
+
             const loadFormValues = () => {
                 // Load number inputs
                 const startingCapitalInput = document.getElementById('starting_capital');
@@ -2121,32 +3382,6 @@
                 if (currentPriceInput) {
                     const saved = loadFormValue(STORAGE_KEYS.currentPrice);
                     if (saved !== null) currentPriceInput.value = saved;
-                }
-
-                // Load range sliders
-                if (rungSlider) {
-                    const saved = loadFormValue(STORAGE_KEYS.numberOfRungs);
-                    if (saved !== null) {
-                        rungSlider.value = saved;
-                        if (rungDisplay) rungDisplay.textContent = saved;
-                    }
-                }
-                if (depthSlider) {
-                    const saved = loadFormValue(STORAGE_KEYS.depth);
-                    if (saved !== null) {
-                        depthSlider.value = saved;
-                        if (depthDisplay) {
-                            const value = parseFloat(saved);
-                            depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
-                        }
-                    }
-                }
-                if (skewSlider) {
-                    const saved = loadFormValue(STORAGE_KEYS.skewValue);
-                    if (saved !== null) {
-                        skewSlider.value = saved;
-                        if (skewDisplay) skewDisplay.textContent = saved;
-                    }
                 }
 
                 // Load checkboxes
@@ -2213,6 +3448,7 @@
                     const saved = loadFormValue(STORAGE_KEYS.existingAvgPrice);
                     if (saved !== null) existingAvgPriceInput.value = saved;
                 }
+                refreshSavedPlansOptions();
             };
 
             if (getStoredValue('tpc-layout-mode')) {
@@ -2248,21 +3484,16 @@
                 });
             }
 
-            if (themeToggleButtons.length > 0) {
-                themeToggleButtons.forEach((button) => {
-                    button.addEventListener('click', () => {
-                        const value = button.getAttribute('data-theme-toggle');
-                        if (!value) {
-                            return;
-                        }
-                        themeLocked = true;
-                        setStoredValue(THEME_STORAGE_KEY, value);
-                        trackInteraction('theme-toggle', {
-                            requested: value,
-                            previous: currentThemeMode
-                        });
-                        applyThemeMode(value, { source: 'user' });
+            if (themeToggleButton) {
+                themeToggleButton.addEventListener('click', () => {
+                    const nextTheme = currentThemeMode === 'dark' ? 'light' : 'dark';
+                    themeLocked = true;
+                    setStoredValue(THEME_STORAGE_KEY, nextTheme);
+                    trackInteraction('theme-toggle', {
+                        requested: nextTheme,
+                        previous: currentThemeMode
                     });
+                    applyThemeMode(nextTheme, { source: 'user' });
                 });
             }
 
@@ -2484,12 +3715,6 @@
                 feeValue: feeValueInput ? feeValueInput.value : '',
                 spacingMode: spacingModeSelect ? spacingModeSelect.value : 'absolute'
             });
-
-            const closeExportMenu = () => {
-                if (exportCollapse && exportCollapse.open) {
-                    exportCollapse.removeAttribute('open');
-                }
-            };
 
             const buildCsvContent = (plan, settings) => {
                 let csvContent = "";
@@ -2729,15 +3954,28 @@ caption { font-weight: 600; margin-bottom: 6px; }
 </html>`;
             };
             const setSkewDisabled = (disabled) => {
-                if (!skewSlider) {
+                const skewControl = sliderControlInstances.get('skew_value');
+                if (skewControl) {
+                    skewControl.disable(disabled);
                     return;
                 }
+                if (skewSlider) {
                 if (disabled) {
                     skewSlider.setAttribute('disabled', 'true');
                     skewSlider.classList.add('opacity-50', 'cursor-not-allowed');
                 } else {
                     skewSlider.removeAttribute('disabled');
                     skewSlider.classList.remove('opacity-50', 'cursor-not-allowed');
+                    }
+                }
+                if (skewNumericInput) {
+                    if (disabled) {
+                        skewNumericInput.setAttribute('disabled', 'true');
+                        skewNumericInput.classList.add('cursor-not-allowed');
+                    } else {
+                        skewNumericInput.removeAttribute('disabled');
+                        skewNumericInput.classList.remove('cursor-not-allowed');
+                    }
                 }
             };
 
@@ -2901,11 +4139,13 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackEvent('calculation', 'calculate:invalid', {
                         invalidFields
                     }, 'warn');
+                    renderPlanAlerts([]);
                     finishCalculation({
                         status: 'invalid-input',
                         invalidFields
                     });
                     currentPlanData = null;
+                    pendingChartData = null;
                     return;
                 }
 
@@ -3236,6 +4476,19 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 const netProfitAfterFees = totalRevenueNet - costBasis - (isFeeNetted ? 0 : totalSellFees);
                 const roi = costBasis > 0 ? (netProfitAfterFees / costBasis) * 100 : 0;
 
+                const planWarnings = [];
+                if (!sellOnlyMode && Number.isFinite(C)) {
+                    const grossBuyRequirement = totalNetCapitalSpent + (isFeeNetted ? totalBuyFees : 0);
+                    if (grossBuyRequirement - C > 0.0001) {
+                        planWarnings.push(`Buy ladder requires ${formatCurrency(grossBuyRequirement)} but available capital is ${formatCurrency(C)}.`);
+                    }
+                }
+                const holdingsForComparison = sellOnlyMode ? effectiveAssetBought : totalAssetBought;
+                if (holdingsForComparison > 0 && (totalQuantityForSell - holdingsForComparison) > 1e-6) {
+                    planWarnings.push(`Sell ladder allocates ${formatNumber(totalQuantityForSell, 4)} units while only ${formatNumber(holdingsForComparison, 4)} are available.`);
+                }
+                renderPlanAlerts(planWarnings);
+
                 // In sell-only mode, buy floor should use known avg buy price, not from stale buy ladder
                 const lowestBuyActive = sellOnlyMode 
                     ? (avgBuyPrice > 0 ? { price: avgBuyPrice, rung: null } : null)
@@ -3524,17 +4777,36 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     sellOnlyState.checkboxElements = [];
                 }
 
-                // Draw charts
+                // Draw charts (lazy rendering support)
                 const combinedVolumes = [...plan.buyLadder, ...plan.sellLadder]
                     .map(rung => (typeof rung?.assetSize === 'number' ? rung.assetSize : 0));
                 const sharedMaxVolume = combinedVolumes.length > 0 ? Math.max(...combinedVolumes) : 1;
 
-                if (plan.buyLadder.length > 0 && !(plan.modes && plan.modes.sellOnly)) {
-                    drawBuyChart(plan.buyLadder, sharedMaxVolume);
+                if (!chartsLazySupported) {
+                    if (plan.buyLadder.length > 0 && !(plan.modes && plan.modes.sellOnly)) {
+                        drawBuyChart(plan.buyLadder, sharedMaxVolume);
+                    } else {
+                        d3.select("#allocation-chart").selectAll("*").remove();
+                    }
+                    if (plan.sellLadder.length > 0) {
+                        drawSellChart(plan.sellLadder, sharedMaxVolume);
+                    } else {
+                        d3.select("#sell-allocation-chart").selectAll("*").remove();
+                    }
                 } else {
-                    d3.select("#allocation-chart").selectAll("*").remove();
+                    pendingChartData = {
+                        buy: (plan.buyLadder.length > 0 && !(plan.modes && plan.modes.sellOnly)) ? plan.buyLadder : null,
+                        sell: plan.sellLadder.length > 0 ? plan.sellLadder : null,
+                        sharedMaxVolume
+                    };
+                    if (!pendingChartData.buy) {
+                        d3.select("#allocation-chart").selectAll("*").remove();
+                    }
+                    if (!pendingChartData.sell) {
+                        d3.select("#sell-allocation-chart").selectAll("*").remove();
+                    }
+                    triggerChartRender();
                 }
-                drawSellChart(plan.sellLadder, sharedMaxVolume);
                 trackEvent('chart', 'render:requested', {
                     buyChartEnabled: plan.buyLadder.length > 0 && !(plan.modes && plan.modes.sellOnly),
                     sellChartEnabled: plan.sellLadder.length > 0,
@@ -3781,34 +5053,22 @@ caption { font-weight: 600; margin-bottom: 6px; }
 
             // --- Real-time updates ---
 
-            // Debounce function
-            function debounce(func, wait) {
-                let timeout;
-                return function(...args) {
-                    const context = this;
-                    clearTimeout(timeout);
-                    timeout = setTimeout(() => func.apply(context, args), wait);
-                };
-            }
-
-            // Debounced calculate function for number inputs
-            const debouncedCalculate = debounce(calculatePlan, 300); // 300ms delay
-
-            // Add listeners to number inputs
             const inputsToTrack = [
                 'starting_capital',
                 'current_price'
             ];
 
-            inputsToTrack.forEach(id => {
+            inputsToTrack.forEach((id) => {
                 const input = document.getElementById(id);
-                if (input) {
+                if (!input) {
+                    return;
+                }
                     input.addEventListener('input', (event) => {
                         trackInteraction('input-change', {
                             id,
                             value: event.target.value
                         });
-                        debouncedCalculate(event);
+                    schedulePlanUpdate();
                     });
                     input.addEventListener('blur', () => {
                         trackInteraction('input-blur', {
@@ -3816,57 +5076,275 @@ caption { font-weight: 600; margin-bottom: 6px; }
                             value: input.value
                         });
                     });
+            });
+
+            // Section navigation & back-to-top
+            const sectionTargets = navLinks
+                .map((link) => link.getAttribute('data-nav-target'))
+                .map((id) => document.getElementById(id))
+                .filter(Boolean);
+
+            const scrollBehavior = () => (prefersReducedMotionQuery.matches ? 'auto' : 'smooth');
+
+            navLinks.forEach((link) => {
+                link.addEventListener('click', (event) => {
+                    const targetId = link.getAttribute('data-nav-target');
+                    const target = targetId ? document.getElementById(targetId) : null;
+                    if (!target) {
+                        return;
+                    }
+                    event.preventDefault();
+                    target.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
+                    target.focus({ preventScroll: true });
+                });
+            });
+
+            if ('IntersectionObserver' in window && sectionTargets.length > 0 && navLinks.length > 0) {
+                const navObserver = new IntersectionObserver((entries) => {
+                    const visibleEntry = entries
+                        .filter((entry) => entry.isIntersecting)
+                        .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+                    if (!visibleEntry) {
+                        return;
+                    }
+                    const visibleId = visibleEntry.target.getAttribute('id');
+                    navLinks.forEach((link) => {
+                        const isActive = link.getAttribute('data-nav-target') === visibleId;
+                        link.classList.toggle('active', isActive);
+                        if (isActive) {
+                            link.setAttribute('aria-current', 'true');
+                        } else {
+                            link.removeAttribute('aria-current');
+                        }
+                    });
+                }, { rootMargin: '-40% 0px -50% 0px', threshold: 0.2 });
+                sectionTargets.forEach((section) => navObserver.observe(section));
+            } else if (navLinks.length > 0) {
+                navLinks[0].classList.add('active');
+                navLinks[0].setAttribute('aria-current', 'true');
+            }
+
+            const setOrderCardsCollapsed = (collapsed) => {
+                orderCards.forEach((card) => {
+                    card.classList.toggle('collapsed', collapsed);
+                });
+            };
+
+            orderToggleButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const action = button.getAttribute('data-order-toggle');
+                    const isCollapse = action === 'collapse';
+                    setOrderCardsCollapsed(isCollapse);
+                    trackInteraction('order-table-toggle', {
+                        action,
+                        collapsed: isCollapse
+                    });
+                });
+            });
+
+            const chartsLazySupported = 'IntersectionObserver' in window;
+            const chartSections = [
+                { id: 'buy-ladder', key: 'buy', element: null },
+                { id: 'sell-ladder', key: 'sell', element: null }
+            ];
+            const chartVisibility = { buy: false, sell: false };
+            let pendingChartData = null;
+
+            const triggerChartRender = () => {
+                if (!pendingChartData) {
+                    return;
+                }
+                if (chartVisibility.buy && pendingChartData.buy && !(currentPlanData?.modes && currentPlanData.modes.sellOnly)) {
+                    drawBuyChart(pendingChartData.buy, pendingChartData.sharedMaxVolume);
+                    pendingChartData.buy = null;
+                }
+                if (chartVisibility.sell && pendingChartData.sell) {
+                    drawSellChart(pendingChartData.sell, pendingChartData.sharedMaxVolume);
+                    pendingChartData.sell = null;
+                }
+                if ((!pendingChartData.buy || chartVisibility.buy) && (!pendingChartData.sell || chartVisibility.sell)) {
+                    pendingChartData = null;
+                }
+            };
+
+            if (chartsLazySupported) {
+                const chartObserver = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        const match = chartSections.find((section) => section.element === entry.target);
+                        if (!match) {
+                            return;
+                        }
+                        chartVisibility[match.key] = entry.isIntersecting;
+                    });
+                    triggerChartRender();
+                }, { threshold: 0.2 });
+                chartSections.forEach((section) => {
+                    section.element = document.getElementById(section.id);
+                    if (section.element) {
+                        chartObserver.observe(section.element);
+                    }
+                });
+            }
+
+            const exportFocusableSelector = 'button:not([disabled]), [data-export-format], a[href], input:not([disabled])';
+            let exportSheetLastFocus = null;
+            let exportScrollRestore = '';
+            let pdfLibraryPromise = null;
+
+            const setExportLoading = (isLoading, message = 'Preparing export…') => {
+                if (!exportSheetStatus) {
+                    return;
+                }
+                exportSheetStatus.classList.toggle('active', isLoading);
+                exportSheetSpinner?.classList.toggle('hidden', !isLoading);
+                if (exportStatusText) {
+                    exportStatusText.textContent = message;
+                }
+            };
+
+            const focusFirstExportElement = () => {
+                if (!exportSheet) {
+                    return;
+                }
+                const focusable = Array.from(exportSheet.querySelectorAll(exportFocusableSelector))
+                    .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('tabindex') !== '-1');
+                (focusable[0] || exportSheetCloseBtn || exportSheet)?.focus({ preventScroll: true });
+            };
+
+            const openExportSheet = () => {
+                if (!exportSheet || !exportSheetOverlay) {
+                    return;
+                }
+                exportSheetLastFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+                exportScrollRestore = document.body.style.overflow;
+                document.body.style.overflow = 'hidden';
+                exportSheet.classList.remove('hidden');
+                exportSheetOverlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    exportSheet.classList.add('is-visible');
+                    exportSheetOverlay.classList.add('is-visible');
+                });
+                exportSheet.setAttribute('aria-hidden', 'false');
+                exportSheetOverlay.setAttribute('aria-hidden', 'false');
+                setExportLoading(false);
+                focusFirstExportElement();
+            };
+
+            const closeExportSheet = () => {
+                if (!exportSheet || !exportSheetOverlay) {
+                    return;
+                }
+                exportSheet.classList.remove('is-visible');
+                exportSheetOverlay.classList.remove('is-visible');
+                const finalize = () => {
+                    exportSheet.classList.add('hidden');
+                    exportSheetOverlay.classList.add('hidden');
+                document.body.style.overflow = exportScrollRestore || '';
+                };
+                exportSheet.addEventListener('transitionend', finalize, { once: true });
+                exportSheet.setAttribute('aria-hidden', 'true');
+                exportSheetOverlay.setAttribute('aria-hidden', 'true');
+                setExportLoading(false);
+                if (exportSheetLastFocus && typeof exportSheetLastFocus.focus === 'function') {
+                    exportSheetLastFocus.focus({ preventScroll: true });
+                }
+                exportSheetLastFocus = null;
+            };
+
+            const handleExportSheetKeyDown = (event) => {
+                if (event.key !== 'Tab' || !exportSheet?.classList.contains('is-visible')) {
+                    return;
+                }
+                const focusable = Array.from(exportSheet.querySelectorAll(exportFocusableSelector))
+                    .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('tabindex') !== '-1');
+                if (focusable.length === 0) {
+                    return;
+                }
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            };
+
+            const loadJsPdf = () => {
+                if (window.jspdf?.jsPDF) {
+                    return Promise.resolve(window.jspdf.jsPDF);
+                }
+                if (!pdfLibraryPromise) {
+                    pdfLibraryPromise = new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                        script.onload = () => {
+                            if (window.jspdf?.jsPDF) {
+                                resolve(window.jspdf.jsPDF);
+                            } else {
+                                reject(new Error('jsPDF unavailable after load.'));
+                            }
+                        };
+                        script.onerror = () => reject(new Error('Unable to load PDF library.'));
+                        document.body.appendChild(script);
+                    });
+                }
+                return pdfLibraryPromise;
+            };
+
+            exportTriggerButton?.addEventListener('click', openExportSheet);
+            exportSheetOverlay?.addEventListener('click', closeExportSheet);
+            exportSheetCloseBtn?.addEventListener('click', closeExportSheet);
+            exportSheet?.addEventListener('keydown', handleExportSheetKeyDown);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && exportSheet?.classList.contains('is-visible')) {
+                    event.preventDefault();
+                    closeExportSheet();
                 }
             });
 
-            // The skew slider updates instantly
-            skewSlider.addEventListener('input', (e) => {
-                trackInteraction('skew-adjust', {
-                    value: e.target.value
+            exportFormatButtons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    const format = button.getAttribute('data-export-format');
+                    if (format === 'csv') {
+                        handleCsvDownload();
+                    } else if (format === 'xls') {
+                        handleXlsDownload();
+                    } else if (format === 'pdf') {
+                        handlePdfDownload();
+                    }
                 });
-                skewDisplay.textContent = e.target.value;
-                calculatePlan(); 
             });
 
-            if (rungSlider && rungDisplay) {
-                rungSlider.addEventListener('input', (e) => {
-                    trackInteraction('rungs-adjust', {
-                        value: e.target.value
-                    });
-                    rungDisplay.textContent = e.target.value;
-                    calculatePlan();
-                });
-                rungDisplay.textContent = rungSlider.value;
+            function updateBackToTopVisibility() {
+                if (!backToTopButton) {
+                    return;
+                }
+                const shouldShow = currentLayoutMode === 'mobile' && window.scrollY > 400;
+                backToTopButton.classList.toggle('visible', shouldShow);
+                backToTopButton.setAttribute('aria-hidden', shouldShow ? 'false' : 'true');
             }
 
-            if (depthSlider && depthDisplay) {
-                depthSlider.addEventListener('input', (e) => {
-                    trackInteraction('depth-adjust', {
-                        value: e.target.value
-                    });
-                    let value = parseFloat(e.target.value);
-                    // Variable step logic: 0.1% steps from 0.1% to 2%, 1% steps from 2% upwards
-                    if (value >= 2) {
-                        // Round to nearest 1% for values >= 2%
-                        value = Math.round(value);
-                    } else {
-                        // Round to nearest 0.1% for values < 2%
-                        value = Math.round(value * 10) / 10;
-                    }
-                    // Clamp value to valid range
-                    value = Math.max(0.1, Math.min(99, value));
-                    // Update slider value if it changed
-                    if (parseFloat(e.target.value) !== value) {
-                        depthSlider.value = value;
-                    }
-                    // Format display: show one decimal place when < 2%, no decimals when >= 2%
-                    depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
-                    calculatePlan();
+            if (backToTopButton) {
+                backToTopButton.addEventListener('click', () => {
+                    window.scrollTo({ top: 0, behavior: scrollBehavior() });
                 });
-                // Initialize display with proper formatting
-                const initialValue = parseFloat(depthSlider.value);
-                depthDisplay.textContent = initialValue < 2 ? initialValue.toFixed(1) : Math.round(initialValue);
+                backToTopButton.setAttribute('aria-hidden', 'true');
             }
+
+            let backToTopTicking = false;
+            window.addEventListener('scroll', () => {
+                if (backToTopTicking) {
+                    return;
+                }
+                backToTopTicking = true;
+                window.requestAnimationFrame(() => {
+                    updateBackToTopVisibility();
+                    backToTopTicking = false;
+                });
+            });
+            updateBackToTopVisibility();
 
             // Toggle advanced settings collapse/expand (independent of checkbox state)
             if (advancedSettingsToggle && advancedSettings) {
@@ -4009,7 +5487,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackInteraction('fee-value-change', {
                         value: event.target.value
                     });
-                    debouncedCalculate(event);
+                    schedulePlanUpdate();
                 });
             }
 
@@ -4027,7 +5505,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackInteraction('existing-quantity-change', {
                         value: event.target.value
                     });
-                    debouncedCalculate(event);
+                    schedulePlanUpdate();
                 });
             }
 
@@ -4036,7 +5514,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackInteraction('existing-avg-price-change', {
                         value: event.target.value
                     });
-                    debouncedCalculate(event);
+                    schedulePlanUpdate();
                 });
             }
 
@@ -4078,22 +5556,26 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         netProfit: safeNumericSummary(plan.summary.netProfit, 2)
                     } : {}
                 });
-                const csvContent = buildCsvContent(plan, settings);
-
-                const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.setAttribute('href', url);
-                link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.csv`);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                closeExportMenu();
-                trackEvent('export', 'csv:completed', {
-                    bytes: csvContent.length,
-                    settings
-                });
+                setExportLoading(true, 'Preparing CSV…');
+                try {
+                    const csvContent = buildCsvContent(plan, settings);
+                    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const link = document.createElement('a');
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.csv`);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    trackEvent('export', 'csv:completed', {
+                        bytes: csvContent.length,
+                        settings
+                    });
+                    closeExportSheet();
+                } finally {
+                    setExportLoading(false);
+                }
             };
 
             const handleXlsDownload = () => {
@@ -4112,30 +5594,78 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         netProfit: safeNumericSummary(plan.summary.netProfit, 2)
                     } : {}
                 });
-                const workbook = buildXlsContent(plan, settings);
-
-                const blob = new Blob([workbook], { type: 'application/vnd.ms-excel' });
-                const link = document.createElement('a');
-                const url = URL.createObjectURL(blob);
-                link.setAttribute('href', url);
-                link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.xls`);
-                link.style.visibility = 'hidden';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                closeExportMenu();
-                trackEvent('export', 'xls:completed', {
-                    bytes: workbook.byteLength || workbook.length || 0,
-                    settings
-                });
+                setExportLoading(true, 'Preparing XLS…');
+                try {
+                    const workbook = buildXlsContent(plan, settings);
+                    const blob = new Blob([workbook], { type: 'application/vnd.ms-excel' });
+                    const link = document.createElement('a');
+                    const url = URL.createObjectURL(blob);
+                    link.setAttribute('href', url);
+                    link.setAttribute('download', `order_skew_plan_${new Date().toISOString().slice(0, 10)}.xls`);
+                    link.style.visibility = 'hidden';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    trackEvent('export', 'xls:completed', {
+                        bytes: workbook.byteLength || workbook.length || 0,
+                        settings
+                    });
+                    closeExportSheet();
+                } finally {
+                    setExportLoading(false);
+                }
             };
 
-            if (downloadCsvBtn) {
-                downloadCsvBtn.addEventListener('click', handleCsvDownload);
-            }
-            if (downloadXlsBtn) {
-                downloadXlsBtn.addEventListener('click', handleXlsDownload);
-            }
+            const handlePdfDownload = async () => {
+                const plan = ensurePlanAvailable();
+                if (!plan) {
+                    trackEvent('export', 'pdf:aborted', {
+                        reason: 'missing-plan'
+                    }, 'warn');
+                    return;
+                }
+                const settings = collectExportSettings();
+                setExportLoading(true, 'Preparing PDF…');
+                try {
+                    const jsPDF = await loadJsPdf();
+                    const doc = new jsPDF({ unit: 'pt', format: 'letter' });
+                    doc.setFontSize(16);
+                    doc.text('Order Skew Plan', 40, 60);
+                    doc.setFontSize(11);
+                    const summaryLines = [
+                        `Avg Buy: ${formatCurrency(plan.summary.avgBuyPrice)}`,
+                        `Avg Sell: ${formatCurrency(plan.summary.avgSellPrice)}`,
+                        `Total Volume: ${formatNumber(plan.summary.totalQuantity, 4)}`,
+                        `ROI: ${formatPercent(plan.summary.roi)}`
+                    ];
+                    summaryLines.forEach((line, index) => {
+                        doc.text(line, 40, 90 + (index * 18));
+                    });
+                    doc.setFontSize(12);
+                    doc.text('Top Buy Rungs', 40, 180);
+                    plan.buyLadder.slice(0, 5).forEach((rung, index) => {
+                        doc.text(`${rung.rung}. ${formatCurrency(rung.price)} · ${formatNumber(rung.assetSize, 4)} units`, 40, 200 + (index * 16));
+                    });
+                    doc.text('Top Sell Rungs', 40, 300);
+                    plan.sellLadder.slice(0, 5).forEach((rung, index) => {
+                        doc.text(`${rung.rung}. ${formatCurrency(rung.price)} · ${formatNumber(rung.assetSize, 4)} units`, 40, 320 + (index * 16));
+                    });
+                    doc.save(`order_skew_plan_${new Date().toISOString().slice(0, 10)}.pdf`);
+                    trackEvent('export', 'pdf:completed', {
+                        settings,
+                        summary: plan.summary ? {
+                            totalQuantity: safeNumericSummary(plan.summary.totalQuantity, 4),
+                            netProfit: safeNumericSummary(plan.summary.netProfit, 2)
+                        } : {}
+                    });
+                    closeExportSheet();
+                } catch (error) {
+                    console.error('PDF export failed', error);
+                    alert('Unable to generate PDF at the moment. Please try again.');
+                } finally {
+                    setExportLoading(false);
+                }
+            };
 
             const runDisplayTests = () => {
                 if (displayTestsExecuted) {
@@ -4200,38 +5730,118 @@ caption { font-weight: 600; margin-bottom: 6px; }
             });
 
             // Intro modal functionality
-            const showIntroModal = () => {
-                if (introModal) {
-                    introModal.classList.remove('hidden');
-                    document.body.classList.add('intro-modal-open');
+            const introFocusableSelector = 'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            const introModalContainer = introModal?.querySelector('.intro-modal-container');
+            let introLastFocusedElement = null;
+            let introStoredBodyOverflow = '';
+
+            const isIntroVisible = () => introModal && !introModal.classList.contains('hidden');
+
+            const focusFirstIntroElement = () => {
+                if (!introModal) {
+                    return;
                 }
+                const focusable = Array.from(introModal.querySelectorAll(introFocusableSelector))
+                    .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('tabindex') !== '-1' && el.offsetParent !== null);
+                const target = focusable[0] || introCloseButton || introModal;
+                target?.focus({ preventScroll: true });
+            };
+
+            const showIntroModal = () => {
+                if (!introModal) {
+                    return;
+                }
+                introLastFocusedElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+                introStoredBodyOverflow = document.body.style.overflow;
+                    introModal.classList.remove('hidden');
+                introModal.setAttribute('aria-hidden', 'false');
+                    document.body.classList.add('intro-modal-open');
+                document.body.style.overflow = 'hidden';
+                focusFirstIntroElement();
             };
 
             const hideIntroModal = () => {
-                if (introModal) {
-                    introModal.classList.add('hidden');
-                    document.body.classList.remove('intro-modal-open');
+                if (!introModal) {
+                    return;
                 }
+                    introModal.classList.add('hidden');
+                introModal.setAttribute('aria-hidden', 'true');
+                    document.body.classList.remove('intro-modal-open');
+                document.body.style.overflow = introStoredBodyOverflow || '';
+                if (introLastFocusedElement && typeof introLastFocusedElement.focus === 'function') {
+                    introLastFocusedElement.focus({ preventScroll: true });
+                }
+                introLastFocusedElement = null;
             };
 
             const closeIntroAndSavePreference = () => {
                 const skipIntro = introSkipCheckbox && introSkipCheckbox.checked;
                 if (skipIntro) {
-                    setStoredValue(INTRO_SKIP_STORAGE_KEY, 'true');
+                    setStoredValue(INTRO_DISMISS_STORAGE_KEY, 'true');
+                    setStoredValue(LEGACY_INTRO_SKIP_KEY, 'true');
                 }
                 hideIntroModal();
             };
 
             // Check if intro should be shown
             const shouldShowIntro = () => {
-                const skipValue = getStoredValue(INTRO_SKIP_STORAGE_KEY);
-                return skipValue !== 'true';
+                const dismissed = getStoredValue(INTRO_DISMISS_STORAGE_KEY);
+                if (dismissed === 'true') {
+                    return false;
+                }
+                const legacySkip = getStoredValue(LEGACY_INTRO_SKIP_KEY);
+                if (legacySkip === 'true') {
+                    setStoredValue(INTRO_DISMISS_STORAGE_KEY, 'true');
+                    return false;
+                }
+                return true;
             };
 
             // Show intro modal if preference allows
             if (shouldShowIntro()) {
                 showIntroModal();
             }
+
+            const handleIntroBackdropClick = (event) => {
+                if (event.target === introModal) {
+                    closeIntroAndSavePreference();
+                    trackInteraction('intro', 'close-backdrop', {
+                        skipIntro: introSkipCheckbox?.checked || false
+                    });
+                }
+            };
+
+            const trapIntroFocus = (event) => {
+                if (event.key !== 'Tab' || !isIntroVisible() || !introModalContainer) {
+                    return;
+                }
+                const focusable = Array.from(introModalContainer.querySelectorAll(introFocusableSelector))
+                    .filter((el) => !el.hasAttribute('disabled') && el.getAttribute('tabindex') !== '-1' && el.offsetParent !== null);
+                if (focusable.length === 0) {
+                    return;
+                }
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                if (event.shiftKey && document.activeElement === first) {
+                    event.preventDefault();
+                    last.focus();
+                } else if (!event.shiftKey && document.activeElement === last) {
+                    event.preventDefault();
+                    first.focus();
+                }
+            };
+
+            const handleIntroEscape = (event) => {
+                if (event.key === 'Escape' && isIntroVisible()) {
+                    event.preventDefault();
+                    closeIntroAndSavePreference();
+                }
+            };
+
+            introModal?.addEventListener('click', handleIntroBackdropClick);
+            introModalContainer?.addEventListener('click', (event) => event.stopPropagation());
+            introModalContainer?.addEventListener('keydown', trapIntroFocus);
+            document.addEventListener('keydown', handleIntroEscape);
 
             // Event handlers for intro modal
             if (introGetStartedButton) {
@@ -4252,30 +5862,18 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 });
             }
 
-            // Allow closing modal by clicking outside (optional - only if user clicks backdrop)
-            if (introModal) {
-                introModal.addEventListener('click', (e) => {
-                    if (e.target === introModal) {
+            if (introCloseButton) {
+                introCloseButton.addEventListener('click', () => {
                         closeIntroAndSavePreference();
-                        trackInteraction('intro', 'close-backdrop', {
+                    trackInteraction('intro', 'close-button', {
                             skipIntro: introSkipCheckbox?.checked || false
                         });
-                    }
                 });
-            }
-
-            // Prevent modal content clicks from closing the modal
-            if (introModal) {
-                const modalContainer = introModal.querySelector('.intro-modal-container');
-                if (modalContainer) {
-                    modalContainer.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                    });
-                }
             }
 
 
             // Load saved form values on page load (before first calculation)
+            initializeSliderControls();
             loadFormValues();
 
             // Set up form value persistence - save values when they change
@@ -4290,21 +5888,6 @@ caption { font-weight: 600; margin-bottom: 6px; }
             if (currentPriceInput) {
                 currentPriceInput.addEventListener('input', () => {
                     saveFormValue(STORAGE_KEYS.currentPrice, currentPriceInput.value);
-                });
-            }
-            if (rungSlider) {
-                rungSlider.addEventListener('input', () => {
-                    saveFormValue(STORAGE_KEYS.numberOfRungs, rungSlider.value);
-                });
-            }
-            if (depthSlider) {
-                depthSlider.addEventListener('input', () => {
-                    saveFormValue(STORAGE_KEYS.depth, depthSlider.value);
-                });
-            }
-            if (skewSlider) {
-                skewSlider.addEventListener('input', () => {
-                    saveFormValue(STORAGE_KEYS.skewValue, skewSlider.value);
                 });
             }
             if (advancedToggle) {
