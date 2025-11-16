@@ -360,7 +360,7 @@
         .brand-header {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 1.25rem;
             padding: 1.5rem;
             border-radius: 1.25rem;
             background: linear-gradient(145deg, rgba(237, 252, 255, 0.85), rgba(219, 246, 250, 0.65));
@@ -371,7 +371,7 @@
         .brand-header-inner {
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.5rem;
         }
 
         .brand-title {
@@ -414,17 +414,21 @@
 
         .header-controls {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 0.75rem;
             flex-wrap: wrap;
-            gap: 0.5rem;
-            align-self: flex-start;
         }
 
         .header-controls-group {
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+        }
+
+        .header-export-section {
+            margin-top: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(186, 198, 234, 0.3);
         }
 
         .theme-toggle-group {
@@ -1537,9 +1541,9 @@
     </div>
 
     <div id="app" class="max-w-7xl mx-auto">
-        <header class="py-6">
-            <div class="flex flex-col gap-6">
-                <div class="brand-header">
+        <header class="py-4">
+            <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-start lg:items-stretch">
+                <div class="brand-header flex-1">
                     <div class="brand-header-inner">
                         <span class="brand-kicker">OrderSkew.com</span>
                         <h1 class="brand-title">Order Skew</h1>
@@ -1567,8 +1571,6 @@
                                     </svg>
                                 </button>
                             </div>
-                            
-                            <!-- Understated Icons -->
                             <div class="header-icons-group">
                                 <button type="button" id="solana-logo-btn-header" class="header-icon-btn" aria-label="Show QR code for Solana address">
                                     <svg viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg" class="header-solana-icon">
@@ -1589,90 +1591,140 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <details id="export-collapse" class="relative self-center sm:self-auto">
-                        <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
-                            <div class="flex items-center gap-2">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
-                                    <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                                    <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                                    <polyline points="7 3 7 8 15 8"></polyline>
-                                </svg>
-                                <span>Export Options</span>
+                    <div class="header-export-section">
+                        <details id="export-collapse" class="relative">
+                            <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
+                                <div class="flex items-center gap-2">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
+                                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                                        <polyline points="7 3 7 8 15 8"></polyline>
+                                    </svg>
+                                    <span>Export Options</span>
+                                </div>
+                                <span class="text-xs opacity-80 tracking-wide">▼</span>
+                            </summary>
+                            <div class="mt-3 flex flex-wrap gap-2 export-panel">
+                                <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg">
+                                    Download CSV
+                                </button>
+                                <button id="download-xls-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg">
+                                    Download XLS
+                                </button>
+                                <button id="save-config-btn" class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg">
+                                    Save Config
+                                </button>
+                                <button id="load-config-btn" class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg">
+                                    Load Config
+                                </button>
+                                <input type="file" id="load-config-file" accept=".json" class="hidden">
                             </div>
-                            <span class="text-xs opacity-80 tracking-wide">▼</span>
-                        </summary>
-                        <div class="mt-3 sm:mt-2 flex flex-col sm:flex-row gap-2 export-panel">
-                            <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Download CSV
-                            </button>
-                            <button id="download-xls-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Download XLS
-                            </button>
-                            <button id="save-config-btn" class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Save Config
-                            </button>
-                            <button id="load-config-btn" class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg w-full sm:w-auto">
-                                Load Config
-                            </button>
-                            <input type="file" id="load-config-file" accept=".json" class="hidden">
+                        </details>
+                    </div>
+                </div>
+                <div class="card p-6 flex-shrink-0 w-full lg:w-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold text-primary-dark">Plan Summary</h2>
+                    </div>
+                    <div id="summary" class="grid summary-mobile-grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Avg. Buy Price</p>
+                            <p id="summary-avg-buy" class="text-xl font-bold text-primary-dark">-</p>
+                            <p class="text-xs text-secondary-dark mt-3">Buy Floor</p>
+                            <p id="summary-buy-floor" class="text-sm font-semibold text-primary-dark">-</p>
                         </div>
-                    </details>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Avg. Sell Price</p>
+                            <p id="summary-avg-sell" class="text-xl font-bold text-primary-dark">-</p>
+                            <p class="text-xs text-secondary-dark mt-3">Sell Ceiling</p>
+                            <p id="summary-sell-ceiling" class="text-sm font-semibold text-primary-dark">-</p>
+                        </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Profit After Fees</p>
+                            <p id="summary-net-profit" class="text-xl font-bold text-primary-dark">-</p>
+                        </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Total Vol</p>
+                            <p id="summary-total-quantity" class="text-xl font-bold text-primary-dark">-</p>
+                        </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">ROI on Cost Basis</p>
+                            <p id="summary-roi" class="text-xl font-bold text-primary-dark">-</p>
+                        </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Total Fees Paid</p>
+                            <p id="summary-total-fees" class="text-xl font-bold text-primary-dark">-</p>
+                            <p id="summary-total-fees-percent" class="text-xs text-secondary-dark mt-1">-</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 auto-rows-min">
-            <div class="card p-6">
-                <h2 class="text-2xl font-semibold text-primary-dark mb-6">Configuration</h2>
-                <form id="trading-plan-form" class="space-y-5">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 auto-rows-min">
+            <div class="card p-6 col-span-1 lg:col-span-2">
+                <form id="trading-plan-form">
+                    <div class="flex gap-4 lg:gap-6 items-start">
+                        <div class="flex-shrink-0 space-y-3">
+                            <div>
+                                <label for="starting_capital" id="starting_capital_label" class="block text-xs font-medium text-secondary-dark mb-1">Initial Capital ($)</label>
+                                <input type="number" id="starting_capital" value="50000" class="form-input w-full rounded-md p-1.5 text-sm" style="min-width: 180px;">
+                            </div>
+                            <div>
+                                <label for="current_price" class="block text-xs font-medium text-secondary-dark mb-1">Current Asset Price ($)</label>
+                                <input type="number" id="current_price" value="100" class="form-input w-full rounded-md p-1.5 text-sm" style="min-width: 180px;">
+                            </div>
+                        </div>
+                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
                         <div>
-                            <label for="starting_capital" class="block text-sm font-medium text-secondary-dark mb-1">Initial Capital ($)</label>
-                            <input type="number" id="starting_capital" value="50000" class="form-input w-full rounded-md p-2">
+                            <label for="number_of_rungs" class="block text-sm font-medium text-secondary-dark mb-1">Number of Rungs</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" step="1" class="form-input w-20 rounded-md p-1.5 text-sm">
+                            </div>
                         </div>
                         <div>
-                            <label for="current_price" class="block text-sm font-medium text-secondary-dark mb-1">Current Asset Price ($)</label>
-                            <input type="number" id="current_price" value="100" class="form-input w-full rounded-md p-2">
-                        </div>
-                    </div>
-                    <div>
-                        <label for="number_of_rungs" class="block text-sm font-medium text-secondary-dark mb-1">Number of Rungs (<span id="number_of_rungs_display">10</span>)</label>
-                        <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="w-full h-2 rounded-lg cursor-pointer">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-secondary-dark mb-1">Price Range</label>
-                        <select id="price_range_mode" class="form-input w-full rounded-md p-2 text-sm mb-2">
-                            <option value="width">Width (%)</option>
-                            <option value="floor">Buy Floor & Sell Ceiling</option>
-                        </select>
-                        <div id="width-mode-container">
-                            <label for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (<span id="depth_display">20</span>%)</label>
-                            <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="w-full h-2 rounded-lg cursor-pointer">
-                        </div>
-                        <div id="floor-mode-container" class="hidden">
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label for="buy_floor" class="block text-sm font-medium text-secondary-dark mb-1">Buy Floor ($)</label>
-                                    <input type="number" id="buy_floor" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2" placeholder="Auto">
+                            <label class="block text-sm font-medium text-secondary-dark mb-1">Price Range</label>
+                            <select id="price_range_mode" class="form-input w-full rounded-md p-2 text-sm mb-2">
+                                <option value="width">Width (%)</option>
+                                <option value="floor">Buy Floor & Sell Ceiling</option>
+                            </select>
+                            <div id="width-mode-container">
+                                <label for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (%)</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                    <input type="number" id="depth_input" value="20" min="0.1" max="99" step="0.1" class="form-input w-20 rounded-md p-1.5 text-sm">
                                 </div>
-                                <div>
-                                    <label for="sell_ceiling" class="block text-sm font-medium text-secondary-dark mb-1">Sell Ceiling ($)</label>
-                                    <input type="number" id="sell_ceiling" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2" placeholder="Auto">
+                            </div>
+                            <div id="floor-mode-container" class="hidden">
+                                <div class="space-y-2">
+                                    <div>
+                                        <label for="buy_floor" class="block text-xs font-medium text-secondary-dark mb-1">Buy Floor ($)</label>
+                                        <input type="number" id="buy_floor" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2 text-sm" placeholder="Auto">
+                                    </div>
+                                    <div>
+                                        <label for="sell_ceiling" class="block text-xs font-medium text-secondary-dark mb-1">Sell Ceiling ($)</label>
+                                        <input type="number" id="sell_ceiling" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2 text-sm" placeholder="Auto">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <label for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew (<span id="skew_value_display">50</span>)</label>
-                        <input type="range" id="skew_value" min="0" max="100" value="50" class="w-full h-2 rounded-lg cursor-pointer">
-                        <div class="flex justify-between text-xs text-tertiary-dark mt-1">
-                            <span>None</span>
-                            <span>Moderate</span>
-                            <span>Heavy</span>
+                        <div>
+                            <label for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="skew_value" min="0" max="100" value="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                <input type="number" id="skew_value_input" min="0" max="100" value="50" step="1" class="form-input w-20 rounded-md p-1.5 text-sm">
+                            </div>
+                            <div class="flex justify-between text-xs text-tertiary-dark mt-1">
+                                <span>None</span>
+                                <span>Moderate</span>
+                                <span>Heavy</span>
+                            </div>
+                        </div>
                         </div>
                     </div>
-                    <div class="border border-soft rounded-lg p-3 surface-muted space-y-3">
+                    <div class="mt-4">
+                        <div class="border border-soft rounded-lg p-3 surface-muted space-y-3">
                         <div class="flex items-center justify-between">
                             <label class="flex items-center space-x-2 text-xs font-medium text-secondary-dark cursor-pointer">
                                 <input id="advanced_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
@@ -1752,60 +1804,28 @@
                             </div>
                         </div>
                     </div>
+                    </div>
                     <!-- Removed Generate Plan button -->
                 </form>
             </div>
 
-            <div class="card p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-2xl font-semibold text-primary-dark">Plan Summary</h2>
-                </div>
-                <div id="summary" class="grid summary-mobile-grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">Avg. Buy Price</p>
-                        <p id="summary-avg-buy" class="text-xl font-bold text-primary-dark">-</p>
-                        <p class="text-xs text-secondary-dark mt-3">Buy Floor</p>
-                        <p id="summary-buy-floor" class="text-sm font-semibold text-primary-dark">-</p>
-                    </div>
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">Avg. Sell Price</p>
-                        <p id="summary-avg-sell" class="text-xl font-bold text-primary-dark">-</p>
-                        <p class="text-xs text-secondary-dark mt-3">Sell Ceiling</p>
-                        <p id="summary-sell-ceiling" class="text-sm font-semibold text-primary-dark">-</p>
-                    </div>
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">Profit After Fees</p>
-                        <p id="summary-net-profit" class="text-xl font-bold text-primary-dark">-</p>
-                    </div>
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">Total Vol</p>
-                        <p id="summary-total-quantity" class="text-xl font-bold text-primary-dark">-</p>
-                    </div>
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">ROI on Cost Basis</p>
-                        <p id="summary-roi" class="text-xl font-bold text-primary-dark">-</p>
-                    </div>
-                    <div class="summary-card p-4 rounded-lg">
-                        <p class="text-sm text-secondary-dark">Total Fees Paid</p>
-                        <p id="summary-total-fees" class="text-xl font-bold text-primary-dark">-</p>
-                        <p id="summary-total-fees-percent" class="text-xs text-secondary-dark mt-1">-</p>
-                    </div>
-                </div>
-            </div>
 
-            <!-- Buy Chart -->
-            <div class="card p-6" id="buy-chart-card">
-                <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Ladder</h3>
-                <div id="visualization" class="d3-chart">
-                    <svg id="allocation-chart"></svg>
+            <!-- Charts Container -->
+            <div class="col-span-1 lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
+                <!-- Buy Chart -->
+                <div class="card p-6" id="buy-chart-card">
+                    <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Ladder</h3>
+                    <div id="visualization" class="d3-chart">
+                        <svg id="allocation-chart"></svg>
+                    </div>
                 </div>
-            </div>
-            
-            <!-- Sell Chart -->
-            <div class="card p-6" id="sell-chart-card">
-                <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Ladder</h3>
-                <div id="sell-visualization" class="d3-chart">
-                    <svg id="sell-allocation-chart"></svg>
+                
+                <!-- Sell Chart -->
+                <div class="card p-6" id="sell-chart-card">
+                    <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Ladder</h3>
+                    <div id="sell-visualization" class="d3-chart">
+                        <svg id="sell-allocation-chart"></svg>
+                    </div>
                 </div>
             </div>
 
@@ -1924,8 +1944,11 @@
             const form = document.getElementById('trading-plan-form');
             const skewSlider = document.getElementById('skew_value');
             const skewDisplay = document.getElementById('skew_value_display');
+            const skewInput = document.getElementById('skew_value_input');
             const rungSlider = document.getElementById('number_of_rungs');
+            const rungInput = document.getElementById('number_of_rungs_input');
             const depthSlider = document.getElementById('depth');
+            const depthInput = document.getElementById('depth_input');
             const rungDisplay = document.getElementById('number_of_rungs_display');
             const depthDisplay = document.getElementById('depth_display');
             const priceRangeModeSelect = document.getElementById('price_range_mode');
@@ -1958,6 +1981,14 @@
             const layoutToggleButtons = Array.from(document.querySelectorAll('[data-layout-toggle]'));
             const themeToggleButtons = Array.from(document.querySelectorAll('[data-theme-toggle]'));
             const displayStatusAnnouncer = document.getElementById('display-status-announcer');
+
+            // Helper function to update starting capital label based on sell-only mode
+            const updateStartingCapitalLabel = () => {
+                const startingCapitalLabel = document.getElementById('starting_capital_label');
+                if (startingCapitalLabel && sellOnlyCheckbox) {
+                    startingCapitalLabel.textContent = sellOnlyCheckbox.checked ? 'Held quantity' : 'Initial Capital ($)';
+                }
+            };
 
             const trackEvent = () => {};
 
@@ -2162,6 +2193,7 @@
                     const saved = loadFormValue(STORAGE_KEYS.numberOfRungs);
                     if (saved !== null) {
                         rungSlider.value = saved;
+                        if (rungInput) rungInput.value = saved;
                         if (rungDisplay) rungDisplay.textContent = saved;
                     }
                 }
@@ -2169,6 +2201,7 @@
                     const saved = loadFormValue(STORAGE_KEYS.depth);
                     if (saved !== null) {
                         depthSlider.value = saved;
+                        if (depthInput) depthInput.value = saved;
                         if (depthDisplay) {
                             const value = parseFloat(saved);
                             depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
@@ -2179,6 +2212,7 @@
                     const saved = loadFormValue(STORAGE_KEYS.skewValue);
                     if (saved !== null) {
                         skewSlider.value = saved;
+                        if (skewInput) skewInput.value = saved;
                         if (skewDisplay) skewDisplay.textContent = saved;
                     }
                 }
@@ -2211,6 +2245,7 @@
                     if (saved === 'true') {
                         sellOnlyCheckbox.checked = true;
                         if (sellOnlyInputs) sellOnlyInputs.classList.remove('hidden');
+                        updateStartingCapitalLabel();
                     }
                 }
                 if (equalQuantityCheckbox && advancedToggle && advancedToggle.checked) {
@@ -3133,9 +3168,10 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 }
 
                 // Normalize buy orders to ensure total capital equals initial capital
-                if (!sellOnlyMode && buyLadder.length > 0) {
+                if (!sellOnlyMode && buyLadder.length > 0 && C > 0) {
                     const totalBuyCapital = buyLadder.reduce((sum, rung) => sum + rung.capital, 0);
-                    if (totalBuyCapital > 0 && Math.abs(totalBuyCapital - C) > 1e-10) {
+                    // Always normalize to ensure total capital exactly equals initial capital
+                    if (totalBuyCapital > 0) {
                         const adjustmentFactor = C / totalBuyCapital;
                         buyLadder = buyLadder.map(rung => {
                             const adjustedCapital = rung.capital * adjustmentFactor;
@@ -3303,7 +3339,8 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 // Normalize sell orders to ensure total quantity equals totalQuantityForSell
                 if (sellLadder.length > 0 && totalQuantityForSell > 0) {
                     const totalSellQuantity = sellLadder.reduce((sum, rung) => sum + rung.assetSize, 0);
-                    if (totalSellQuantity > 0 && Math.abs(totalSellQuantity - totalQuantityForSell) > 1e-10) {
+                    // Always normalize to ensure total quantity exactly equals totalQuantityForSell
+                    if (totalSellQuantity > 0) {
                         const adjustmentFactor = totalQuantityForSell / totalSellQuantity;
                         // Reset totals before recalculating
                         totalRevenueGross = 0;
@@ -3947,22 +3984,62 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 trackInteraction('skew-adjust', {
                     value: e.target.value
                 });
-                skewDisplay.textContent = e.target.value;
+                const value = parseInt(e.target.value);
+                if (skewInput) skewInput.value = value;
+                if (skewDisplay) skewDisplay.textContent = value;
                 calculatePlan(); 
             });
+            
+            // Sync number input with slider for skew
+            if (skewInput) {
+                skewInput.addEventListener('input', (e) => {
+                    let value = parseInt(e.target.value) || 0;
+                    value = Math.max(0, Math.min(100, value));
+                    if (skewSlider) skewSlider.value = value;
+                    if (skewDisplay) skewDisplay.textContent = value;
+                    calculatePlan();
+                });
+                skewInput.addEventListener('blur', (e) => {
+                    let value = parseInt(e.target.value) || 0;
+                    value = Math.max(0, Math.min(100, value));
+                    e.target.value = value;
+                    if (skewSlider) skewSlider.value = value;
+                    if (skewDisplay) skewDisplay.textContent = value;
+                });
+            }
 
-            if (rungSlider && rungDisplay) {
+            if (rungSlider) {
                 rungSlider.addEventListener('input', (e) => {
                     trackInteraction('rungs-adjust', {
                         value: e.target.value
                     });
-                    rungDisplay.textContent = e.target.value;
+                    const value = parseInt(e.target.value);
+                    if (rungInput) rungInput.value = value;
+                    if (rungDisplay) rungDisplay.textContent = value;
                     calculatePlan();
                 });
-                rungDisplay.textContent = rungSlider.value;
+                if (rungDisplay) rungDisplay.textContent = rungSlider.value;
+            }
+            
+            // Sync number input with slider for rungs
+            if (rungInput) {
+                rungInput.addEventListener('input', (e) => {
+                    let value = parseInt(e.target.value) || 2;
+                    value = Math.max(2, Math.min(50, value));
+                    if (rungSlider) rungSlider.value = value;
+                    if (rungDisplay) rungDisplay.textContent = value;
+                    calculatePlan();
+                });
+                rungInput.addEventListener('blur', (e) => {
+                    let value = parseInt(e.target.value) || 2;
+                    value = Math.max(2, Math.min(50, value));
+                    e.target.value = value;
+                    if (rungSlider) rungSlider.value = value;
+                    if (rungDisplay) rungDisplay.textContent = value;
+                });
             }
 
-            if (depthSlider && depthDisplay) {
+            if (depthSlider) {
                 depthSlider.addEventListener('input', (e) => {
                     trackInteraction('depth-adjust', {
                         value: e.target.value
@@ -3982,13 +4059,56 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     if (parseFloat(e.target.value) !== value) {
                         depthSlider.value = value;
                     }
+                    // Update number input
+                    if (depthInput) depthInput.value = value;
                     // Format display: show one decimal place when < 2%, no decimals when >= 2%
-                    depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
+                    if (depthDisplay) depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
                     calculatePlan();
                 });
                 // Initialize display with proper formatting
                 const initialValue = parseFloat(depthSlider.value);
-                depthDisplay.textContent = initialValue < 2 ? initialValue.toFixed(1) : Math.round(initialValue);
+                if (depthInput) depthInput.value = initialValue;
+                if (depthDisplay) depthDisplay.textContent = initialValue < 2 ? initialValue.toFixed(1) : Math.round(initialValue);
+            }
+            
+            // Sync number input with slider for depth
+            if (depthInput) {
+                depthInput.addEventListener('input', (e) => {
+                    let value = parseFloat(e.target.value) || 0.1;
+                    // Variable step logic: 0.1% steps from 0.1% to 2%, 1% steps from 2% upwards
+                    if (value >= 2) {
+                        value = Math.round(value);
+                    } else {
+                        value = Math.round(value * 10) / 10;
+                    }
+                    // Clamp value to valid range
+                    value = Math.max(0.1, Math.min(99, value));
+                    if (depthSlider) depthSlider.value = value;
+                    if (depthDisplay) depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
+                    calculatePlan();
+                });
+                depthInput.addEventListener('blur', (e) => {
+                    let value = parseFloat(e.target.value) || 0.1;
+                    // Variable step logic
+                    if (value >= 2) {
+                        value = Math.round(value);
+                    } else {
+                        value = Math.round(value * 10) / 10;
+                    }
+                    // Clamp value to valid range
+                    value = Math.max(0.1, Math.min(99, value));
+                    e.target.value = value;
+                    if (depthSlider) depthSlider.value = value;
+                    if (depthDisplay) depthDisplay.textContent = value < 2 ? value.toFixed(1) : Math.round(value);
+                });
+            }
+            
+            // Initialize number inputs with slider values (after all sync code is set up)
+            if (rungSlider && rungInput) {
+                rungInput.value = rungSlider.value;
+            }
+            if (skewSlider && skewInput) {
+                skewInput.value = skewSlider.value;
             }
 
             // Price range mode selector
@@ -4127,6 +4247,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     trackInteraction('sell-only-toggle', {
                         enabled: sellOnlyCheckbox.checked
                     });
+                    updateStartingCapitalLabel();
                     if (sellOnlyCheckbox.checked) {
                         sellOnlyInputs?.classList.remove('hidden');
                     } else {
@@ -4139,6 +4260,8 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 if (!sellOnlyCheckbox.checked) {
                     sellOnlyInputs?.classList.add('hidden');
                 }
+                // Update label on initial load
+                updateStartingCapitalLabel();
             }
 
             if (equalQuantityCheckbox) {
@@ -4430,6 +4553,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                             // Load sell-only settings (set values first)
                             if (config.sellOnly.sellOnlyMode !== undefined && sellOnlyCheckbox) {
                                 sellOnlyCheckbox.checked = config.sellOnly.sellOnlyMode;
+                                updateStartingCapitalLabel();
                             }
                             if (config.sellOnly.existingQuantity !== undefined && existingQuantityInput) {
                                 existingQuantityInput.value = config.sellOnly.existingQuantity;
@@ -4480,6 +4604,7 @@ caption { font-weight: 600; margin-bottom: 6px; }
                                 } else {
                                     if (sellOnlyInputs) sellOnlyInputs.classList.add('hidden');
                                 }
+                                updateStartingCapitalLabel();
                             }
 
                             // Trigger recalculation once with all values set
@@ -4695,14 +4820,29 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     saveFormValue(STORAGE_KEYS.numberOfRungs, rungSlider.value);
                 });
             }
+            if (rungInput) {
+                rungInput.addEventListener('input', () => {
+                    saveFormValue(STORAGE_KEYS.numberOfRungs, rungInput.value);
+                });
+            }
             if (depthSlider) {
                 depthSlider.addEventListener('input', () => {
                     saveFormValue(STORAGE_KEYS.depth, depthSlider.value);
                 });
             }
+            if (depthInput) {
+                depthInput.addEventListener('input', () => {
+                    saveFormValue(STORAGE_KEYS.depth, depthInput.value);
+                });
+            }
             if (skewSlider) {
                 skewSlider.addEventListener('input', () => {
                     saveFormValue(STORAGE_KEYS.skewValue, skewSlider.value);
+                });
+            }
+            if (skewInput) {
+                skewInput.addEventListener('input', () => {
+                    saveFormValue(STORAGE_KEYS.skewValue, skewInput.value);
                 });
             }
             if (advancedToggle) {
