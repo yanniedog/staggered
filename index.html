@@ -11,48 +11,45 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --color-bg: #e8f4f7;
-            --color-card: #ffffff;
-            --color-card-alt: #f0f9fb;
-            --color-card-muted: #fafcfd;
-            --color-text: #1a2e32;
-            --color-text-secondary: #2d3f4a;
-            --color-text-muted: #5a6c75;
-            --color-border: #e0f2f5;
-            --color-border-strong: #b8d4e0;
+            --color-bg: #cde7ec;
+            --color-card: #edfcff;
+            --color-card-alt: #dbf6fa;
+            --color-card-muted: #f8fafa;
+            --color-text: #273f43;
+            --color-text-secondary: #2f3b58;
+            --color-text-muted: #48616b;
+            --color-border: #dbf6fa;
+            --color-border-strong: #bac6ea;
             --color-primary: #00424a;
-            --color-primary-accent: #006b7a;
-            --color-primary-contrast: #ffffff;
+            --color-primary-accent: #005f6b;
+            --color-primary-contrast: #edfcff;
             --color-secondary: #006b5e;
             --color-secondary-hover: #008a7b;
             --color-tooltip-bg: #00424a;
-            --color-tooltip-text: #ffffff;
-            --color-table-row-even: #fafcfd;
-            --color-table-row-odd: #f5f9fa;
-            --color-summary-bg: linear-gradient(135deg, #e8f7fa 0%, #d4f0f5 100%);
+            --color-tooltip-text: #edfcff;
+            --color-table-row-even: #f8fafa;
+            --color-table-row-odd: #edfcff;
+            --color-summary-bg: #dbf6fa;
             --color-summary-border: #00424a;
-            --color-executed-bg: #d4f0e8;
-            --color-invalid: #dc2626;
-            --color-helper-border: #2d3f4a;
-            --color-slider-track: #c8e0e8;
+            --color-executed-bg: #cde9d6;
+            --color-invalid: #b91c1c;
+            --color-helper-border: #2f3b58;
+            --color-slider-track: #bac6ea;
             --color-slider-thumb: #00424a;
-            --color-grid-line: rgba(184, 212, 224, 0.6);
-            --color-chart-axis-text: #2d3f4a;
-            --color-buy-bar: #2d3f4a;
+            --color-grid-line: rgba(186, 198, 234, 0.7);
+            --color-chart-axis-text: #2f3b58;
+            --color-buy-bar: #2f3b58;
             --color-buy-bar-hover: #00424a;
             --color-sell-bar: #006b5e;
             --color-sell-bar-hover: #008a7b;
-            --color-control-bg: rgba(255, 255, 255, 0.9);
-            --color-control-text: #2d3f4a;
-            --color-control-border: #c8e0e8;
+            --color-control-bg: rgba(237, 252, 255, 0.75);
+            --color-control-text: #2f3b58;
+            --color-control-border: #bac6ea;
             --color-control-active: #00424a;
-            --color-control-active-text: #ffffff;
-            --color-control-shadow: 0 4px 12px -4px rgba(15, 23, 42, 0.15);
-            --focus-ring-color: rgba(0, 66, 74, 0.25);
-            --shadow-base: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
-            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+            --color-control-active-text: #edfcff;
+            --color-control-shadow: 0 6px 16px -8px rgba(15, 23, 42, 0.18);
+            --focus-ring-color: rgba(0, 66, 74, 0.2);
+            --shadow-base: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -2px rgba(15, 23, 42, 0.06);
         }
 
         body.theme-dark {
@@ -102,25 +99,6 @@
             background-color: var(--color-bg);
             color: var(--color-text);
             transition: background-color 0.3s ease, color 0.3s ease;
-            padding: 0.75rem;
-        }
-
-        @media (min-width: 640px) {
-            body {
-                padding: 1rem;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            body {
-                padding: 1.5rem;
-            }
-        }
-
-        @media (min-width: 1280px) {
-            body {
-                padding: 2rem;
-            }
         }
 
         .sr-only {
@@ -149,169 +127,49 @@
 
         .form-input,
         select.form-input {
-            background-color: var(--color-card);
-            border: 1.5px solid var(--color-border);
+            background-color: var(--color-card-muted);
+            border: 1px solid var(--color-border);
             color: var(--color-text);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-        }
-
-        .form-input:hover,
-        select.form-input:hover {
-            border-color: var(--color-primary-accent);
-            background-color: #ffffff;
-            box-shadow: 0 4px 8px rgba(0, 66, 74, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-            transform: translateY(-1px);
+            transition: all 0.3s ease;
         }
 
         .form-input:focus,
         select.form-input:focus {
             outline: none;
             border-color: var(--color-primary);
-            box-shadow: 0 0 0 4px var(--focus-ring-color), 0 4px 12px rgba(0, 66, 74, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.9);
-            background-color: #ffffff;
-            transform: translateY(-1px);
+            box-shadow: 0 0 0 3px var(--focus-ring-color);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-accent) 100%);
+            background-color: var(--color-primary);
             color: var(--color-primary-contrast);
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 12px rgba(0, 66, 74, 0.2), 0 2px 4px rgba(0, 66, 74, 0.1);
-            font-weight: 600;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .btn-primary:hover {
-            background: linear-gradient(135deg, var(--color-primary-accent) 0%, var(--color-primary) 100%);
-            box-shadow: 0 8px 20px rgba(0, 66, 74, 0.3), 0 4px 8px rgba(0, 66, 74, 0.15);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:active {
-            transform: translateY(0);
-            box-shadow: 0 4px 8px rgba(0, 66, 74, 0.2);
+            background-color: var(--color-primary-accent);
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-hover) 100%);
+            background-color: var(--color-secondary);
             color: var(--color-primary-contrast);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 4px 6px rgba(0, 107, 94, 0.15);
-            font-weight: 600;
+            transition: background-color 0.3s ease;
         }
 
         .btn-secondary:hover {
-            background: linear-gradient(135deg, var(--color-secondary-hover) 0%, var(--color-secondary) 100%);
-            box-shadow: 0 6px 12px rgba(0, 107, 94, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 107, 94, 0.15);
+            background-color: var(--color-secondary-hover);
         }
 
         .card {
             background-color: var(--color-card);
-            border-radius: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 66, 74, 0.08), 0 2px 8px rgba(0, 66, 74, 0.04);
-            border: 1px solid rgba(224, 242, 245, 0.6);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(0, 66, 74, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .card:hover {
-            box-shadow: 0 12px 32px rgba(0, 66, 74, 0.12), 0 4px 12px rgba(0, 66, 74, 0.08);
-            transform: translateY(-2px);
-            border-color: rgba(0, 66, 74, 0.2);
-        }
-
-        .card:hover::before {
-            opacity: 1;
+            border-radius: 1rem;
+            box-shadow: var(--shadow-base);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .summary-card {
-            background: linear-gradient(135deg, #f0f9fb 0%, #e8f7fa 50%, #e0f5f8 100%);
-            border-left: 3px solid var(--color-summary-border);
-            border-radius: 0.625rem;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            min-height: 100px;
-            position: relative;
-            box-shadow: 0 2px 8px rgba(0, 66, 74, 0.06), 0 1px 3px rgba(0, 66, 74, 0.03);
-            overflow: hidden;
-        }
-
-        .summary-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(0, 66, 74, 0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .summary-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 3px;
-            height: 100%;
-            background: linear-gradient(180deg, var(--color-summary-border), var(--color-primary-accent));
-            transition: width 0.4s ease, box-shadow 0.4s ease;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 66, 74, 0.12), 0 3px 8px rgba(0, 66, 74, 0.08);
-            border-left-color: var(--color-primary-accent);
-            border-left-width: 4px;
-        }
-
-        .summary-card:hover::before {
-            opacity: 1;
-        }
-
-        .summary-card:hover::after {
-            width: 4px;
-            box-shadow: 0 0 8px rgba(0, 66, 74, 0.25);
+            background-color: var(--color-summary-bg);
+            border-left: 4px solid var(--color-summary-border);
         }
 
         .surface-muted {
@@ -335,32 +193,7 @@
         }
 
         .table-header {
-            background: linear-gradient(135deg, var(--color-card-alt) 0%, rgba(240, 249, 251, 0.9) 100%);
-            border-bottom: 2px solid var(--color-border-strong);
-            position: relative;
-        }
-
-        .table-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(0, 66, 74, 0.2), transparent);
-        }
-
-        .table-header th {
-            font-weight: 700;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            padding: 0.75rem 0.75rem;
-            position: relative;
-        }
-
-        body.layout-desktop tbody td {
-            padding: 0.75rem 0.75rem;
-            vertical-align: middle;
+            background-color: var(--color-card-alt);
         }
 
         body.layout-desktop .table-row-odd td {
@@ -371,50 +204,9 @@
             background-color: var(--color-table-row-even);
         }
 
-        body.layout-desktop tbody tr {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        body.layout-desktop tbody tr::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(180deg, var(--color-primary), var(--color-secondary));
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        body.layout-desktop tbody tr:hover {
-            background-color: rgba(224, 242, 245, 0.6);
-            transform: translateX(2px);
-            box-shadow: -2px 0 8px rgba(0, 66, 74, 0.1);
-        }
-
-        body.layout-desktop tbody tr:hover::before {
-            opacity: 1;
-        }
-
         .executed-rung td {
-            background: linear-gradient(135deg, var(--color-executed-bg) 0%, rgba(212, 240, 232, 0.9) 100%);
+            background-color: var(--color-executed-bg);
             font-weight: 600;
-            border-left: 4px solid var(--color-secondary);
-            box-shadow: inset 2px 0 8px rgba(0, 107, 94, 0.15);
-            position: relative;
-        }
-
-        .executed-rung td::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(180deg, var(--color-secondary), var(--color-secondary-hover));
-            box-shadow: 0 0 8px rgba(0, 107, 94, 0.3);
         }
 
         .label-invalid {
@@ -483,82 +275,35 @@
             appearance: none;
             width: 100%;
             height: 8px;
-            background: linear-gradient(90deg, var(--color-slider-track) 0%, rgba(200, 224, 232, 0.7) 100%);
-            border-radius: 10px;
+            background: var(--color-slider-track);
+            border-radius: 5px;
             outline: none;
-            opacity: 0.95;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(255, 255, 255, 0.5);
+            opacity: 0.7;
+            transition: opacity 0.2s;
         }
 
         input[type=range]:hover {
-            opacity: 1;
-            transform: scaleY(1.2);
-            box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.1), 0 2px 8px rgba(0, 66, 74, 0.12);
-        }
-
-        input[type=range]:active {
             opacity: 1;
         }
 
         input[type=range]::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--color-slider-thumb) 0%, var(--color-primary-accent) 100%);
+            width: 20px;
+            height: 20px;
+            background: var(--color-slider-thumb);
             cursor: pointer;
             border-radius: 50%;
-            border: 3px solid var(--color-primary-contrast);
-            box-shadow: 0 3px 8px rgba(0, 66, 74, 0.3), 0 0 0 3px rgba(0, 66, 74, 0.12), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        input[type=range]::-webkit-slider-thumb::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 8px;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.6);
-            border-radius: 50%;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        input[type=range]::-webkit-slider-thumb:hover {
-            transform: scale(1.25);
-            box-shadow: 0 6px 16px rgba(0, 66, 74, 0.4), 0 0 0 5px rgba(0, 66, 74, 0.18), inset 0 1px 2px rgba(255, 255, 255, 0.6);
-        }
-
-        input[type=range]::-webkit-slider-thumb:hover::before {
-            opacity: 1;
+            border: 2px solid var(--color-primary-contrast);
         }
 
         input[type=range]::-moz-range-thumb {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--color-slider-thumb) 0%, var(--color-primary-accent) 100%);
+            width: 20px;
+            height: 20px;
+            background: var(--color-slider-thumb);
             cursor: pointer;
             border-radius: 50%;
-            border: 3px solid var(--color-primary-contrast);
-            box-shadow: 0 2px 6px rgba(0, 66, 74, 0.25), 0 0 0 3px rgba(0, 66, 74, 0.1);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        input[type=range]::-moz-range-thumb:hover {
-            transform: scale(1.2);
-            box-shadow: 0 4px 10px rgba(0, 66, 74, 0.3), 0 0 0 4px rgba(0, 66, 74, 0.15);
-        }
-
-        input[type=range]::-moz-range-track {
-            height: 8px;
-            background: linear-gradient(90deg, var(--color-slider-track) 0%, rgba(200, 224, 232, 0.6) 100%);
-            border-radius: 10px;
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+            border: 2px solid var(--color-primary-contrast);
         }
 
         .d3-chart .domain {
@@ -601,58 +346,32 @@
         .tooltip {
             position: absolute;
             text-align: center;
-            padding: 10px 14px;
+            padding: 8px;
             font-size: 12px;
             background: var(--color-tooltip-bg);
             color: var(--color-tooltip-text);
-            border-radius: 10px;
+            border-radius: 8px;
             pointer-events: none;
             opacity: 0;
-            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), 0 4px 8px rgba(0, 0, 0, 0.15);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: opacity 0.2s, transform 0.2s;
+            box-shadow: 0 10px 18px -12px rgba(15, 23, 42, 0.45);
         }
 
         .brand-header {
             display: flex;
             flex-direction: column;
             gap: 1.25rem;
-            padding: 1.5rem 1.5rem;
-            border-radius: 1.5rem;
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(240, 249, 251, 0.95) 50%, rgba(232, 247, 250, 0.92) 100%);
-            border: 1px solid rgba(224, 242, 245, 0.7);
-            box-shadow: 0 8px 32px rgba(0, 66, 74, 0.12), 0 4px 16px rgba(0, 66, 74, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-            position: relative;
-            backdrop-filter: blur(20px);
-            overflow: hidden;
-        }
-
-        .brand-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, rgba(0, 66, 74, 0.15), transparent);
-        }
-
-        .header-top-controls {
-            position: absolute;
-            top: 1.25rem;
-            right: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 10;
+            padding: 1.5rem;
+            border-radius: 1.25rem;
+            background: linear-gradient(145deg, rgba(237, 252, 255, 0.85), rgba(219, 246, 250, 0.65));
+            border: 1px solid rgba(186, 198, 234, 0.45);
+            box-shadow: 0 20px 35px -18px rgba(15, 23, 42, 0.35);
         }
 
         .brand-header-inner {
             display: flex;
             flex-direction: column;
             gap: 0.5rem;
-            padding-right: 120px;
         }
 
         .brand-title {
@@ -660,13 +379,11 @@
             font-weight: 800;
             line-height: 1.05;
             letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 50%, var(--color-primary-accent) 100%);
+            background: linear-gradient(120deg, var(--color-primary) 0%, var(--color-secondary) 45%, var(--color-primary-accent) 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 8px 20px rgba(0, 66, 74, 0.2);
-            position: relative;
-            filter: drop-shadow(0 2px 4px rgba(0, 66, 74, 0.1));
+            text-shadow: 0 6px 14px rgba(0, 66, 74, 0.18);
         }
 
         .brand-kicker {
@@ -714,92 +431,15 @@
             border-top: 1px solid rgba(186, 198, 234, 0.3);
         }
 
-        .export-button-summary {
-            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-accent) 100%);
-            color: var(--color-primary-contrast);
-            font-size: 0.875rem;
-            font-weight: 600;
-            padding: 0.75rem 1.25rem;
-            border-radius: 0.875rem;
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.75rem;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            border: none;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(0, 66, 74, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .export-button-summary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s ease;
-        }
-
-        .export-button-summary:hover {
-            background: linear-gradient(135deg, var(--color-primary-accent) 0%, var(--color-primary) 100%);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 66, 74, 0.3);
-        }
-
-        .export-button-summary:hover::before {
-            left: 100%;
-        }
-
-        .export-button-summary:active {
-            transform: translateY(0);
-        }
-
-        .export-chevron {
-            font-size: 0.75rem;
-            opacity: 0.9;
-            transition: transform 0.2s ease;
-        }
-
-        details[open] .export-chevron {
-            transform: rotate(180deg);
-        }
-
-        .export-panel {
-            margin-top: 0.75rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            padding: 0.875rem;
-            background: linear-gradient(135deg, var(--color-card) 0%, rgba(240, 249, 251, 0.5) 100%);
-            border-radius: 0.875rem;
-            border: 1px solid var(--color-border);
-            box-shadow: 0 8px 24px rgba(0, 66, 74, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-        }
-
-        @media (min-width: 640px) {
-            .export-panel {
-                background-color: var(--color-card-muted);
-                border-color: var(--color-border);
-                box-shadow: none;
-            }
-        }
-
         .theme-toggle-group {
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            padding: 0.3rem;
+            padding: 0.25rem;
             border-radius: 999px;
-            border: 1px solid rgba(186, 198, 234, 0.7);
-            background: linear-gradient(135deg, rgba(237, 252, 255, 0.8) 0%, rgba(255, 255, 255, 0.6) 100%);
-            box-shadow: 0 4px 12px rgba(0, 66, 74, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(186, 198, 234, 0.6);
+            background-color: rgba(237, 252, 255, 0.6);
+            box-shadow: var(--color-control-shadow);
         }
 
         .header-icons-group {
@@ -808,12 +448,12 @@
             gap: 0.25rem;
             padding: 0.25rem;
             border-radius: 999px;
-            opacity: 0.7;
+            opacity: 0.5;
             transition: opacity 0.2s ease;
         }
 
         .header-icons-group:hover {
-            opacity: 1;
+            opacity: 0.8;
         }
 
         .header-icon-btn {
@@ -863,22 +503,7 @@
             background: transparent;
             color: var(--color-control-text);
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-        }
-
-        .theme-toggle-button::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 999px;
-            background: radial-gradient(circle at center, rgba(0, 66, 74, 0.1), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .theme-toggle-button:hover::before {
-            opacity: 1;
+            transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
         }
 
         .theme-toggle-button svg {
@@ -887,72 +512,14 @@
         }
 
         .theme-toggle-button.active {
-            background: linear-gradient(135deg, var(--color-control-active) 0%, var(--color-primary-accent) 100%);
+            background-color: var(--color-control-active);
             color: var(--color-control-active-text);
-            box-shadow: 0 4px 12px rgba(0, 66, 74, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .theme-toggle-button.active::before {
-            opacity: 0;
+            box-shadow: 0 8px 14px -8px rgba(15, 23, 42, 0.3);
         }
 
         .theme-toggle-button:focus-visible {
             outline: 2px solid var(--color-control-active);
             outline-offset: 2px;
-        }
-
-        .advanced-toggle-label {
-            background: linear-gradient(135deg, var(--color-card) 0%, rgba(240, 249, 251, 0.5) 100%);
-            border: 1.5px solid var(--color-border);
-            color: var(--color-text-secondary);
-            user-select: none;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-        }
-
-        .advanced-toggle-label:hover {
-            background: linear-gradient(135deg, var(--color-card-alt) 0%, rgba(240, 249, 251, 0.7) 100%);
-            border-color: var(--color-primary);
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0, 66, 74, 0.15);
-        }
-
-        .advanced-toggle-label:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 4px rgba(0, 66, 74, 0.1);
-        }
-
-        .advanced-toggle-label:has(input:checked),
-        .advanced-toggle-label:has(.peer:checked),
-        .advanced-toggle-label.is-checked {
-            background: linear-gradient(135deg, var(--color-card-alt) 0%, rgba(240, 249, 251, 0.8) 100%);
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(0, 66, 74, 0.12), 0 4px 12px rgba(0, 66, 74, 0.15);
-        }
-
-        .advanced-toggle-label:has(input:focus-visible),
-        .advanced-toggle-label:has(.peer:focus-visible) {
-            outline: 2px solid var(--color-primary);
-            outline-offset: 2px;
-        }
-
-        body.theme-dark .advanced-toggle-label {
-            background-color: rgba(30, 41, 59, 0.6);
-            border-color: rgba(56, 189, 248, 0.3);
-        }
-
-        body.theme-dark .advanced-toggle-label:hover {
-            background-color: rgba(30, 41, 59, 0.8);
-            border-color: var(--color-primary);
-            box-shadow: 0 4px 8px rgba(56, 189, 248, 0.2);
-        }
-
-        body.theme-dark .advanced-toggle-label:has(input:checked),
-        body.theme-dark .advanced-toggle-label:has(.peer:checked),
-        body.theme-dark .advanced-toggle-label.is-checked {
-            background-color: rgba(30, 41, 59, 0.8);
-            border-color: var(--color-primary);
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.15);
         }
 
         .display-footer {
@@ -1447,21 +1014,6 @@
             box-shadow: 0 10px 20px -14px rgba(2, 6, 23, 0.7);
         }
 
-        body.theme-dark .export-button-summary {
-            background-color: var(--color-primary);
-            color: var(--color-primary-contrast);
-        }
-
-        body.theme-dark .export-button-summary:hover {
-            background-color: var(--color-primary-accent);
-            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3);
-        }
-
-        body.theme-dark .export-panel {
-            background-color: rgba(15, 23, 42, 0.6);
-            border-color: rgba(56, 189, 248, 0.2);
-        }
-
         body.theme-dark .layout-toggle-group {
             background-color: rgba(15, 23, 42, 0.65);
             border-color: rgba(56, 189, 248, 0.35);
@@ -1472,61 +1024,34 @@
             color: var(--color-secondary);
         }
 
-        @media (max-width: 767px) {
-            .brand-header {
-                padding: 1.25rem 1.5rem;
-                gap: 1rem;
-            }
-
-            .brand-header-inner {
-                padding-right: 0;
-                margin-top: 2rem;
-            }
-
-            .header-top-controls {
-                top: 0.875rem;
-                right: 0.875rem;
-                gap: 0.5rem;
-            }
-
-            .header-export-section {
-                margin-top: 0.75rem;
-                padding-top: 0.875rem;
-            }
-        }
-
         @media (min-width: 768px) {
             .brand-header {
-                padding: 1.75rem 2rem;
-                gap: 1.25rem;
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: space-between;
             }
 
-            .brand-header-inner {
-                padding-right: 110px;
-            }
-        }
-
-        @media (min-width: 1024px) {
-            .brand-header {
-                padding: 2rem 2.25rem;
+            .header-controls {
+                align-self: flex-end;
             }
         }
 
-        @media (min-width: 1280px) {
-            .brand-header {
-                padding: 2rem 2.5rem;
-            }
-
-            .brand-header-inner {
-                padding-right: 140px;
-            }
-
-            .header-top-controls {
-                top: 1.25rem;
-                right: 1.25rem;
-            }
+        .export-panel {
+            background-color: var(--color-card);
+            border: 1px solid var(--color-border);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            box-shadow: 0 12px 20px -14px rgba(15, 23, 42, 0.3);
         }
 
+        @media (min-width: 640px) {
+            .export-panel {
+                background-color: transparent;
+                border-color: transparent;
+                box-shadow: none;
+                padding: 0;
+            }
+        }
 
         @media (min-width: 768px) {
             .display-control-panel {
@@ -1538,18 +1063,6 @@
             .mobile-two-col {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
-            .summary-mobile-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-        }
-
-        @media (min-width: 640px) and (max-width: 1024px) {
-            .summary-mobile-grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-            }
-        }
-        
-        @media (min-width: 1024px) {
             .summary-mobile-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
             }
@@ -1574,11 +1087,11 @@
         body.layout-mobile main {
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         body.layout-mobile .card {
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
 
         body.layout-mobile .summary-mobile-grid {
@@ -1692,10 +1205,10 @@
         }
 
         .intro-modal-content {
-            padding: 1.75rem;
+            padding: 2rem;
             display: flex;
             flex-direction: column;
-            gap: 1.75rem;
+            gap: 2rem;
         }
 
         .intro-text-section {
@@ -1928,8 +1441,8 @@
         /* Mobile responsiveness */
         @media (max-width: 640px) {
             .intro-modal-content {
-                padding: 1.25rem;
-                gap: 1.25rem;
+                padding: 1.5rem;
+                gap: 1.5rem;
             }
 
             .intro-title {
@@ -1965,7 +1478,7 @@
         })(window, document, "clarity", "script", "u4us17in70");
     </script>
 </head>
-<body class="theme-light layout-desktop">
+<body class="p-2 sm:p-4 theme-light layout-desktop">
     <!-- Intro Modal -->
     <div id="intro-modal" class="intro-modal-overlay hidden">
         <div class="intro-modal-container">
@@ -2028,60 +1541,59 @@
     </div>
 
     <div id="app" class="max-w-7xl mx-auto">
-        <header class="py-4 lg:py-5 xl:py-6 mb-3 lg:mb-4 xl:mb-5">
-            <div class="flex flex-col xl:flex-row gap-4 lg:gap-5 xl:gap-6 items-start xl:items-stretch">
-                <div class="brand-header flex-1 w-full relative">
-                    <!-- Top Right Controls -->
-                    <div class="header-top-controls">
-                        <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
-                            <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="12" cy="12" r="5"></circle>
-                                    <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
-                                    <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
-                                    <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
-                                    <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
-                                    <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
-                                    <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
-                                    <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
-                                    <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
-                                </svg>
-                            </button>
-                            <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="header-icons-group">
-                            <button type="button" id="solana-logo-btn-header" class="header-icon-btn" aria-label="Show QR code for Solana address">
-                                <svg viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg" class="header-solana-icon">
-                                    <linearGradient id="solanaGradientHeader" x1="360.879" y1="351.455" x2="141.213" y2="69.836" gradientUnits="userSpaceOnUse">
-                                        <stop offset="0" stop-color="#9945FF"/>
-                                        <stop offset="1" stop-color="#14F195"/>
-                                    </linearGradient>
-                                    <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#solanaGradientHeader)"/>
-                                    <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#solanaGradientHeader)"/>
-                                    <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#solanaGradientHeader)"/>
-                                </svg>
-                            </button>
-                            <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="View project on GitHub">
-                                <svg viewBox="0 0 24 24" fill="currentColor" class="header-github-icon">
-                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                                </svg>
-                            </a>
-                        </div>
-                    </div>
-                    
+        <header class="py-4">
+            <div class="flex flex-col lg:flex-row gap-4 items-start lg:items-start lg:items-stretch">
+                <div class="brand-header flex-1">
                     <div class="brand-header-inner">
                         <span class="brand-kicker">OrderSkew.com</span>
                         <h1 class="brand-title">Order Skew</h1>
                         <p class="brand-subtitle">Design your buy and sell ladders with precision at OrderSkew.com.</p>
                     </div>
-                    
+                    <div class="header-controls">
+                        <div class="header-controls-group">
+                            <div class="theme-toggle-group" id="theme-toggle-group" role="group" aria-label="Switch theme">
+                                <button type="button" class="theme-toggle-button" data-theme-toggle="light" aria-pressed="false" aria-label="Activate light theme">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="5"></circle>
+                                        <line x1="12" y1="1.5" x2="12" y2="4.5"></line>
+                                        <line x1="12" y1="19.5" x2="12" y2="22.5"></line>
+                                        <line x1="4.22" y1="4.22" x2="6.34" y2="6.34"></line>
+                                        <line x1="17.66" y1="17.66" x2="19.78" y2="19.78"></line>
+                                        <line x1="1.5" y1="12" x2="4.5" y2="12"></line>
+                                        <line x1="19.5" y1="12" x2="22.5" y2="12"></line>
+                                        <line x1="4.22" y1="19.78" x2="6.34" y2="17.66"></line>
+                                        <line x1="17.66" y1="6.34" x2="19.78" y2="4.22"></line>
+                                    </svg>
+                                </button>
+                                <button type="button" class="theme-toggle-button" data-theme-toggle="dark" aria-pressed="false" aria-label="Activate dark theme">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="header-icons-group">
+                                <button type="button" id="solana-logo-btn-header" class="header-icon-btn" aria-label="Show QR code for Solana address">
+                                    <svg viewBox="0 0 397.7 311.7" xmlns="http://www.w3.org/2000/svg" class="header-solana-icon">
+                                        <linearGradient id="solanaGradientHeader" x1="360.879" y1="351.455" x2="141.213" y2="69.836" gradientUnits="userSpaceOnUse">
+                                            <stop offset="0" stop-color="#9945FF"/>
+                                            <stop offset="1" stop-color="#14F195"/>
+                                        </linearGradient>
+                                        <path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z" fill="url(#solanaGradientHeader)"/>
+                                        <path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z" fill="url(#solanaGradientHeader)"/>
+                                        <path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7-4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z" fill="url(#solanaGradientHeader)"/>
+                                    </svg>
+                                </button>
+                                <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener noreferrer" class="header-icon-btn" aria-label="View project on GitHub">
+                                    <svg viewBox="0 0 24 24" fill="currentColor" class="header-github-icon">
+                                        <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="header-export-section">
                         <details id="export-collapse" class="relative">
-                            <summary class="export-button-summary">
+                            <summary class="btn-secondary text-sm font-medium py-2 px-4 rounded-lg cursor-pointer select-none flex items-center justify-between gap-2">
                                 <div class="flex items-center gap-2">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4">
                                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
@@ -2090,9 +1602,9 @@
                                     </svg>
                                     <span>Export Options</span>
                                 </div>
-                                <span class="export-chevron">▼</span>
+                                <span class="text-xs opacity-80 tracking-wide">▼</span>
                             </summary>
-                            <div class="export-panel">
+                            <div class="mt-3 flex flex-wrap gap-2 export-panel">
                                 <button id="download-csv-btn" class="btn-primary text-sm font-medium py-2 px-4 rounded-lg">
                                     Download CSV
                                 </button>
@@ -2110,278 +1622,244 @@
                         </details>
                     </div>
                 </div>
-                <div class="card p-4 md:p-5 lg:p-6 xl:p-7 flex-shrink-0 w-full xl:w-[calc((100%-1.5rem)/2)] xl:ml-auto lg:w-[calc((100%-1.5rem)/2)]">
-                    <div class="flex justify-between items-center mb-4 md:mb-5">
-                        <h2 class="text-xl md:text-2xl font-bold text-primary-dark tracking-tight">Plan Summary</h2>
+                <div class="card p-6 flex-shrink-0 w-full lg:w-auto">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-semibold text-primary-dark">Plan Summary</h2>
                     </div>
-                    <div id="summary" class="grid summary-mobile-grid grid-cols-2 gap-2.5 md:gap-3 lg:gap-4">
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Avg. Buy Price</p>
-                            <p id="summary-avg-buy" class="text-lg md:text-xl font-bold text-primary-dark mb-2 leading-tight">-</p>
-                            <div class="mt-auto pt-2 border-t border-white/40">
-                                <p class="text-[10px] text-secondary-dark mb-0.5 font-medium">Buy Floor</p>
-                                <p id="summary-buy-floor" class="text-xs font-bold text-primary-dark">-</p>
-                            </div>
+                    <div id="summary" class="grid summary-mobile-grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Avg. Buy Price</p>
+                            <p id="summary-avg-buy" class="text-xl font-bold text-primary-dark">-</p>
+                            <p class="text-xs text-secondary-dark mt-3">Buy Floor</p>
+                            <p id="summary-buy-floor" class="text-sm font-semibold text-primary-dark">-</p>
                         </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Avg. Sell Price</p>
-                            <p id="summary-avg-sell" class="text-lg md:text-xl font-bold text-primary-dark mb-2 leading-tight">-</p>
-                            <div class="mt-auto pt-2 border-t border-white/40">
-                                <p class="text-[10px] text-secondary-dark mb-0.5 font-medium">Sell Ceiling</p>
-                                <p id="summary-sell-ceiling" class="text-xs font-bold text-primary-dark">-</p>
-                            </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Avg. Sell Price</p>
+                            <p id="summary-avg-sell" class="text-xl font-bold text-primary-dark">-</p>
+                            <p class="text-xs text-secondary-dark mt-3">Sell Ceiling</p>
+                            <p id="summary-sell-ceiling" class="text-sm font-semibold text-primary-dark">-</p>
                         </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Total Buy Order Size</p>
-                            <p id="summary-total-buy-size" class="text-lg md:text-xl font-bold text-primary-dark mb-2 leading-tight">-</p>
-                            <div class="mt-auto pt-2 border-t border-white/40">
-                                <p class="text-[10px] text-secondary-dark mb-0.5 font-medium">Total Volume</p>
-                                <p id="summary-total-buy-volume" class="text-xs font-bold text-primary-dark">-</p>
-                            </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Profit After Fees</p>
+                            <p id="summary-net-profit" class="text-xl font-bold text-primary-dark">-</p>
                         </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Total Sell Order Size</p>
-                            <p id="summary-total-sell-size" class="text-lg md:text-xl font-bold text-primary-dark mb-2 leading-tight">-</p>
-                            <div class="mt-auto pt-2 border-t border-white/40">
-                                <p class="text-[10px] text-secondary-dark mb-0.5 font-medium">Total Volume</p>
-                                <p id="summary-total-sell-volume" class="text-xs font-bold text-primary-dark">-</p>
-                            </div>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Total Vol</p>
+                            <p id="summary-total-quantity" class="text-xl font-bold text-primary-dark">-</p>
                         </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Profit After Fees</p>
-                            <p id="summary-net-profit" class="text-lg md:text-xl font-bold text-primary-dark mt-auto leading-tight">-</p>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">ROI on Cost Basis</p>
+                            <p id="summary-roi" class="text-xl font-bold text-primary-dark">-</p>
                         </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Total Vol</p>
-                            <p id="summary-total-quantity" class="text-lg md:text-xl font-bold text-primary-dark mt-auto leading-tight">-</p>
-                        </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">ROI on Cost Basis</p>
-                            <p id="summary-roi" class="text-lg md:text-xl font-bold text-primary-dark mt-auto leading-tight">-</p>
-                        </div>
-                        <div class="summary-card p-3 md:p-3.5 lg:p-4 rounded-lg">
-                            <p class="text-[10px] md:text-xs text-secondary-dark mb-1.5 font-semibold tracking-wide uppercase">Total Fees Paid</p>
-                            <p id="summary-total-fees" class="text-lg md:text-xl font-bold text-primary-dark mb-1 leading-tight">-</p>
-                            <p id="summary-total-fees-percent" class="text-[10px] text-secondary-dark mt-1 font-medium">-</p>
+                        <div class="summary-card p-4 rounded-lg">
+                            <p class="text-sm text-secondary-dark">Total Fees Paid</p>
+                            <p id="summary-total-fees" class="text-xl font-bold text-primary-dark">-</p>
+                            <p id="summary-total-fees-percent" class="text-xs text-secondary-dark mt-1">-</p>
                         </div>
                     </div>
                 </div>
             </div>
         </header>
 
-        <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 xl:gap-6 auto-rows-min">
-            <div class="col-span-1 lg:col-span-2">
+        <main class="grid mobile-two-col grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6 auto-rows-min">
+            <div class="card p-6 col-span-1 lg:col-span-2">
                 <form id="trading-plan-form">
-                    <!-- Horizontal Configuration Strip -->
-                    <div class="card p-5 lg:p-6 xl:p-7">
-                        <div class="flex flex-wrap items-end gap-3 lg:gap-4 xl:gap-5">
-                            
-                            <!-- Initial Capital -->
-                            <div class="flex-shrink-0">
-                                <label for="starting_capital" id="starting_capital_label" class="block text-xs font-medium text-tertiary-dark mb-1.5">Initial Capital ($)</label>
-                                <input type="number" id="starting_capital" value="50000" class="form-input w-32 lg:w-36 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:border-primary focus:border-primary">
+                    <div class="flex gap-4 lg:gap-6 items-start">
+                        <div class="flex-shrink-0 space-y-3">
+                            <div>
+                                <label for="starting_capital" id="starting_capital_label" class="block text-xs font-medium text-secondary-dark mb-1">Initial Capital ($)</label>
+                                <input type="number" id="starting_capital" value="50000" class="form-input w-full rounded-md p-1.5 text-sm" style="min-width: 180px;">
                             </div>
-
-                            <!-- Current Asset Price -->
-                            <div class="flex-shrink-0">
-                                <label for="current_price" class="block text-xs font-medium text-tertiary-dark mb-1.5">Current Price ($)</label>
-                                <input type="number" id="current_price" value="100" class="form-input w-32 lg:w-36 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:border-primary focus:border-primary">
-                            </div>
-
-                            <!-- Number of Rungs -->
-                            <div class="flex-shrink-0 flex-1 min-w-[180px]">
-                                <label for="number_of_rungs" class="block text-xs font-medium text-tertiary-dark mb-1.5">Rungs</label>
-                                <div class="flex items-center gap-2">
-                                    <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
-                                    <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" step="1" class="form-input w-16 rounded-lg px-2 py-2 text-sm font-medium text-center transition-all duration-200 hover:border-primary focus:border-primary">
-                                </div>
-                            </div>
-
-                            <!-- Price Range Mode -->
-                            <div class="flex-shrink-0">
-                                <label for="price_range_mode" class="block text-xs font-medium text-tertiary-dark mb-1.5">Range Mode</label>
-                                <select id="price_range_mode" class="form-input w-40 lg:w-44 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:border-primary focus:border-primary">
-                                    <option value="width">Width (%)</option>
-                                    <option value="floor">Buy Floor & Sell Ceiling</option>
-                                </select>
-                            </div>
-
-                            <!-- Width/Depth -->
-                            <div id="width-mode-container" class="flex-shrink-0 flex-1 min-w-[180px]">
-                                <label for="depth" class="block text-xs font-medium text-tertiary-dark mb-1.5">Width (%)</label>
-                                <div class="flex items-center gap-2">
-                                    <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="flex-1 h-2 rounded-lg cursor-pointer">
-                                    <input type="number" id="depth_input" value="20" min="0.1" max="99" step="0.1" class="form-input w-20 rounded-lg px-2 py-2 text-sm font-medium text-center transition-all duration-200 hover:border-primary focus:border-primary">
-                                </div>
-                            </div>
-
-                            <!-- Floor Mode Container -->
-                            <div id="floor-mode-container" class="hidden flex flex-shrink-0 items-end gap-3">
-                                <div>
-                                    <label for="buy_floor" class="block text-xs font-medium text-tertiary-dark mb-1.5">Buy Floor ($)</label>
-                                    <input type="number" id="buy_floor" value="" min="0" step="0.0001" class="form-input w-32 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:border-primary focus:border-primary" placeholder="Auto">
-                                </div>
-                                <div>
-                                    <label for="sell_ceiling" class="block text-xs font-medium text-tertiary-dark mb-1.5">Sell Ceiling ($)</label>
-                                    <input type="number" id="sell_ceiling" value="" min="0" step="0.0001" class="form-input w-32 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-200 hover:border-primary focus:border-primary" placeholder="Auto">
-                                </div>
-                            </div>
-
-                            <!-- Allocation Skew -->
-                            <div class="flex-shrink-0 flex-1 min-w-[180px]">
-                                <label for="skew_value" class="block text-xs font-medium text-tertiary-dark mb-1.5">Allocation Skew</label>
-                                <div class="flex items-center gap-2">
-                                    <input type="range" id="skew_value" min="0" max="100" value="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
-                                    <input type="number" id="skew_value_input" min="0" max="100" value="50" step="1" class="form-input w-16 rounded-lg px-2 py-2 text-sm font-medium text-center transition-all duration-200 hover:border-primary focus:border-primary">
-                                </div>
-                                <div class="flex justify-between items-center text-[10px] text-tertiary-dark mt-1 px-1">
-                                    <span>None</span>
-                                    <span>Moderate</span>
-                                    <span>Heavy</span>
-                                </div>
-                            </div>
-
-                            <!-- Advanced Mode Toggle -->
-                            <div class="flex-shrink-0 flex items-end pb-0.5">
-                                <label class="advanced-toggle-label flex items-center gap-2.5 cursor-pointer group px-3 py-2 rounded-lg border transition-all duration-200">
-                                    <span class="text-sm font-medium text-secondary-dark group-hover:text-primary-dark transition-colors">Advanced</span>
-                                    <input id="advanced_mode" type="checkbox" class="sr-only peer">
-                                    <div class="w-10 h-5 bg-surface-muted peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-primary relative shadow-sm"></div>
-                                </label>
+                            <div>
+                                <label for="current_price" class="block text-xs font-medium text-secondary-dark mb-1">Current Asset Price ($)</label>
+                                <input type="number" id="current_price" value="100" class="form-input w-full rounded-md p-1.5 text-sm" style="min-width: 180px;">
                             </div>
                         </div>
-
-                        <!-- Advanced Settings (Collapsible) -->
-                        <div id="advanced-settings" class="hidden mt-5 pt-5 border-t border-soft">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-5">
-                                
-                                <!-- Sell-only Mode -->
-                                <div class="p-3.5 rounded-lg border border-soft surface-muted">
-                                    <div class="flex items-center justify-between mb-2">
-                                        <label for="sell_only_mode" class="text-xs font-medium text-secondary-dark">Sell-only Mode</label>
-                                        <input id="sell_only_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-1 focus:ring-primary">
-                                    </div>
-                                    <p class="text-[10px] text-tertiary-dark leading-relaxed">Preserve buy orders while adjusting sell ladder.</p>
-                                    <div id="sell-only-inputs" class="hidden mt-3 space-y-2 pt-3 border-t border-soft">
-                                        <div>
-                                            <label for="existing_quantity" class="block text-[10px] font-medium text-tertiary-dark mb-1">Existing Qty</label>
-                                            <input type="number" id="existing_quantity" value="0" min="0" class="form-input w-full rounded px-2 py-1.5 text-xs transition-all duration-200 hover:border-primary focus:border-primary" step="0.0001">
-                                        </div>
-                                        <div>
-                                            <label for="existing_avg_price" class="block text-[10px] font-medium text-tertiary-dark mb-1">Avg Buy ($)</label>
-                                            <input type="number" id="existing_avg_price" value="0" min="0" class="form-input w-full rounded px-2 py-1.5 text-xs transition-all duration-200 hover:border-primary focus:border-primary" step="0.0001">
-                                        </div>
-                                    </div>
+                        <div class="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
+                        <div>
+                            <label for="number_of_rungs" class="block text-sm font-medium text-secondary-dark mb-1">Number of Rungs</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="number_of_rungs" value="10" min="2" max="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" step="1" class="form-input w-20 rounded-md p-1.5 text-sm">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-secondary-dark mb-1">Price Range</label>
+                            <select id="price_range_mode" class="form-input w-full rounded-md p-2 text-sm mb-2">
+                                <option value="width">Width (%)</option>
+                                <option value="floor">Buy Floor & Sell Ceiling</option>
+                            </select>
+                            <div id="width-mode-container">
+                                <label for="depth" class="block text-sm font-medium text-secondary-dark mb-1">Width (%)</label>
+                                <div class="flex items-center gap-2">
+                                    <input type="range" id="depth" value="20" min="0.1" max="99" step="0.1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                    <input type="number" id="depth_input" value="20" min="0.1" max="99" step="0.1" class="form-input w-20 rounded-md p-1.5 text-sm">
                                 </div>
-
-                                <!-- Trading Fees -->
-                                <div class="space-y-3">
-                                    <label class="block text-xs font-medium text-secondary-dark mb-2">Trading Fees</label>
-                                    <div class="space-y-2.5">
-                                        <div>
-                                            <label for="fee_type" class="block text-[10px] font-medium text-tertiary-dark mb-1">Type</label>
-                                            <select id="fee_type" class="form-input w-full rounded px-2 py-1.5 text-xs transition-all duration-200 hover:border-primary focus:border-primary">
-                                                <option value="percent">Percent (%)</option>
-                                                <option value="fixed">Flat ($)</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label for="fee_value" class="block text-[10px] font-medium text-tertiary-dark mb-1">Amount</label>
-                                            <input type="number" id="fee_value" value="0" min="0" class="form-input w-full rounded px-2 py-1.5 text-xs transition-all duration-200 hover:border-primary focus:border-primary" step="0.0001">
-                                        </div>
-                                        <div>
-                                            <label for="fee_settlement" class="flex items-center justify-between text-[10px] font-medium text-tertiary-dark mb-1">
-                                                <span>Settlement</span>
-                                                <button type="button" class="helper-tooltip" title="Choose whether trading fees reduce each order (net settlement) or are paid from a separate pool (external settlement)." aria-label="Fee settlement details">i</button>
-                                            </label>
-                                            <select id="fee_settlement" class="form-input w-full rounded px-2 py-1.5 text-xs transition-all duration-200 hover:border-primary focus:border-primary">
-                                                <option value="netted">Net</option>
-                                                <option value="external">External</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Spacing -->
+                            </div>
+                            <div id="floor-mode-container" class="hidden">
                                 <div class="space-y-2">
-                                    <label for="spacing_mode" class="flex items-center justify-between text-xs font-medium text-secondary-dark mb-2">
-                                        <span>Rung Spacing</span>
-                                        <button type="button" class="helper-tooltip" title="Relative spacing compounds the rung width as a percent change, creating exponential steps." aria-label="Spacing mode information">i</button>
-                                    </label>
-                                    <select id="spacing_mode" class="form-input w-full rounded px-3 py-2 text-sm transition-all duration-200 hover:border-primary focus:border-primary">
-                                        <option value="absolute">Absolute (Equal Steps)</option>
-                                        <option value="relative">Relative (% per rung)</option>
+                                    <div>
+                                        <label for="buy_floor" class="block text-xs font-medium text-secondary-dark mb-1">Buy Floor ($)</label>
+                                        <input type="number" id="buy_floor" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2 text-sm" placeholder="Auto">
+                                    </div>
+                                    <div>
+                                        <label for="sell_ceiling" class="block text-xs font-medium text-secondary-dark mb-1">Sell Ceiling ($)</label>
+                                        <input type="number" id="sell_ceiling" value="" min="0" step="0.0001" class="form-input w-full rounded-md p-2 text-sm" placeholder="Auto">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="skew_value" class="block text-sm font-medium text-secondary-dark mb-1">Allocation Skew</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="skew_value" min="0" max="100" value="50" step="1" class="flex-1 h-2 rounded-lg cursor-pointer">
+                                <input type="number" id="skew_value_input" min="0" max="100" value="50" step="1" class="form-input w-20 rounded-md p-1.5 text-sm">
+                            </div>
+                            <div class="flex justify-between text-xs text-tertiary-dark mt-1">
+                                <span>None</span>
+                                <span>Moderate</span>
+                                <span>Heavy</span>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <div class="border border-soft rounded-lg p-3 surface-muted space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center space-x-2 text-xs font-medium text-secondary-dark cursor-pointer">
+                                <input id="advanced_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
+                                <span>Advanced mode</span>
+                            </label>
+                            <button type="button" id="advanced-settings-toggle" class="hidden items-center justify-center w-6 h-6 text-secondary-dark hover:text-primary-dark transition-colors" aria-label="Toggle advanced settings" aria-expanded="false">
+                                <svg class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div id="advanced-settings" class="space-y-3 hidden">
+                            <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                                <div class="sm:col-span-4">
+                                    <div class="border-2 border-accent surface-accent rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                                        <div>
+                                            <p class="text-xs font-semibold text-secondary-dark uppercase tracking-wide">Mode</p>
+                                            <p class="text-sm font-semibold text-primary-dark">Sell-only ladder</p>
+                                            <p class="text-[11px] text-secondary-dark mt-1">Preserve existing buy orders while fine-tuning the sell ladder.</p>
+                                        </div>
+                                        <label class="inline-flex items-center space-x-2 text-sm font-medium text-primary-dark">
+                                            <input id="sell_only_mode" type="checkbox" class="form-checkbox h-4 w-4 text-primary-dark rounded focus:ring-0">
+                                            <span>Enable</span>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="fee_type" class="block text-xs font-medium text-secondary-dark mb-1">Trading Fee Type</label>
+                                    <select id="fee_type" class="form-input w-full rounded-md p-2 text-sm">
+                                        <option value="percent">Percent (%)</option>
+                                        <option value="fixed">Flat ($)</option>
                                     </select>
                                 </div>
-
-                                <!-- Equal Quantity -->
-                                <div class="space-y-2">
-                                    <label class="flex items-center justify-between text-xs font-medium text-secondary-dark mb-2">
-                                        <span class="flex items-center gap-2 cursor-pointer group">
-                                            <input id="equal_quantity_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-1 focus:ring-primary">
-                                            <span class="group-hover:text-primary-dark transition-colors">Equal quantity</span>
-                                        </span>
-                                        <button type="button" class="helper-tooltip" title="Override skew settings and distribute the same asset size across each rung." aria-label="Equal quantity details">i</button>
+                                <div>
+                                    <label for="fee_value" class="block text-xs font-medium text-secondary-dark mb-1">Trading Fee</label>
+                                    <input type="number" id="fee_value" value="0" min="0" class="form-input w-full rounded-md p-2 text-sm" step="0.0001">
+                                </div>
+                                <div>
+                                    <label for="fee_settlement" class="flex items-center justify-between text-xs font-medium text-secondary-dark mb-1">
+                                        <span>Fee Settlement</span>
+                                        <button type="button" class="helper-tooltip" title="Choose whether trading fees reduce each order (net settlement) or are paid from a separate pool (external settlement)." aria-label="Fee settlement details">i</button>
                                     </label>
-                                    <p class="text-[10px] text-tertiary-dark mt-1">Override skew and distribute equally across rungs.</p>
+                                    <select id="fee_settlement" class="form-input w-full rounded-md p-2 text-sm">
+                                        <option value="netted">Net settlement (deduct from order)</option>
+                                        <option value="external">External settlement (separate funds)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="spacing_mode" class="flex items-center justify-between text-xs font-medium text-secondary-dark mb-1">
+                                    <span>Spacing Between Rungs</span>
+                                    <button type="button" class="helper-tooltip" title="Relative spacing compounds the rung width as a percent change, creating exponential steps." aria-label="Spacing mode information">i</button>
+                                </label>
+                                <select id="spacing_mode" class="form-input w-full rounded-md p-2 text-sm">
+                                    <option value="absolute">Absolute (Equal Steps)</option>
+                                    <option value="relative">Relative (% per rung)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="flex items-center justify-between text-xs font-medium text-secondary-dark mb-1">
+                                    <span class="flex items-center space-x-2">
+                                        <input id="equal_quantity_mode" type="checkbox" class="form-checkbox h-3.5 w-3.5 text-primary-dark rounded focus:ring-0">
+                                        <span>Equal quantity per rung</span>
+                                    </span>
+                                    <button type="button" class="helper-tooltip" title="Override skew settings and distribute the same asset size across each rung." aria-label="Equal quantity details">i</button>
+                                </label>
+                            </div>
+                            <div id="sell-only-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-3 hidden">
+                                <div>
+                                    <label for="existing_quantity" class="block text-xs font-medium text-secondary-dark mb-1">Existing Quantity</label>
+                                    <input type="number" id="existing_quantity" value="0" min="0" class="form-input w-full rounded-md p-2 text-sm" step="0.0001">
+                                </div>
+                                <div>
+                                    <label for="existing_avg_price" class="block text-xs font-medium text-secondary-dark mb-1">Known Average Buy Price ($)</label>
+                                    <input type="number" id="existing_avg_price" value="0" min="0" class="form-input w-full rounded-md p-2 text-sm" step="0.0001">
                                 </div>
                             </div>
                         </div>
                     </div>
+                    </div>
+                    <!-- Removed Generate Plan button -->
                 </form>
             </div>
 
 
             <!-- Charts Container -->
-            <div class="col-span-1 lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-5 xl:gap-6">
+            <div class="col-span-1 lg:col-span-2 grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
                 <!-- Buy Chart -->
-                <div class="card p-5 lg:p-6 xl:p-7" id="buy-chart-card">
-                    <h3 class="text-xl lg:text-2xl font-bold text-primary-dark mb-4 lg:mb-5 tracking-tight">Buy Ladder</h3>
+                <div class="card p-6" id="buy-chart-card">
+                    <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Ladder</h3>
                     <div id="visualization" class="d3-chart">
                         <svg id="allocation-chart"></svg>
                     </div>
                 </div>
                 
                 <!-- Sell Chart -->
-                <div class="card p-5 lg:p-6 xl:p-7" id="sell-chart-card">
-                    <h3 class="text-xl lg:text-2xl font-bold text-primary-dark mb-4 lg:mb-5 tracking-tight">Sell Ladder</h3>
+                <div class="card p-6" id="sell-chart-card">
+                    <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Ladder</h3>
                     <div id="sell-visualization" class="d3-chart">
                         <svg id="sell-allocation-chart"></svg>
                     </div>
                 </div>
             </div>
 
-            <div class="card p-5 lg:p-6 xl:p-7" id="buy-orders-card">
-                <h3 class="text-xl lg:text-2xl font-bold text-primary-dark mb-4 lg:mb-5 tracking-tight">Buy Orders</h3>
+            <div class="card p-6" id="buy-orders-card">
+                <h3 class="text-xl font-semibold text-primary-dark mb-4">Buy Orders</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-primary-dark uppercase table-header">
                             <tr id="buy-table-header-row">
-                                <th scope="col" class="px-3 py-3 rounded-l-lg">#</th>
-                                <th scope="col" class="px-3 py-3">Price</th>
-                                <th scope="col" class="px-3 py-3">Vol</th>
-                                <th scope="col" class="px-3 py-3">Alloc</th>
-                                <th scope="col" class="px-3 py-3">Value</th>
-                                <th scope="col" class="px-3 py-3 rounded-r-lg">Avg Buy Price</th>
+                                <th scope="col" class="px-2 py-2 rounded-l-lg">#</th>
+                                <th scope="col" class="px-2 py-2">Price</th>
+                                <th scope="col" class="px-2 py-2">Vol</th>
+                                <th scope="col" class="px-2 py-2">Alloc</th>
+                                <th scope="col" class="px-2 py-2">Value</th>
+                                <th scope="col" class="px-2 py-2 rounded-r-lg">Avg Buy Price</th>
                             </tr>
                         </thead>
                         <tbody id="buy-ladder-body"></tbody>
                     </table>
                 </div>
             </div>
-            <div class="card p-5 lg:p-6 xl:p-7" id="sell-orders-card">
-                <h3 class="text-xl lg:text-2xl font-bold text-primary-dark mb-4 lg:mb-5 tracking-tight">Sell Orders</h3>
+            <div class="card p-6" id="sell-orders-card">
+                <h3 class="text-xl font-semibold text-primary-dark mb-4">Sell Orders</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left">
                         <thead class="text-xs text-primary-dark uppercase table-header">
                             <tr id="sell-table-header-row">
-                                <th scope="col" class="px-3 py-3 rounded-l-lg">#</th>
-                                <th scope="col" class="px-3 py-3">Price</th>
-                                <th scope="col" class="px-3 py-3">Vol</th>
-                                <th scope="col" class="px-3 py-3">Alloc</th>
-                                <th scope="col" class="px-3 py-3">Value</th>
-                                <th scope="col" class="px-3 py-3">Avg Sell Price</th>
-                                <th scope="col" class="px-3 py-3 rounded-r-lg">Profit</th>
+                                <th scope="col" class="px-2 py-2 rounded-l-lg">#</th>
+                                <th scope="col" class="px-2 py-2">Price</th>
+                                <th scope="col" class="px-2 py-2">Vol</th>
+                                <th scope="col" class="px-2 py-2">Alloc</th>
+                                <th scope="col" class="px-2 py-2">Value</th>
+                                <th scope="col" class="px-2 py-2">Avg Sell Price</th>
+                                <th scope="col" class="px-2 py-2 rounded-r-lg">Profit</th>
                             </tr>
                         </thead>
                         <tbody id="sell-ladder-body"></tbody>
@@ -2741,13 +2219,9 @@
 
                 // Load checkboxes
                 if (advancedToggle) {
-                    const advancedToggleLabel = advancedToggle.closest('.advanced-toggle-label');
                     const saved = loadFormValue(STORAGE_KEYS.advancedMode);
                     if (saved === 'true') {
                         advancedToggle.checked = true;
-                        if (advancedToggleLabel) {
-                            advancedToggleLabel.classList.add('is-checked');
-                        }
                         if (advancedSettings) {
                             advancedSettings.classList.remove('hidden');
                             if (advancedSettingsToggle) {
@@ -2764,8 +2238,6 @@
                                 equalQuantityCheckbox.checked = true;
                             }
                         }
-                    } else if (advancedToggleLabel) {
-                        advancedToggleLabel.classList.remove('is-checked');
                     }
                 }
                 if (sellOnlyCheckbox) {
@@ -3061,7 +2533,7 @@
             };
 
             const buildTableCell = (label, content, classList = []) => {
-                const classes = ['px-3', 'py-3', ...classList].filter(Boolean).join(' ');
+                const classes = ['px-2', 'py-2', ...classList].filter(Boolean).join(' ');
                 const safeLabel = escapeForHtml(label);
                 return `<td class="${classes}" data-label="${safeLabel}">${content}</td>`;
             };
@@ -4071,27 +3543,15 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         'Avg Buy Price'
                     ];
                     buyHeaderRow.innerHTML = buyHeaders.map((label, idx) => {
-                        const classes = ['px-3', 'py-3'];
-                        let headerIdx = idx;
+                        const classes = ['px-2', 'py-2'];
                         if (showExecutionCheckboxes) {
                             if (idx === 0) {
                                 classes.push('w-16', 'text-center', 'rounded-l-lg');
-                                return `<th scope="col" class="${classes.join(' ')}">${label}</th>`;
-                            }
-                            headerIdx = idx - 1; // Adjust index for alignment mapping
-                            if (idx === 1) {
+                            } else if (idx === 1) {
                                 classes.push('w-12', 'text-center');
                             }
-                        } else {
-                            if (idx === 0) {
-                                classes.push('w-12', 'text-center', 'rounded-l-lg');
-                            }
-                        }
-                        // Add text alignment based on column type
-                        if (headerIdx === 0 || (showExecutionCheckboxes && idx === 1)) {
-                            // Rung column - already handled above
-                        } else if (label === 'Price' || label === 'Vol' || label === 'Alloc' || label === 'Value' || label.startsWith('Fee') || label === 'Avg Buy Price') {
-                            classes.push('text-right');
+                        } else if (idx === 0) {
+                            classes.push('w-12', 'text-center', 'rounded-l-lg');
                         }
                         if (idx === buyHeaders.length - 1) {
                             classes.push('rounded-r-lg');
@@ -4112,16 +3572,14 @@ caption { font-weight: 600; margin-bottom: 6px; }
                         'Profit'
                     ];
                     sellHeaderRow.innerHTML = sellHeaders.map((label, idx) => {
-                        const classes = ['px-3', 'py-3'];
-                        if (idx === 0) {
-                            classes.push('w-12', 'text-center', 'rounded-l-lg');
-                        } else if (label === 'Price' || label === 'Vol' || label === 'Alloc' || label === 'Value' || label.startsWith('Fee') || label === 'Avg Sell Price' || label === 'Profit') {
-                            classes.push('text-right');
-                        }
-                        if (idx === sellHeaders.length - 1) {
-                            classes.push('rounded-r-lg');
-                        }
-                        return `<th scope="col" class="${classes.join(' ')}">${label}</th>`;
+                        const classes = [
+                            'px-2',
+                            'py-2',
+                            idx === 0 ? 'w-12 text-center' : '',
+                            idx === 0 ? 'rounded-l-lg' : '',
+                            idx === sellHeaders.length - 1 ? 'rounded-r-lg' : ''
+                        ].filter(Boolean).join(' ');
+                        return `<th scope="col" class="${classes}">${label}</th>`;
                     }).join('');
                 }
 
@@ -4140,28 +3598,6 @@ caption { font-weight: 600; margin-bottom: 6px; }
                 const formatSummaryPrice = price => (price ? formatCurrencySignificant(price) : '-');
                 document.getElementById('summary-buy-floor').textContent = formatSummaryPrice(summary.lowestBuyPrice);
                 document.getElementById('summary-sell-ceiling').textContent = formatSummaryPrice(summary.highestSellPrice);
-                
-                // Calculate total buy and sell order sizes
-                const totalBuyOrderSize = summary.avgBuyPrice > 0 && summary.totalQuantity > 0 
-                    ? summary.avgBuyPrice * summary.totalQuantity 
-                    : 0;
-                const totalSellOrderSize = summary.avgSellPrice > 0 && summary.totalQuantity > 0 
-                    ? summary.avgSellPrice * summary.totalQuantity 
-                    : 0;
-                document.getElementById('summary-total-buy-size').textContent = totalBuyOrderSize > 0 
-                    ? formatCurrencySignificant(totalBuyOrderSize) 
-                    : '-';
-                document.getElementById('summary-total-sell-size').textContent = totalSellOrderSize > 0 
-                    ? formatCurrencySignificant(totalSellOrderSize) 
-                    : '-';
-                
-                // Display total volumes for buy and sell orders
-                document.getElementById('summary-total-buy-volume').textContent = summary.totalQuantity > 0 
-                    ? formatSignificant(summary.totalQuantity) 
-                    : '-';
-                document.getElementById('summary-total-sell-volume').textContent = summary.totalQuantity > 0 
-                    ? formatSignificant(summary.totalQuantity) 
-                    : '-';
 
                 // Toggle visibility for buy components in sell-only mode
                 if (buyChartCard && buyOrdersCard) {
@@ -4739,24 +4175,12 @@ caption { font-weight: 600; margin-bottom: 6px; }
             }
 
             if (advancedToggle) {
-                const advancedToggleLabel = advancedToggle.closest('.advanced-toggle-label');
-                const updateLabelState = () => {
-                    if (advancedToggleLabel) {
-                        if (advancedToggle.checked) {
-                            advancedToggleLabel.classList.add('is-checked');
-                        } else {
-                            advancedToggleLabel.classList.remove('is-checked');
-                        }
-                    }
-                };
-                
                 advancedToggle.addEventListener('change', () => {
-                    updateLabelState();
                     trackInteraction('advanced-mode-toggle', {
                         enabled: advancedToggle.checked
                     });
                     if (advancedToggle.checked) {
-                        // Show settings when enabling advanced mode
+                        // Show settings and expand by default when enabling advanced mode
                         advancedSettings?.classList.remove('hidden');
                         if (advancedSettingsToggle) {
                             advancedSettingsToggle.classList.remove('hidden');
@@ -4795,9 +4219,6 @@ caption { font-weight: 600; margin-bottom: 6px; }
                     }
                     calculatePlan();
                 });
-                
-                // Initialize label state
-                updateLabelState();
                 if (!advancedToggle.checked) {
                     advancedSettings?.classList.add('hidden');
                     if (advancedSettingsToggle) {
