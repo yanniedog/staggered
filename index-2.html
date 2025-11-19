@@ -175,6 +175,24 @@
         }
         .helper-tooltip:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
+        .fee-type-btn {
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+        .fee-type-btn.active {
+            background-color: var(--color-primary);
+            color: var(--color-primary-contrast);
+        }
+        .fee-type-btn:not(.active) {
+            background-color: transparent;
+            color: var(--color-text-secondary);
+        }
+        .fee-type-btn:not(.active):hover {
+            color: var(--color-text);
+            background-color: var(--color-card);
+        }
+
         /* --- CARDS --- */
         .card {
             background-color: var(--color-card);
@@ -508,6 +526,22 @@
                                     <input type="number" id="skew_value_input" min="0" max="100" value="50" class="form-input w-14 rounded-md p-1 text-center text-xs hidden">
                                 </div>
                             </div>
+
+                            <!-- Fees -->
+                            <div>
+                                <div class="flex items-center gap-1 mb-1.5">
+                                    <label class="text-sm font-medium text-[var(--color-text-secondary)]">Fee</label>
+                                    <button type="button" class="helper-tooltip" title="Trading fee as a percentage or fixed dollar amount per trade.">?</button>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <div class="flex rounded-lg border border-[var(--color-border)] overflow-hidden bg-[var(--color-card-muted)]">
+                                        <button type="button" id="fee_type_percent" class="fee-type-btn active px-3 py-2 text-xs font-medium transition-colors" data-value="percent">%</button>
+                                        <button type="button" id="fee_type_fixed" class="fee-type-btn px-3 py-2 text-xs font-medium transition-colors" data-value="fixed">$</button>
+                                    </div>
+                                    <input type="number" id="fee_value" value="0.1" step="0.01" class="form-input flex-1 rounded-lg p-2.5 font-mono">
+                                    <input type="hidden" id="fee_type" value="percent">
+                                </div>
+                            </div>
                         </div>
 
                         <!-- Advanced Toggle -->
@@ -552,27 +586,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Fee Settings -->
-                                <div class="grid grid-cols-2 gap-3">
-                                    <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] font-medium">Fee Type</label>
-                                            <button type="button" class="helper-tooltip" title="Choose between a percentage fee (e.g., 0.1%) or a fixed dollar amount per trade.">?</button>
-                                        </div>
-                                        <select id="fee_type" class="form-input w-full rounded p-1.5 text-sm">
-                                            <option value="percent">Percent (%)</option>
-                                            <option value="fixed">Fixed ($)</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] font-medium">Fee Value</label>
-                                            <button type="button" class="helper-tooltip" title="The value of the fee. E.g., enter '0.1' for 0.1%.">?</button>
-                                        </div>
-                                        <input type="number" id="fee_value" value="0" step="0.01" class="form-input w-full rounded p-1.5 text-sm">
-                                    </div>
-                                </div>
-                                
                                 <div>
                                     <div class="flex items-center gap-1 mb-1">
                                         <label class="text-[10px] font-medium">Fee Settlement</label>
@@ -943,8 +956,29 @@
                                    els.existQty, els.existAvg, els.feeValue];
                     inputs.forEach(el => { if(el) el.addEventListener('input', App.debouncedCalc); });
 
+                    // Fee Type Toggle Buttons
+                    const feeTypePercent = document.getElementById('fee_type_percent');
+                    const feeTypeFixed = document.getElementById('fee_type_fixed');
+                    if (feeTypePercent && feeTypeFixed) {
+                        const updateFeeType = (value) => {
+                            els.feeType.value = value;
+                            if (value === 'percent') {
+                                feeTypePercent.classList.add('active');
+                                feeTypeFixed.classList.remove('active');
+                            } else {
+                                feeTypeFixed.classList.add('active');
+                                feeTypePercent.classList.remove('active');
+                            }
+                            App.calculatePlan();
+                        };
+                        feeTypePercent.addEventListener('click', () => updateFeeType('percent'));
+                        feeTypeFixed.addEventListener('click', () => updateFeeType('fixed'));
+                        // Initialize active state
+                        updateFeeType('percent');
+                    }
+
                     // Selects
-                    [els.priceRangeMode, els.feeType, els.feeSettlement, els.spacingMode].forEach(el => {
+                    [els.priceRangeMode, els.feeSettlement, els.spacingMode].forEach(el => {
                         if(el) el.addEventListener('change', (e) => {
                             if (e.target === els.priceRangeMode) App.togglePriceMode();
                             App.calculatePlan();
@@ -1023,10 +1057,10 @@
                     const advMode = els.advCheck.checked;
                     const feeType = els.feeType.value;
                     const feeValue = parseFloat(els.feeValue.value) || 0;
-                    const feeSettlement = els.feeSettlement.value;
-                    const spacingMode = els.spacingMode.value;
-                    const sellOnly = els.sellOnlyCheck.checked;
-                    const equalQty = els.equalQtyCheck.checked;
+                    const feeSettlement = advMode ? els.feeSettlement.value : 'netted';
+                    const spacingMode = advMode ? els.spacingMode.value : 'absolute';
+                    const sellOnly = advMode && els.sellOnlyCheck.checked;
+                    const equalQty = advMode && els.equalQtyCheck.checked;
 
                     const feeRate = feeType === 'percent' ? feeValue / 100 : 0;
                     const isFeeNetted = feeSettlement !== 'external';
@@ -1083,9 +1117,9 @@
                             let sharedQty = 0;
                             
                             if (activePrices.length > 0 && C > 0) {
-                                if (advMode && feeValue > 0 && isFeeNetted && feeType !== 'percent') {
+                                if (feeValue > 0 && isFeeNetted && feeType !== 'percent') {
                                     sharedQty = (C - (activePrices.length * feeValue)) / sumPrices;
-                                } else if (feeType === 'percent' && isFeeNetted) {
+                                } else if (feeValue > 0 && feeType === 'percent' && isFeeNetted) {
                                     sharedQty = C / (sumPrices * (1 + feeRate));
                                 } else {
                                     sharedQty = C / sumPrices;
@@ -1097,7 +1131,7 @@
                                 const assetSize = price > 0 ? sharedQty : 0;
                                 const netCapital = assetSize * price;
                                 let fee = 0;
-                                if (assetSize > 0 && advMode && feeValue > 0) {
+                                if (assetSize > 0 && feeValue > 0) {
                                     fee = feeType === 'percent' ? netCapital * feeRate : feeValue;
                                 }
                                 totalAssetBought += assetSize;
@@ -1115,7 +1149,7 @@
                                 const price = buyPrices[i];
                                 let net = alloc, fee = 0, gross = alloc;
 
-                                if (advMode && feeValue > 0) {
+                                if (feeValue > 0) {
                                     if (isFeeNetted) {
                                         if (feeType === 'percent') { net = alloc / (1+feeRate); fee = alloc - net; }
                                         else { fee = Math.min(feeValue, alloc); net = alloc - fee; }
@@ -1186,7 +1220,7 @@
                         const grossRev = qty * price;
                         let netRev = grossRev, fee = 0;
 
-                        if (advMode && feeValue > 0) {
+                        if (feeValue > 0) {
                              const rawFee = feeType === 'percent' ? grossRev * feeRate : (grossRev > 0 ? feeValue : 0);
                              fee = isFeeNetted ? Math.min(rawFee, grossRev) : rawFee;
                              netRev = isFeeNetted ? Math.max(grossRev - fee, 0) : grossRev;
