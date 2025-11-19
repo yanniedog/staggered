@@ -328,12 +328,11 @@
 
             <div class="w-full space-y-3">
                 <div class="flex items-center justify-center gap-2">
-                    <img src="solana_logo.png" 
+                    <img src="https://cryptologos.cc/logos/solana-sol-logo.svg" 
                          alt="Solana" 
                          class="h-5 w-auto object-contain"
-                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                    <span class="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-widest font-solana" style="display:none">Solana Network</span>
-                    <span class="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-widest font-solana">Network</span>
+                         onerror="this.style.display='none'">
+                    <span class="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-widest font-solana">Solana Network</span>
                 </div>
 
                 <div class="relative group cursor-pointer transition-all" onclick="App.copy('F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1')" title="Click to copy">
@@ -436,7 +435,7 @@
                                         <label class="text-xs font-medium text-[var(--color-text-secondary)]" id="starting_capital_label">Initial Capital ($)</label>
                                         <button type="button" class="helper-tooltip" title="Total amount of capital available to deploy for this plan.">?</button>
                                     </div>
-                                    <input type="number" id="starting_capital" value="50000" class="form-input w-full rounded-lg p-2.5 font-mono">
+                                    <input type="text" id="starting_capital" value="50,000" class="form-input w-full rounded-lg p-2.5 font-mono">
                                 </div>
                                 <div>
                                     <div class="flex items-center gap-1 mb-1.5">
@@ -761,6 +760,28 @@
                 fmtCurr: (n) => new Intl.NumberFormat('en-US', {style:'currency', currency:'USD'}).format(Number.isFinite(n) ? n : 0),
                 fmtNum: (n, d=4) => Number.isFinite(n) ? n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:d}) : '0',
                 fmtPct: (n) => Number.isFinite(n) ? n.toFixed(2) + '%' : '0.00%',
+                formatNumberWithCommas: (value) => {
+                    if (value === null || value === undefined) return '';
+                    const strValue = value.toString();
+                    if (strValue === '' || strValue === '-' || strValue === '.' || strValue === '-.') {
+                        return strValue;
+                    }
+                    const isNegative = strValue.startsWith('-');
+                    const endsWithDot = strValue.endsWith('.');
+                    let workingValue = isNegative ? strValue.slice(1) : strValue;
+                    const parts = workingValue.split('.');
+                    const intPartRaw = parts.shift() || '';
+                    const decimalPartRaw = parts.join('');
+                    const formattedInt = intPartRaw.replace(/\B(?=(\d{3})+(?!\d))/g, ',') || '0';
+                    if (parts.length === 0 && !strValue.includes('.')) {
+                        return `${isNegative ? '-' : ''}${formattedInt}`;
+                    }
+                    if ((parts.length === 0 && strValue.includes('.')) || (parts.length >= 0 && decimalPartRaw.length === 0 && endsWithDot)) {
+                        return `${isNegative ? '-' : ''}${formattedInt}.`;
+                    }
+                    return `${isNegative ? '-' : ''}${formattedInt}.${decimalPartRaw}`;
+                },
+                stripCommas: (value) => (value ?? '').toString().replace(/,/g, ''),
                 copyToClipboard: (text) => {
                     const textArea = document.createElement("textarea");
                     textArea.value = text;
@@ -951,8 +972,54 @@
                         App.debouncedCalc();
                     });
 
+                    // Format Initial Capital with commas
+                    if (els.startCap) {
+                        const sanitizeInput = (value) => {
+                            if (value === null || value === undefined) return '';
+                            const strValue = value.toString();
+                            if (strValue === '' || strValue === '-' || strValue === '.' || strValue === '-.') {
+                                return strValue;
+                            }
+                            let sanitized = strValue.replace(/,/g, '');
+                            let sign = '';
+                            if (sanitized.startsWith('-')) {
+                                sign = '-';
+                                sanitized = sanitized.slice(1);
+                            }
+                            sanitized = sanitized.replace(/[^0-9.]/g, '');
+                            const hadDecimal = sanitized.includes('.');
+                            const parts = sanitized.split('.');
+                            const integerPart = parts.shift() || '';
+                            const decimalPart = parts.join('');
+                            let normalized = sign + integerPart;
+                            if (hadDecimal) {
+                                normalized += '.' + decimalPart;
+                                if (sanitized.endsWith('.') && decimalPart.length === 0) {
+                                    normalized += '';
+                                }
+                            }
+                            return normalized;
+                        };
+
+                        els.startCap.addEventListener('input', (e) => {
+                            const cursorPos = e.target.selectionStart || 0;
+                            const valueBefore = e.target.value;
+                            const normalized = sanitizeInput(valueBefore);
+                            e.target.value = Utils.formatNumberWithCommas(normalized);
+                            const diff = e.target.value.length - valueBefore.length;
+                            const newPos = Math.max(0, cursorPos + diff);
+                            e.target.setSelectionRange(newPos, newPos);
+                            App.debouncedCalc();
+                        });
+                        
+                        els.startCap.addEventListener('blur', (e) => {
+                            const normalized = sanitizeInput(e.target.value);
+                            e.target.value = Utils.formatNumberWithCommas(normalized);
+                        });
+                    }
+
                     // Standard Inputs
-                    const inputs = [els.startCap, els.currPrice, els.buyFloor, els.sellCeiling, 
+                    const inputs = [els.currPrice, els.buyFloor, els.sellCeiling, 
                                    els.existQty, els.existAvg, els.feeValue];
                     inputs.forEach(el => { if(el) el.addEventListener('input', App.debouncedCalc); });
 
@@ -1048,7 +1115,7 @@
                 // --- CORE CALCULATION ---
                 calculatePlan: () => {
                     // 1. Inputs
-                    const C = parseFloat(els.startCap.value) || 0;
+                    const C = parseFloat(Utils.stripCommas(els.startCap.value)) || 0;
                     const N = parseInt(els.rungs.value) || 2;
                     const S = parseInt(els.skew.value) || 0;
                     const currentPrice = parseFloat(els.currPrice.value) || 0;
@@ -1384,7 +1451,7 @@
                 
                 saveConfig: () => {
                     const config = {
-                        startingCapital: els.startCap.value,
+                        startingCapital: Utils.stripCommas(els.startCap.value),
                         numberOfRungs: els.rungs.value,
                         skewValue: els.skew.value,
                         depth: els.depth.value
@@ -1403,13 +1470,14 @@
                         try {
                             const c = JSON.parse(ev.target.result);
                             if (c.startingCapital) {
-                                els.startCap.value = c.startingCapital;
+                                els.startCap.value = Utils.formatNumberWithCommas(c.startingCapital);
                                 els.rungs.value = c.numberOfRungs;
                                 els.skew.value = c.skewValue;
                                 els.depth.value = c.depth;
                                 els.rungs.dispatchEvent(new Event('input'));
                                 els.skew.dispatchEvent(new Event('input'));
                                 els.depth.dispatchEvent(new Event('input'));
+                                els.startCap.dispatchEvent(new Event('input'));
                             }
                         } catch(err) { alert('Invalid Config'); }
                     };
