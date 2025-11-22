@@ -476,7 +476,7 @@
 
             <div class="flex items-center gap-3">
                 <!-- Video Tutorial -->
-                <button id="video-btn" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-secondary)] hover:bg-[var(--color-border)] hover:text-[var(--color-primary)] transition-colors text-xs font-medium border border-transparent hover:border-[var(--color-border-strong)]" title="Watch Tutorial">
+                <button id="video-btn" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-primary)] text-[var(--color-primary-contrast)] hover:bg-[var(--color-primary-accent)] transition-colors text-xs font-medium shadow-sm" title="Watch Tutorial">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>Tutorial</span>
                 </button>
@@ -527,20 +527,22 @@
                 
                 <!-- Input Form Card -->
                 <div class="card p-5 sm:p-6 animate-fade-in" style="animation-delay: 0.1s;">
-                    <h2 class="text-lg font-semibold text-[var(--color-primary)] mb-5 flex items-center gap-2">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                        Strategy Configuration
-                    </h2>
+                    <div class="flex justify-between items-center mb-5">
+                        <h2 class="text-lg font-semibold text-[var(--color-primary)] flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                            Strategy
+                        </h2>
+                        <div class="flex items-center bg-[var(--color-card-muted)] rounded-lg p-1 border border-[var(--color-border)]">
+                            <button id="mode-simple" class="px-3 py-1 text-xs font-medium rounded-md transition-all shadow-sm bg-[var(--color-card)] text-[var(--color-primary)]">Simple</button>
+                            <button id="mode-pro" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">Pro</button>
+                        </div>
+                    </div>
                     
                     <form id="trading-plan-form" class="space-y-6" onsubmit="return false;">
                         
-                        <!-- Market Data Group -->
+                        <!-- Market Data Group (Always Visible) -->
                         <div class="space-y-4">
-                            <button type="button" id="toggle-market-data" class="w-full flex items-center justify-between focus:outline-none group">
-                                <label class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider cursor-pointer group-hover:text-[var(--color-primary)] transition-colors">Market Data</label>
-                                <svg id="chevron-market-data" class="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
-                            
+                            <!-- Removed collapsible wrapper for simplified view -->
                             <div id="section-market-data" class="grid grid-cols-2 gap-4">
                                 <div>
                                     <div class="flex items-center gap-1 mb-1.5">
@@ -559,14 +561,14 @@
                             </div>
                         </div>
 
-                        <hr class="border-[var(--color-border)]">
+                        <!-- Pro Controls Container -->
+                        <div id="pro-controls" class="hidden space-y-6 pt-2 border-t border-[var(--color-border)]">
 
                         <!-- Ladder Settings Group -->
                         <div class="space-y-5">
-                            <button type="button" id="toggle-ladder-settings" class="w-full flex items-center justify-between focus:outline-none group">
-                                <label class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider cursor-pointer group-hover:text-[var(--color-primary)] transition-colors">Ladder Settings</label>
-                                <svg id="chevron-ladder-settings" class="w-4 h-4 text-[var(--color-text-muted)] group-hover:text-[var(--color-primary)] transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </button>
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Configuration</span>
+                            </div>
                             
                             <div id="section-ladder-settings" class="space-y-5">
                             <!-- Rungs -->
@@ -660,15 +662,13 @@
                             </div>
                         </div>
 
-                        <!-- Advanced Toggle -->
+                        <!-- Advanced Settings (Always visible in Pro Mode) -->
                         <div class="pt-2">
-                            <label class="flex items-center gap-2 text-sm font-medium text-[var(--color-primary)] cursor-pointer hover:text-[var(--color-secondary)] transition-colors w-fit select-none">
-                                <input type="checkbox" id="advanced_mode" class="w-4 h-4 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
-                                <span>Advanced Options</span>
-                                <svg id="adv-chevron" class="w-4 h-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                            </label>
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Advanced</span>
+                            </div>
                             
-                            <div id="advanced-settings" class="hidden mt-4 p-4 bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] space-y-4">
+                            <div id="advanced-settings" class="space-y-4">
                                 
                                 <!-- Sell Only Mode -->
                                 <div class="flex items-center justify-between p-2 bg-[var(--color-card)] rounded border border-[var(--color-border)]">
@@ -734,6 +734,7 @@
                                 </div>
                             </div>
                         </div>
+                        </div> <!-- End Pro Controls -->
 
                     </form>
                 </div>
@@ -810,10 +811,14 @@
 
                 <!-- Data Tables -->
                 <div class="card overflow-hidden animate-fade-in mb-48 lg:mb-8" style="animation-delay: 0.5s;">
-                    <div class="border-b border-[var(--color-border)]">
-                        <div class="flex">
+                    <div class="border-b border-[var(--color-border)] flex justify-between items-center bg-[var(--color-card-alt)]">
+                        <div class="flex flex-1">
                             <button id="tab-buy" class="flex-1 py-3 text-sm font-medium text-[var(--color-primary)] border-b-2 border-[var(--color-primary)] bg-[var(--color-card-alt)]">Buy Orders</button>
                             <button id="tab-sell" class="flex-1 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)]">Sell Orders</button>
+                        </div>
+                        <div class="px-4 flex items-center gap-2">
+                            <input type="checkbox" id="show-fees-toggle" class="w-3.5 h-3.5 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
+                            <label for="show-fees-toggle" class="text-xs font-medium text-[var(--color-text-secondary)] cursor-pointer select-none">Show Fees</label>
                         </div>
                     </div>
                     
@@ -826,6 +831,7 @@
                                         <th class="px-4 py-3 text-right">Price</th>
                                         <th class="px-4 py-3 text-right">Vol</th>
                                         <th class="px-4 py-3 text-right">Value ($)</th>
+                                        <th class="hidden fee-col px-4 py-3 text-right">Fee</th>
                                         <th class="px-4 py-3 text-right">Avg Price</th>
                                     </tr>
                                 </thead>
@@ -840,6 +846,7 @@
                                         <th class="px-4 py-3 text-right">Price</th>
                                         <th class="px-4 py-3 text-right">Vol</th>
                                         <th class="px-4 py-3 text-right">Value ($)</th>
+                                        <th class="hidden fee-col px-4 py-3 text-right">Fee</th>
                                         <th class="px-4 py-3 text-right text-green-600">Profit</th>
                                     </tr>
                                 </thead>
@@ -876,6 +883,11 @@
                 },
                 fmtCurr: (n) => new Intl.NumberFormat('en-US', {style:'currency', currency:'USD'}).format(Number.isFinite(n) ? n : 0),
                 fmtNum: (n, d=4) => Number.isFinite(n) ? n.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:d}) : '0',
+                fmtSigFig: (n) => {
+                    if (!Number.isFinite(n) || n === 0) return '0';
+                    // Use 5 significant figures
+                    return new Intl.NumberFormat('en-US', { minimumSignificantDigits: 5, maximumSignificantDigits: 5 }).format(n);
+                },
                 fmtPct: (n) => Number.isFinite(n) ? n.toFixed(2) + '%' : '0.00%',
                 formatNumberWithCommas: (value) => {
                     if (value === null || value === undefined) return '';
@@ -924,12 +936,18 @@
                 baselineBuySnapshot: null,
                 sellOnlyHighestExecuted: null,
                 activeTab: 'buy',
-                theme: 'light'
+                theme: 'light',
+                mode: 'simple', // 'simple' or 'pro'
+                showFees: false
             };
 
             // --- DOM ELEMENTS ---
             const els = {
                 form: document.getElementById('trading-plan-form'),
+                // Modes
+                modeSimple: document.getElementById('mode-simple'),
+                modePro: document.getElementById('mode-pro'),
+                proControls: document.getElementById('pro-controls'),
                 // Inputs
                 startCap: document.getElementById('starting_capital'),
                 startCapLabel: document.getElementById('starting_capital_label'),
@@ -948,9 +966,9 @@
                 sellCeiling: document.getElementById('sell_ceiling'),
                 
                 // Advanced
-                advCheck: document.getElementById('advanced_mode'),
-                advPanel: document.getElementById('advanced-settings'),
-                advChevron: document.getElementById('adv-chevron'),
+                // advCheck: document.getElementById('advanced_mode'), // Removed
+                // advPanel: document.getElementById('advanced-settings'), // Just container now
+                // advChevron: document.getElementById('adv-chevron'), // Removed
                 sellOnlyCheck: document.getElementById('sell_only_mode'),
                 sellOnlyInputs: document.getElementById('sell-only-inputs'),
                 existQty: document.getElementById('existing_quantity'),
@@ -991,13 +1009,16 @@
                 videoBackdrop: document.getElementById('video-backdrop'),
                 videoClose: document.getElementById('video-close'),
 
-                // Sections
-                marketToggle: document.getElementById('toggle-market-data'),
-                marketSection: document.getElementById('section-market-data'),
-                marketChevron: document.getElementById('chevron-market-data'),
-                ladderToggle: document.getElementById('toggle-ladder-settings'),
-                ladderSection: document.getElementById('section-ladder-settings'),
-                ladderChevron: document.getElementById('chevron-ladder-settings'),
+                // Fees
+                showFeesToggle: document.getElementById('show-fees-toggle'),
+
+                // Sections (removed toggles)
+                // marketToggle: document.getElementById('toggle-market-data'),
+                // marketSection: document.getElementById('section-market-data'),
+                // marketChevron: document.getElementById('chevron-market-data'),
+                // ladderToggle: document.getElementById('toggle-ladder-settings'),
+                // ladderSection: document.getElementById('section-ladder-settings'),
+                // ladderChevron: document.getElementById('chevron-ladder-settings'),
 
                 // Sticky Extended
                 stickyBtn: document.getElementById('sticky-expand-btn'),
@@ -1100,6 +1121,18 @@
                 },
 
                 bindEvents: () => {
+                    // Mode Switch
+                    els.modeSimple.addEventListener('click', () => App.setMode('simple'));
+                    els.modePro.addEventListener('click', () => App.setMode('pro'));
+
+                    // Fees Toggle
+                    if (els.showFeesToggle) {
+                        els.showFeesToggle.addEventListener('change', () => {
+                            State.showFees = els.showFeesToggle.checked;
+                            App.updateUI(State.currentPlanData);
+                        });
+                    }
+
                     // Handle Intro Page
                     const enterBtn = document.getElementById('enter-app-btn');
                     if (enterBtn) {
@@ -1273,11 +1306,7 @@
                     });
 
                     // Toggles
-                    els.advCheck.addEventListener('change', () => {
-                        els.advPanel.classList.toggle('hidden', !els.advCheck.checked);
-                        els.advChevron.classList.toggle('rotate-180', els.advCheck.checked);
-                        App.calculatePlan();
-                    });
+                    // els.advCheck.addEventListener('change', () => { ... }); // Removed
 
                     els.sellOnlyCheck.addEventListener('change', () => {
                         const isSellOnly = els.sellOnlyCheck.checked;
@@ -1313,22 +1342,26 @@
                     els.qrClose.addEventListener('click', () => toggleModal(false));
 
                     // Video Modal
-                    const toggleVideo = (show) => els.videoModal.classList.toggle('open', show);
+                    const videoIframe = els.videoModal.querySelector('iframe');
+                    const videoSrc = videoIframe ? videoIframe.src : '';
+
+                    const toggleVideo = (show) => {
+                        els.videoModal.classList.toggle('open', show);
+                        if (!show && videoIframe) {
+                             // Stop video by resetting src
+                             videoIframe.src = '';
+                        } else if (show && videoIframe && !videoIframe.src) {
+                             videoIframe.src = videoSrc;
+                        }
+                    };
+
                     if(els.videoBtn) els.videoBtn.addEventListener('click', () => toggleVideo(true));
                     if(els.videoBtnMobile) els.videoBtnMobile.addEventListener('click', () => toggleVideo(true));
                     els.videoBackdrop.addEventListener('click', () => toggleVideo(false));
                     els.videoClose.addEventListener('click', () => toggleVideo(false));
 
-                    // Sections
-                    const toggleSection = (btn, section, chevron) => {
-                        if(!btn) return;
-                        btn.addEventListener('click', () => {
-                            section.classList.toggle('hidden');
-                            chevron.classList.toggle('rotate-180');
-                        });
-                    };
-                    toggleSection(els.marketToggle, els.marketSection, els.marketChevron);
-                    toggleSection(els.ladderToggle, els.ladderSection, els.ladderChevron);
+                    // Sections (Removed)
+                    // const toggleSection = (btn, section, chevron) => ...
 
                     // Sticky Footer
                     if(els.stickyBtn) {
@@ -1340,6 +1373,21 @@
                 },
 
                 debouncedCalc: () => Utils.debounce(App.calculatePlan, 50)(),
+
+                setMode: (mode) => {
+                    State.mode = mode;
+                    // Update Buttons
+                    const activeClass = "shadow-sm bg-[var(--color-card)] text-[var(--color-primary)]";
+                    const inactiveClass = "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]";
+
+                    els.modeSimple.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='simple'?activeClass:inactiveClass}`;
+                    els.modePro.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='pro'?activeClass:inactiveClass}`;
+
+                    // Show/Hide Pro Controls
+                    els.proControls.classList.toggle('hidden', mode === 'simple');
+
+                    App.calculatePlan();
+                },
 
                 togglePriceMode: () => {
                     const mode = els.priceRangeMode.value;
@@ -1362,18 +1410,33 @@
                 calculatePlan: () => {
                     // 1. Inputs
                     const C = parseFloat(Utils.stripCommas(els.startCap.value)) || 0;
-                    const N = parseInt(els.rungs.value) || 2;
-                    const S = parseInt(els.skew.value) || 0;
                     const currentPrice = parseFloat(Utils.stripCommas(els.currPrice.value)) || 0;
-                    const depth = parseFloat(els.depth.value) || 20;
                     
-                    const advMode = els.advCheck.checked;
-                    const feeType = els.feeType.value;
-                    const feeValue = parseFloat(els.feeValue.value) || 0;
-                    const feeSettlement = advMode ? els.feeSettlement.value : 'netted';
-                    const spacingMode = advMode ? els.spacingMode.value : 'absolute';
-                    const sellOnly = advMode && els.sellOnlyCheck.checked;
-                    const equalQty = advMode && els.equalQtyCheck.checked;
+                    let N, S, depth, feeType, feeValue, feeSettlement, spacingMode, sellOnly, equalQty;
+
+                    if (State.mode === 'simple') {
+                        // Defaults for Simple Mode
+                        N = 10;
+                        S = 50; // Moderate
+                        depth = 25;
+                        feeType = 'percent';
+                        feeValue = 0.075;
+                        feeSettlement = 'netted';
+                        spacingMode = 'absolute';
+                        sellOnly = false;
+                        equalQty = false;
+                    } else {
+                        // Pro Mode Inputs
+                        N = parseInt(els.rungs.value) || 2;
+                        S = parseInt(els.skew.value) || 0;
+                        depth = parseFloat(els.depth.value) || 20;
+                        feeType = els.feeType.value;
+                        feeValue = parseFloat(els.feeValue.value) || 0;
+                        feeSettlement = els.feeSettlement.value;
+                        spacingMode = els.spacingMode.value;
+                        sellOnly = els.sellOnlyCheck.checked;
+                        equalQty = els.equalQtyCheck.checked;
+                    }
 
                     const feeRate = feeType === 'percent' ? feeValue / 100 : 0;
                     const isFeeNetted = feeSettlement !== 'external';
@@ -1381,7 +1444,10 @@
 
                     // 2. Price Range
                     let buyPriceEnd, sellPriceEnd;
-                    if (els.priceRangeMode.value === 'floor') {
+                    // In simple mode, always use width. In Pro, check DOM.
+                    const useFloor = State.mode === 'pro' && els.priceRangeMode.value === 'floor';
+
+                    if (useFloor) {
                         buyPriceEnd = parseFloat(els.buyFloor.value) || currentPrice * 0.8;
                         sellPriceEnd = parseFloat(els.sellCeiling.value) || currentPrice * 1.2;
                     } else {
@@ -1589,13 +1655,17 @@
                     setTxt('sticky-ceiling', Utils.fmtCurr(s.highestSell));
                     els.stickyFooter.classList.add('visible');
 
+                    // Toggle Fee Cols
+                    document.querySelectorAll('.fee-col').forEach(el => el.classList.toggle('hidden', !State.showFees));
+
                     const renderRow = (r, isSell) => `
                         <td class="px-4 py-3 font-mono text-xs text-[var(--color-text-muted)]">${isSell?'':`<input type="checkbox" class="mr-2" ${State.sellOnlyHighestExecuted===r.rung?'checked':''} onclick="App.toggleExecuted(${r.rung})">`}${r.rung}</td>
-                        <td class="px-4 py-3 text-right font-mono copy-cursor hover:bg-[var(--color-border)] transition-colors" onclick="App.copy('${r.price}')">${Utils.fmtCurr(r.price)}</td>
-                        <td class="px-4 py-3 text-right font-mono text-[var(--color-text)] copy-cursor hover:bg-[var(--color-border)] transition-colors" onclick="App.copy('${r.assetSize}')">${Utils.fmtNum(r.assetSize)}</td>
-                        <td class="px-4 py-3 text-right font-mono text-[var(--color-text-muted)]">${Utils.fmtNum(r.capital)}</td>
+                        <td class="px-4 py-3 text-right font-mono copy-cursor hover:bg-[var(--color-border)] transition-colors" onclick="App.copy('${r.price}')">${Utils.fmtSigFig(r.price)}</td>
+                        <td class="px-4 py-3 text-right font-mono text-[var(--color-text)] copy-cursor hover:bg-[var(--color-border)] transition-colors" onclick="App.copy('${r.assetSize}')">${Utils.fmtSigFig(r.assetSize)}</td>
+                        <td class="px-4 py-3 text-right font-mono text-[var(--color-text-muted)]">${Utils.fmtSigFig(r.capital)}</td>
+                        ${State.showFees ? `<td class="px-4 py-3 text-right font-mono text-[var(--color-text-muted)]">${Utils.fmtSigFig(r.fee)}</td>` : ''}
                         <td class="px-4 py-3 text-right font-mono font-medium ${isSell ? 'text-green-600' : 'text-[var(--color-text-secondary)]'}">
-                            ${isSell ? Utils.fmtCurr(r.profit) : Utils.fmtCurr(r.avg)}
+                            ${Utils.fmtSigFig(isSell ? r.profit : r.avg)}
                         </td>
                     `;
 
@@ -1604,7 +1674,8 @@
                         const isMobile = window.innerWidth < 1024;
                         // Much smaller spacer row to remove the "blue block" effect, while still keeping structure
                         const spacerHeight = 'h-8';
-                        const spacerRow = `<tr><td colspan="5" class="${spacerHeight}"></td></tr>`;
+                        const colSpan = State.showFees ? 6 : 5;
+                        const spacerRow = `<tr><td colspan="${colSpan}" class="${spacerHeight}"></td></tr>`;
                         tbody.innerHTML = data.map((r, i) => 
                             `<tr class="${i%2===0?'table-row-even':'table-row-odd'} ${State.sellOnlyHighestExecuted>=r.rung && !isSell && els.sellOnlyCheck.checked ? 'executed-rung' : ''}">
                                 ${renderRow(r, isSell)}
