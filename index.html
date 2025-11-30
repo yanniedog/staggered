@@ -469,7 +469,7 @@
     </div>
 
     <!-- Question-Based Setup Wizard -->
-    <div id="setup-wizard" class="fixed inset-0 z-[10000] bg-black backdrop-blur-sm flex items-center justify-center transition-opacity duration-500 opacity-0 pointer-events-none" role="dialog" aria-labelledby="wizard-title" aria-modal="true">
+    <div id="setup-wizard" class="fixed inset-0 z-[10000] bg-black backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none" role="dialog" aria-labelledby="wizard-title" aria-modal="true">
         <div class="bg-[var(--color-card)] rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" style="transform: scale(0.95); transition: transform 0.4s ease;">
             <div class="p-6 sm:p-8">
                 <!-- Header with gradient accent -->
@@ -1747,6 +1747,9 @@
                     // Hide wizard
                     const wizard = document.getElementById('setup-wizard');
                     wizard.classList.remove('open');
+                    // Reset inline opacity style to ensure proper hiding
+                    wizard.style.opacity = '';
+                    wizard.style.pointerEvents = '';
                     
                     // Mark as completed
                     localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
@@ -1946,14 +1949,20 @@
                     if (enterBtn) {
                         enterBtn.addEventListener('click', () => {
                             const introLayer = document.getElementById('intro-layer');
+                            const wizard = document.getElementById('setup-wizard');
                             
                             // Prepare wizard data first (without showing it yet)
                             SetupWizard.prepare();
                             
+                            // Make wizard background visible instantly to cover screen immediately
+                            // This happens synchronously before any transitions, ensuring no gap
+                            wizard.style.opacity = '1';
+                            wizard.style.pointerEvents = 'auto';
+                            
                             // Start both transitions simultaneously for seamless effect
-                            // Wizard fades in while intro layer fades out
+                            // Intro layer fades out while wizard content fades in
                             requestAnimationFrame(() => {
-                                // Trigger wizard fade-in
+                                // Trigger wizard content setup and fade-in
                                 SetupWizard.show();
                                 
                                 // Trigger intro layer fade-out simultaneously
