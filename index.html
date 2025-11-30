@@ -1247,7 +1247,6 @@
             const SetupWizard = {
                 currentStep: 0,
                 answers: {},
-                wasSkipped: false,
                 questions: [
                     {
                         question: "What's your trading goal?",
@@ -1321,7 +1320,6 @@
                 init: () => {
                     SetupWizard.currentStep = 0;
                     SetupWizard.answers = {};
-                    SetupWizard.wasSkipped = false;
                     // Pre-populate with defaults
                     SetupWizard.questions.forEach(q => {
                         if (q.default !== undefined) {
@@ -1417,20 +1415,35 @@
                         
                         // Calculate default for lowest_buy_price as 25% below current price
                         let defaultValue = question.default;
-                        if (question.field === 'lowest_buy_price' && currentPrice > 0 && (actualValue === undefined || actualValue === null)) {
-                            defaultValue = Math.round((currentPrice * 0.75) * 100) / 100; // Round to 2 decimal places
-                            // Pre-populate the answer with the calculated default
-                            SetupWizard.answers[valueField] = defaultValue;
-                            actualValue = defaultValue; // Update actualValue to reflect the set default
+                        if (question.field === 'lowest_buy_price' && currentPrice > 0) {
+                            const calculatedDefault = currentPrice * 0.75;
+                            defaultValue = calculatedDefault;
+                            
+                            // If actualValue is undefined, use the calculated default
+                            if (actualValue === undefined) {
+                                actualValue = calculatedDefault;
+                                SetupWizard.answers[valueField] = calculatedDefault;
+                            } else {
+                                // Check if the stored value matches what would be calculated (within 0.01 tolerance)
+                                // If it matches, it was likely auto-calculated, so recalculate it
+                                const tolerance = 0.01;
+                                if (Math.abs(actualValue - calculatedDefault) <= tolerance) {
+                                    actualValue = calculatedDefault;
+                                    SetupWizard.answers[valueField] = calculatedDefault;
+                                }
+                                // Otherwise, keep the user's manually entered value
+                            }
                         }
                         
-                        // Use actualValue if it exists and is valid, otherwise use defaultValue
-                        const valueToUse = (actualValue !== undefined && actualValue !== null) ? actualValue : defaultValue;
-                        const currentValue = valueToUse !== undefined && valueToUse !== null
-                            ? (question.type === 'currency' && valueToUse >= 1000 
-                                ? Utils.formatNumberWithCommas(valueToUse.toString())
-                                : valueToUse)
-                            : '';
+                        const currentValue = actualValue !== undefined 
+                            ? (question.type === 'currency' && actualValue >= 1000 
+                                ? Utils.formatNumberWithCommas(actualValue.toString())
+                                : actualValue)
+                            : (defaultValue !== undefined && defaultValue !== null 
+                                ? (question.type === 'currency' && defaultValue >= 1000 
+                                    ? Utils.formatNumberWithCommas(defaultValue.toString())
+                                    : defaultValue)
+                                : '');
                         const inputType = question.type === 'number' ? 'number' : 'text';
                         const isCurrency = question.type === 'currency';
                         const showRangeCalc = question.field === 'lowest_buy_price';
@@ -1681,7 +1694,6 @@
                 },
 
                 skip: () => {
-                    SetupWizard.wasSkipped = true;
                     SetupWizard.finish();
                 },
 
@@ -1689,13 +1701,8 @@
                     // Apply answers to form fields
                     SetupWizard.applyAnswers();
                     
-                    // Set mode based on whether wizard was skipped or completed
-                    // If skipped: Customise mode (pro), If completed: Current mode (simple)
-                    if (SetupWizard.wasSkipped) {
-                        App.setMode('pro'); // Customise mode when skipped
-                    } else {
-                        App.setMode('simple'); // Current mode when completed
-                    }
+                    // Enable Pro mode to show all fields
+                    App.setMode('pro');
                     
                     // Hide wizard
                     const wizard = document.getElementById('setup-wizard');
