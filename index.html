@@ -958,26 +958,21 @@
             <!-- Right Column: Visualization (lg:col-span-8) -->
             <div class="lg:col-span-7 space-y-6">
                 
-                <!-- Charts Container -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <!-- Buy Chart -->
-                    <div id="buy-chart-card" class="card p-4 h-72 flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.3s;">
-                        <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-sm font-semibold text-[var(--color-text)]">Buy Ladder</h3>
+                <!-- Combined Depth Chart (Vertical) -->
+                <div id="depth-chart-card" class="card p-4 h-[600px] flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.3s;">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-3 text-xs text-slate-300">
+                            <span class="inline-flex items-center gap-1">
+                                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span> Bids
+                            </span>
+                            <span class="inline-flex items-center gap-1">
+                                <span class="inline-block w-2 h-2 rounded-full bg-rose-400"></span> Asks
+                            </span>
                         </div>
-                        <div id="visualization" class="d3-chart flex-1 w-full h-full relative">
-                            <svg id="allocation-chart" width="100%" height="100%"></svg>
-                        </div>
+                        <span id="mid-price-label" class="text-xs text-slate-400"></span>
                     </div>
-
-                    <!-- Sell Chart -->
-                    <div id="sell-chart-card" class="card p-4 h-72 flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.4s;">
-                         <div class="flex justify-between items-center mb-2">
-                            <h3 class="text-sm font-semibold text-[var(--color-text)]">Sell Ladder</h3>
-                        </div>
-                        <div id="sell-visualization" class="d3-chart flex-1 w-full h-full relative">
-                            <svg id="sell-allocation-chart" width="100%" height="100%"></svg>
-                        </div>
+                    <div id="depth-wrapper" class="d3-chart flex-1 w-full h-full relative">
+                        <svg id="depth-chart" width="100%" height="100%"></svg>
                     </div>
                 </div>
 
@@ -1152,7 +1147,7 @@
                 equalQtyCheck: document.getElementById('equal_quantity_mode'),
 
                 // Containers
-                buyChartCard: document.getElementById('buy-chart-card'),
+                depthChartCard: document.getElementById('depth-chart-card'),
                 
                 // Tabs
                 tabBuy: document.getElementById('tab-buy'),
@@ -2167,7 +2162,7 @@
                         const isSellOnly = els.sellOnlyCheck.checked;
                         els.sellOnlyInputs.classList.toggle('hidden', !isSellOnly);
                         els.startCapLabel.textContent = isSellOnly ? 'Held Quantity' : 'Initial Capital ($)';
-                        els.buyChartCard.style.display = isSellOnly ? 'none' : 'flex';
+                        // Combined chart always visible (shows both buys and sells)
                         if(!isSellOnly) {
                             State.sellOnlyHighestExecuted = null;
                         }
@@ -2561,8 +2556,7 @@
                     updateTable('buy-ladder-body', plan.buyLadder, false);
                     updateTable('sell-ladder-body', plan.sellLadder, true);
 
-                    App.drawChart('#allocation-chart', plan.buyLadder, 'buy');
-                    App.drawChart('#sell-allocation-chart', plan.sellLadder, 'sell');
+                    App.drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder);
                     
                     // Ensure table has enough bottom space after rendering
                     setTimeout(() => App.ensureTableBottomSpace(), 100);
@@ -2578,212 +2572,266 @@
                 },
 
                 // --- CHARTS ---
-                drawChart: (selector, data, type) => {
-                    const container = d3.select(selector).node()?.parentNode;
-                    if (!container || data.length === 0) return;
-                    d3.select(selector).selectAll("*").remove();
+                /**
+                 * Vertical combined depth chart:
+                 *  - Single SVG
+                 *  - Bids (buy) area on the bottom, Asks (sell) area on the top
+                 *  - Price on Y-axis (vertical), cumulative size on X-axis (horizontal)
+                 *  - No average buy/sell lines
+                 */
+                drawDepthChart: (selector, buys, sells) => {
+                    const svgSel = d3.select(selector);
+                    const svgNode = svgSel.node();
+                    if (!svgNode) return;
 
-                    const width = container.clientWidth;
+                    const container = svgNode.parentNode;
+                    if (!container || (!buys?.length && !sells?.length)) return;
+
+                    svgSel.selectAll("*").remove();
+
+                    const width  = container.clientWidth;
                     const height = container.clientHeight;
-                    const margin = {top: 20, right: 40, bottom: 30, left: 40};
+                    const margin = { top: 20, right: 40, bottom: 30, left: 40 };
 
-                    const svg = d3.select(selector).attr("width", width).attr("height", height);
-                    
-                    // Defs for Gradient
-                    const defs = svg.append("defs");
-                    const gradientId = `grad-${type}`;
-                    const gradient = defs.append("linearGradient").attr("id", gradientId).attr("x1", "0%").attr("y1", "0%").attr("x2", "0%").attr("y2", "100%");
-                    const colorStart = getComputedStyle(document.body).getPropertyValue(type === 'buy' ? '--color-chart-buy-start' : '--color-chart-sell-start').trim();
-                    const colorEnd = getComputedStyle(document.body).getPropertyValue(type === 'buy' ? '--color-chart-buy-end' : '--color-chart-sell-end').trim();
-                    gradient.append("stop").attr("offset", "0%").attr("stop-color", colorStart).attr("stop-opacity", 0.8);
-                    gradient.append("stop").attr("offset", "100%").attr("stop-color", colorEnd).attr("stop-opacity", 0.2);
+                    const svg = svgSel
+                        .attr("width", width)
+                        .attr("height", height);
 
-                    // X-Axis: Price (Linear)
-                    // Buy: Low -> High (Standard, Reversed from previous)
-                    // Sell: Low -> High
-                    const xExtent = d3.extent(data, d => d.price);
-                    // Ensure decent domain if single point
-                    if (xExtent[0] === xExtent[1]) { xExtent[0] *= 0.99; xExtent[1] *= 1.01; }
-                    
+                    // Sort; buys descending by price (best bid nearest mid), sells ascending
+                    const buySeries  = (buys || []).slice().sort((a, b) => b.price - a.price);
+                    const sellSeries = (sells || []).slice().sort((a, b) => a.price - b.price);
+
+                    // Compute cumulative qty if not already present
+                    let cum = 0;
+                    buySeries.forEach(d => {
+                        cum += d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0;
+                        d.cumQty = d.cumQty ?? cum;
+                    });
+
+                    cum = 0;
+                    sellSeries.forEach(d => {
+                        cum += d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0;
+                        d.cumSold = d.cumSold ?? cum;
+                    });
+
+                    const all = buySeries.concat(sellSeries);
+                    if (!all.length) return;
+
+                    const prices = all.map(d => d.price);
+                    const yMin = d3.min(prices);
+                    const yMax = d3.max(prices);
+
+                    let yDomainMin = yMin;
+                    let yDomainMax = yMax;
+                    if (yMin === yMax) {
+                        yDomainMin *= 0.99;
+                        yDomainMax *= 1.01;
+                    }
+
+                    // Y-axis: Price (vertical)
+                    const y = d3.scaleLinear()
+                        .range([height - margin.bottom, margin.top])
+                        .domain([yDomainMin, yDomainMax]);
+
+                    // X-axis: Cumulative size (horizontal)
+                    const xMax = d3.max([
+                        d3.max(buySeries, d => d.cumQty || 0) || 0,
+                        d3.max(sellSeries, d => d.cumSold || 0) || 0
+                    ]) || 1;
+
                     const x = d3.scaleLinear()
                         .range([margin.left, width - margin.right])
-                        .domain([xExtent[0], xExtent[1]]); // Always Low -> High
+                        .domain([0, xMax * 1.1]);
 
-                    // Left Y-Axis: Cumulative Quantity (Area)
-                    const yQtyMax = d3.max(data, d => type === 'buy' ? d.cumQty : d.cumSold) || 1;
-                    const yQty = d3.scaleLinear()
-                        .range([height - margin.bottom, margin.top])
-                        .domain([0, yQtyMax * 1.1]);
-
-                    // Right Y-Axis: Avg Price (Buy) or Profit (Sell)
-                    let y2, y2Max, y2Min;
-                    if (type === 'buy') {
-                        // Sync Avg Price axis with Spot Price axis to show the gap/edge clearly
-                        // Use the same domain as X-axis for true comparison
-                        y2 = d3.scaleLinear()
-                             .range([height - margin.bottom, margin.top])
-                             .domain([xExtent[0], xExtent[1]]);
-                    } else {
-                        // Profit
-                        const profExtent = d3.extent(data, d => d.cumProfit);
-                        y2Min = Math.min(0, profExtent[0]);
-                        y2Max = Math.max(0, profExtent[1]);
-                        y2 = d3.scaleLinear()
-                             .range([height - margin.bottom, margin.top])
-                             .domain([y2Min, y2Max]);
+                    // Mid price label
+                    const mid = (yMin + yMax) / 2;
+                    const midLabel = document.getElementById("mid-price-label");
+                    if (midLabel) {
+                        midLabel.textContent = `Mid ≈ ${Utils.fmtCurr(mid)}`;
                     }
 
-                    // Generators
-                    const area = d3.area()
-                        .x(d => x(d.price))
-                        .y0(height - margin.bottom)
-                        .y1(d => yQty(type === 'buy' ? d.cumQty : d.cumSold))
-                        .curve(d3.curveMonotoneX);
+                    // Gradients
+                    const defs = svg.append("defs");
 
-                    const line = d3.line()
-                        .x(d => x(d.price))
-                        .y(d => y2(type === 'buy' ? d.avg : d.cumProfit))
-                        .curve(d3.curveMonotoneX);
+                    const gradBid = defs.append("linearGradient")
+                        .attr("id", "grad-bids")
+                        .attr("x1", "0%").attr("y1", "0%")
+                        .attr("x2", "100%").attr("y2", "0%");
+                    gradBid.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
+                        .attr("stop-opacity", 0.9);
+                    gradBid.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-end").trim())
+                        .attr("stop-opacity", 0.15);
 
-                    // Draw Area
-                    svg.append("path")
-                        .datum(data)
-                        .attr("fill", `url(#${gradientId})`)
-                        .attr("d", area)
-                        .attr("opacity", 0)
-                        .transition().duration(800)
-                        .attr("opacity", 1);
+                    const gradAsk = defs.append("linearGradient")
+                        .attr("id", "grad-asks")
+                        .attr("x1", "0%").attr("y1", "0%")
+                        .attr("x2", "100%").attr("y2", "0%");
+                    gradAsk.append("stop")
+                        .attr("offset", "0%")
+                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
+                        .attr("stop-opacity", 0.9);
+                    gradAsk.append("stop")
+                        .attr("offset", "100%")
+                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-end").trim())
+                        .attr("stop-opacity", 0.15);
 
-                    // Draw Line (Secondary)
-                    svg.append("path")
-                        .datum(data)
-                        .attr("fill", "none")
-                        .attr("stroke", type === 'buy' ? "#f59e0b" : "#8b5cf6") // Amber for avg price, Violet for profit
-                        .attr("stroke-width", 2)
-                        .attr("d", line)
-                        .attr("stroke-dasharray", function() { return this.getTotalLength(); })
-                        .attr("stroke-dashoffset", function() { return this.getTotalLength(); })
-                        .transition().duration(1000).delay(200)
-                        .attr("stroke-dashoffset", 0);
-                    
-                    // Draw Initial Price Ref Line (Buy Only)
-                    if (type === 'buy') {
-                         const startPrice = parseFloat(Utils.stripCommas(els.currPrice.value)) || 0;
-                         // Only draw if in view (it should be, it's the start)
-                         const yStart = y2(startPrice); // Map to avg price axis to compare apples-to-apples?
-                         // Wait, y2 domain is dynamic avg price. Start price might be far off if DCA drops a lot.
-                         // If we want to show "Gap", Y2 must include Start Price.
-                         // Let's adjust Y2 domain for Buy to always include Start Price.
+                    // Area generators – depth style (vertical)
+                    // Bids: bottom half, extending right
+                    const midY = (height - margin.bottom + margin.top) / 2;
+                    const areaBids = d3.area()
+                        .x0(margin.left)
+                        .x1(d => x(d.cumQty || 0))
+                        .y(d => y(d.price))
+                        .curve(d3.curveStepAfter);
+
+                    // Asks: top half, extending right
+                    const areaAsks = d3.area()
+                        .x0(margin.left)
+                        .x1(d => x(d.cumSold || 0))
+                        .y(d => y(d.price))
+                        .curve(d3.curveStepBefore);
+
+                    // Draw bids (bottom)
+                    if (buySeries.length) {
+                        svg.append("path")
+                            .datum(buySeries)
+                            .attr("fill", "url(#grad-bids)")
+                            .attr("d", areaBids)
+                            .attr("opacity", 0)
+                            .transition()
+                            .duration(600)
+                            .attr("opacity", 1);
                     }
+
+                    // Draw asks (top)
+                    if (sellSeries.length) {
+                        svg.append("path")
+                            .datum(sellSeries)
+                            .attr("fill", "url(#grad-asks)")
+                            .attr("d", areaAsks)
+                            .attr("opacity", 0)
+                            .transition()
+                            .duration(600)
+                            .attr("opacity", 1);
+                    }
+
+                    // Mid price line
+                    svg.append("line")
+                        .attr("x1", margin.left)
+                        .attr("x2", width - margin.right)
+                        .attr("y1", y(mid))
+                        .attr("y2", y(mid))
+                        .attr("stroke", "currentColor")
+                        .attr("stroke-width", 1)
+                        .attr("stroke-dasharray", "2 2")
+                        .attr("opacity", 0.3);
 
                     // Axes
-                    const xAxis = d3.axisBottom(x).ticks(5).tickFormat(d => '$' + d3.format(".2s")(d));
-                    svg.append("g")
-                       .attr("transform", `translate(0,${height - margin.bottom})`)
-                       .call(xAxis)
-                       .attr("class", "text-[9px] opacity-60");
+                    const yAxis = d3.axisLeft(y)
+                        .ticks(8)
+                        .tickFormat(d => "$" + d3.format(".2s")(d));
 
-                    const yAxisLeft = d3.axisLeft(yQty).ticks(5).tickSize(0); // Qty
                     svg.append("g")
-                       .attr("transform", `translate(${margin.left},0)`)
-                       .call(yAxisLeft)
-                       .attr("class", "text-[9px] opacity-60");
-                       
-                    // Right Axis Label
+                        .attr("transform", `translate(${margin.left},0)`)
+                        .call(yAxis)
+                        .attr("class", "text-[9px] opacity-60")
+                        .call(g => g.selectAll("path").attr("stroke", "#475569"))
+                        .call(g => g.selectAll("line").attr("stroke", "#1e293b"));
+
+                    const xAxis = d3.axisBottom(x)
+                        .ticks(5)
+                        .tickSize(0);
+
+                    svg.append("g")
+                        .attr("transform", `translate(0,${height - margin.bottom})`)
+                        .call(xAxis)
+                        .attr("class", "text-[9px] opacity-60")
+                        .call(g => g.selectAll("path").attr("stroke", "#475569"))
+                        .call(g => g.selectAll("line").remove());
+
                     svg.append("text")
-                        .attr("x", margin.left)
-                        .attr("y", margin.top - 5)
+                        .attr("x", width - margin.right)
+                        .attr("y", height - margin.bottom + 20)
                         .attr("fill", "currentColor")
                         .attr("text-anchor", "middle")
                         .attr("font-size", "9px")
                         .attr("class", "opacity-60")
-                        .text("Qty");
+                        .text("Cumulative size");
 
-                    const yAxisRight = d3.axisRight(y2).ticks(5).tickSize(0); // Price/Profit
-                    svg.append("g")
-                       .attr("transform", `translate(${width - margin.right},0)`)
-                       .call(yAxisRight)
-                       .attr("class", "text-[9px] opacity-60")
-                       .call(g => g.selectAll(".tick text").attr("fill", type==='buy'?"#f59e0b":"#8b5cf6").attr("font-weight", "bold"));
-
-                    // Right Axis Label
-                    svg.append("text")
-                        .attr("x", width - margin.right)
-                        .attr("y", margin.top - 5)
-                        .attr("fill", type==='buy'?"#f59e0b":"#8b5cf6")
-                        .attr("text-anchor", "middle")
-                        .attr("font-size", "9px")
-                        .attr("font-weight", "bold")
-                        .text(type === 'buy' ? "Avg $" : "Profit");
-
-                    // Tooltip Interaction (Overlay Rect)
+                    // Tooltip
                     const tooltip = d3.select("#tooltip");
-                    
-                    // Bisector
-                    const bisect = d3.bisector(d => d.price).left;
-                    
+                    const bisect  = d3.bisector(d => d.price).left;
+
+                    // Combined interaction over full price range
+                    const allSeries = buySeries.concat(sellSeries).sort((a, b) => a.price - b.price);
+
                     svg.append("rect")
-                        .attr("width", width - margin.left - margin.right)
+                        .attr("width",  width - margin.left - margin.right)
                         .attr("height", height - margin.top - margin.bottom)
                         .attr("x", margin.left)
                         .attr("y", margin.top)
                         .attr("fill", "transparent")
-                        .on("mousemove", function(event) {
-                            const x0 = x.invert(d3.pointer(event)[0]);
-                            // Bisect needs sorted data. 
-                            // Buy data is High -> Low (descending). Bisector works on ascending.
-                            // Sell data is Low -> High (ascending).
-                            let i;
-                            if (type === 'buy') {
-                                // For descending, we can just find closest manually or reverse a temp array
-                                // Simple closest find:
-                                i = d3.scan(data, (a, b) => Math.abs(a.price - x0) - Math.abs(b.price - x0));
-                            } else {
-                                i = bisect(data, x0, 1);
-                                i = Math.min(Math.max(i, 0), data.length - 1);
-                                // Check closer of i and i-1
-                                if (i > 0) {
-                                    const d0 = data[i - 1], d1 = data[i];
-                                    if (x0 - d0.price < d1.price - x0) i = i - 1;
-                                }
+                        .on("mousemove", function (event) {
+                            const [, py] = d3.pointer(event);
+                            const y0   = y.invert(py);
+
+                            let i = bisect(allSeries, y0, 1);
+                            i = Math.min(Math.max(i, 0), allSeries.length - 1);
+                            if (i > 0) {
+                                const d0 = allSeries[i - 1];
+                                const d1 = allSeries[i];
+                                if (y0 - d0.price < d1.price - y0) i = i - 1;
                             }
-                            
-                            const d = data[i];
+
+                            const d = allSeries[i];
                             if (!d) return;
 
-                            const html = type === 'buy' 
-                                ? `<div class="font-bold text-amber-500">Rung ${d.rung}</div>
-                                   <div>Spot: ${Utils.fmtCurr(d.price)}</div>
-                                   <div>Total Qty: ${Utils.fmtNum(d.cumQty)}</div>
-                                   <div class="border-t border-gray-600 mt-1 pt-1">Avg Entry: ${Utils.fmtCurr(d.avg)}</div>`
-                                : `<div class="font-bold text-violet-500">Rung ${d.rung}</div>
-                                   <div>Spot: ${Utils.fmtCurr(d.price)}</div>
-                                   <div>Total Sold: ${Utils.fmtNum(d.cumSold)}</div>
-                                   <div class="border-t border-gray-600 mt-1 pt-1">Total Profit: ${Utils.fmtCurr(d.cumProfit)}</div>`;
+                            const isBid = buySeries.includes(d);
+                            const cum   = isBid ? (d.cumQty || 0) : (d.cumSold || 0);
 
-                            tooltip.style("opacity", 1).html(html);
-                            
-                            const box = tooltip.node().getBoundingClientRect();
-                            let left = event.pageX + 15;
-                            if (left + box.width > window.innerWidth) left = event.pageX - box.width - 15;
-                            tooltip.style("left", left + "px").style("top", (event.pageY - 40) + "px");
-                            
-                            // Optional: Draw a vertical line at cursor
+                            const html = `
+                                <div class="font-bold ${isBid ? "text-emerald-400" : "text-rose-400"}">
+                                    ${isBid ? "Bid" : "Ask"}
+                                </div>
+                                <div>Price: ${Utils.fmtCurr(d.price)}</div>
+                                <div>Level size: ${Utils.fmtNum(d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0)}</div>
+                                <div>Cumulative: ${Utils.fmtNum(cum)}</div>
+                            `;
+
+                            tooltip
+                                .classed("hidden", false)
+                                .style("opacity", 1)
+                                .html(html);
+
+                            const box  = tooltip.node().getBoundingClientRect();
+                            let left   = event.pageX + 15;
+                            if (left + box.width > window.innerWidth) {
+                                left = event.pageX - box.width - 15;
+                            }
+
+                            tooltip
+                                .style("left", left + "px")
+                                .style("top",  (event.pageY - 40) + "px");
+
+                            // Cursor line (horizontal for vertical chart)
                             svg.selectAll(".cursor-line").remove();
                             svg.append("line")
                                 .attr("class", "cursor-line")
-                                .attr("x1", x(d.price))
-                                .attr("x2", x(d.price))
-                                .attr("y1", margin.top)
-                                .attr("y2", height - margin.bottom)
+                                .attr("x1", margin.left)
+                                .attr("x2", width - margin.right)
+                                .attr("y1", y(d.price))
+                                .attr("y2", y(d.price))
                                 .attr("stroke", "currentColor")
                                 .attr("stroke-width", 1)
                                 .attr("stroke-dasharray", "4 4")
                                 .attr("opacity", 0.5);
-
                         })
                         .on("mouseout", () => {
-                            tooltip.style("opacity", 0);
+                            tooltip.classed("hidden", true).style("opacity", 0);
                             svg.selectAll(".cursor-line").remove();
                         });
                 },
