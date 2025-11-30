@@ -1747,9 +1747,9 @@
                     // Hide wizard
                     const wizard = document.getElementById('setup-wizard');
                     wizard.classList.remove('open');
-                    // Reset inline opacity style to ensure proper hiding
-                    wizard.style.opacity = '';
-                    wizard.style.pointerEvents = '';
+                    // Reset inline opacity and pointer-events styles to ensure proper hiding
+                    wizard.style.opacity = '0';
+                    wizard.style.pointerEvents = 'none';
                     
                     // Mark as completed
                     localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
