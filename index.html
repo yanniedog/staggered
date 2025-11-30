@@ -438,7 +438,7 @@
 <body class="p-3 sm:p-6 theme-light layout-desktop antialiased">
 
     <!-- Intro Overlay -->
-    <div id="intro-layer" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center transition-opacity duration-700">
+    <div id="intro-layer" class="fixed inset-0 z-[9999] bg-black flex items-center justify-center transition-opacity duration-500">
         <!-- Video Background -->
         <div class="absolute inset-0 overflow-hidden">
             <div class="absolute inset-0 bg-black/60 z-10"></div>
@@ -469,8 +469,8 @@
     </div>
 
     <!-- Question-Based Setup Wizard -->
-    <div id="setup-wizard" class="fixed inset-0 z-[9998] bg-black/80 backdrop-blur-sm flex items-center justify-center transition-opacity duration-500 opacity-0 pointer-events-none" role="dialog" aria-labelledby="wizard-title" aria-modal="true">
-        <div class="bg-[var(--color-card)] rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" style="transform: scale(0.95); transition: transform 0.3s ease;">
+    <div id="setup-wizard" class="fixed inset-0 z-[10000] bg-black backdrop-blur-sm flex items-center justify-center transition-opacity duration-500 opacity-0 pointer-events-none" role="dialog" aria-labelledby="wizard-title" aria-modal="true">
+        <div class="bg-[var(--color-card)] rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto" style="transform: scale(0.95); transition: transform 0.4s ease;">
             <div class="p-6 sm:p-8">
                 <!-- Header with gradient accent -->
                 <div class="mb-6 pb-4 border-b border-[var(--color-border)]">
@@ -1329,6 +1329,17 @@
                     SetupWizard.show();
                 },
 
+                prepare: () => {
+                    SetupWizard.currentStep = 0;
+                    SetupWizard.answers = {};
+                    // Pre-populate with defaults
+                    SetupWizard.questions.forEach(q => {
+                        if (q.default !== undefined) {
+                            SetupWizard.answers[q.field] = q.default;
+                        }
+                    });
+                },
+
                 show: () => {
                     const wizard = document.getElementById('setup-wizard');
                     const wizardContent = document.getElementById('wizard-content');
@@ -1721,15 +1732,17 @@
                 },
 
                 skip: () => {
-                    SetupWizard.finish();
+                    SetupWizard.finish(true);
                 },
 
-                finish: () => {
+                finish: (wasSkipped = false) => {
                     // Apply answers to form fields
                     SetupWizard.applyAnswers();
                     
-                    // Enable Pro mode to show all fields
-                    App.setMode('pro');
+                    // Set mode based on whether wizard was skipped
+                    // If completed normally, default to 'simple' (Current mode)
+                    // If skipped, default to 'pro' (Customise mode)
+                    App.setMode(wasSkipped ? 'pro' : 'simple');
                     
                     // Hide wizard
                     const wizard = document.getElementById('setup-wizard');
@@ -1933,13 +1946,25 @@
                     if (enterBtn) {
                         enterBtn.addEventListener('click', () => {
                             const introLayer = document.getElementById('intro-layer');
-                            introLayer.style.opacity = '0';
-                            introLayer.style.pointerEvents = 'none';
-                            setTimeout(() => {
-                                introLayer.style.display = 'none';
-                                // Always show wizard when clicking Get Started
-                                SetupWizard.init();
-                            }, 700);
+                            
+                            // Prepare wizard data first (without showing it yet)
+                            SetupWizard.prepare();
+                            
+                            // Start both transitions simultaneously for seamless effect
+                            // Wizard fades in while intro layer fades out
+                            requestAnimationFrame(() => {
+                                // Trigger wizard fade-in
+                                SetupWizard.show();
+                                
+                                // Trigger intro layer fade-out simultaneously
+                                introLayer.style.opacity = '0';
+                                introLayer.style.pointerEvents = 'none';
+                                
+                                // Hide intro layer completely after transition completes
+                                setTimeout(() => {
+                                    introLayer.style.display = 'none';
+                                }, 500); // Match transition duration
+                            });
                         });
                     }
 
