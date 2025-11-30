@@ -675,10 +675,10 @@
         </header>
 
         <!-- Main Content Grid -->
-        <main class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <main id="main-content-grid" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
             
             <!-- Left Column: Controls (lg:col-span-4) -->
-            <div class="lg:col-span-5 space-y-6">
+            <div id="config-column" class="lg:col-span-5 space-y-6">
                 
                 <!-- Input Form Card -->
                 <div class="card p-5 sm:p-6 animate-fade-in" style="animation-delay: 0.1s;">
@@ -915,7 +915,7 @@
             </div>
 
             <!-- Right Column: Visualization (lg:col-span-8) -->
-            <div class="lg:col-span-7 space-y-6">
+            <div id="graph-column" class="lg:col-span-7 space-y-6">
                 
                 <!-- Combined Depth Chart (Vertical) -->
                 <div id="depth-chart-card" class="card p-4 h-[600px] flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.3s;">
@@ -2245,6 +2245,23 @@
                     
                     // Show/Hide Pro Controls
                     els.proControls.classList.toggle('hidden', mode === 'simple');
+                    
+                    // Adjust layout for customise mode - graph sits on side of configuration card
+                    const mainGrid = document.getElementById('main-content-grid');
+                    const configColumn = document.getElementById('config-column');
+                    const graphColumn = document.getElementById('graph-column');
+                    
+                    if (mode === 'pro') {
+                        // Customise mode: side-by-side layout (graph on right side of config card)
+                        if (mainGrid) mainGrid.className = 'grid grid-cols-1 lg:grid-cols-12 gap-6';
+                        if (configColumn) configColumn.className = 'lg:col-span-5 space-y-6';
+                        if (graphColumn) graphColumn.className = 'lg:col-span-7 space-y-6';
+                    } else {
+                        // Simple mode: stacked layout (full width for both)
+                        if (mainGrid) mainGrid.className = 'grid grid-cols-1 gap-6';
+                        if (configColumn) configColumn.className = 'space-y-6';
+                        if (graphColumn) graphColumn.className = 'space-y-6';
+                    }
                     
                     App.calculatePlan();
                 },
