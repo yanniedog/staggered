@@ -913,46 +913,6 @@
                     </form>
                 </div>
 
-                <!-- Summary Card (Desktop) -->
-                <div class="card p-6 animate-fade-in" style="animation-delay: 0.2s;">
-                     <h3 class="text-sm font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-4">Projected Results</h3>
-                     <div class="grid grid-cols-2 gap-y-6 gap-x-4">
-                         <div>
-                             <p class="text-xs text-[var(--color-text-secondary)]">Net Profit</p>
-                             <p id="summary-net-profit" class="text-2xl font-bold text-[var(--color-primary)]">-</p>
-                         </div>
-                         <div>
-                             <p class="text-xs text-[var(--color-text-secondary)]">ROI</p>
-                             <p id="summary-roi" class="text-2xl font-bold text-green-600">-</p>
-                         </div>
-                         
-                         <!-- Averages -->
-                         <div class="pt-4 border-t border-[var(--color-border)]">
-                             <p class="text-xs text-[var(--color-text-secondary)]">Avg Buy</p>
-                             <p id="summary-avg-buy" class="text-lg font-semibold text-[var(--color-text)]">-</p>
-                         </div>
-                         <div class="pt-4 border-t border-[var(--color-border)]">
-                             <p class="text-xs text-[var(--color-text-secondary)]">Avg Sell</p>
-                             <p id="summary-avg-sell" class="text-lg font-semibold text-[var(--color-text)]">-</p>
-                         </div>
-
-                         <!-- Limits -->
-                         <div class="pt-2">
-                            <p class="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">Buy Floor</p>
-                            <p id="summary-buy-floor" class="text-sm font-mono font-medium text-[var(--color-text-secondary)]">-</p>
-                        </div>
-                        <div class="pt-2">
-                            <p class="text-[10px] uppercase tracking-wider text-[var(--color-text-muted)]">Sell Ceiling</p>
-                            <p id="summary-sell-ceiling" class="text-sm font-mono font-medium text-[var(--color-text-secondary)]">-</p>
-                        </div>
-
-                         <div class="col-span-2 pt-4 border-t border-[var(--color-border)] text-xs text-[var(--color-text-muted)] flex justify-between">
-                             <span>Total Fees: <span id="summary-total-fees">-</span></span>
-                             <span>Total Vol: <span id="summary-total-quantity">-</span></span>
-                         </div>
-                     </div>
-                </div>
-
             </div>
 
             <!-- Right Column: Visualization (lg:col-span-8) -->
@@ -973,6 +933,41 @@
                     </div>
                     <div id="depth-wrapper" class="d3-chart flex-1 w-full h-full relative">
                         <svg id="depth-chart" width="100%" height="100%"></svg>
+                        
+                        <!-- Projected Results Overlay (Middle Right) -->
+                        <div id="chart-summary-overlay" class="absolute top-1/2 right-4 transform -translate-y-1/2 pointer-events-none z-10">
+                            <div class="bg-[var(--color-card)]/95 backdrop-blur-sm border border-[var(--color-border)] rounded-lg p-3 shadow-xl min-w-[180px] max-w-[200px]">
+                                <h4 class="text-[10px] font-bold text-[var(--color-text-muted)] uppercase tracking-wider mb-2">Projected Results</h4>
+                                <div class="space-y-2.5">
+                                    <div>
+                                        <p class="text-[9px] text-[var(--color-text-secondary)]">Net Profit</p>
+                                        <p id="chart-summary-net-profit" class="text-lg font-bold text-[var(--color-primary)]">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-[var(--color-text-secondary)]">ROI</p>
+                                        <p id="chart-summary-roi" class="text-lg font-bold text-green-600">-</p>
+                                    </div>
+                                    <div class="pt-2 border-t border-[var(--color-border)]">
+                                        <p class="text-[9px] text-[var(--color-text-secondary)]">Avg Buy</p>
+                                        <p id="chart-summary-avg-buy" class="text-sm font-semibold text-[var(--color-text)]">-</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-[var(--color-text-secondary)]">Avg Sell</p>
+                                        <p id="chart-summary-avg-sell" class="text-sm font-semibold text-[var(--color-text)]">-</p>
+                                    </div>
+                                    <div class="pt-2 border-t border-[var(--color-border)] text-[9px] text-[var(--color-text-muted)] space-y-1">
+                                        <div class="flex justify-between">
+                                            <span>Fees:</span>
+                                            <span id="chart-summary-total-fees">-</span>
+                                        </div>
+                                        <div class="flex justify-between">
+                                            <span>Vol:</span>
+                                            <span id="chart-summary-total-quantity">-</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -2515,6 +2510,16 @@
                     setTxt('summary-total-quantity', Utils.fmtNum(s.totalQuantity));
                     setTxt('summary-buy-floor', Utils.fmtCurr(s.lowestBuy));
                     setTxt('summary-sell-ceiling', Utils.fmtCurr(s.highestSell));
+
+                    // Update chart overlay summary
+                    setTxt('chart-summary-net-profit', Utils.fmtCurr(s.netProfit));
+                    setCls('chart-summary-net-profit', `text-lg font-bold ${s.netProfit >= 0 ? 'text-[var(--color-primary)]' : 'text-[var(--color-invalid)]'}`);
+                    setTxt('chart-summary-roi', Utils.fmtPct(s.roi));
+                    setCls('chart-summary-roi', `text-lg font-bold ${s.roi >= 0 ? 'text-green-600' : 'text-red-500'}`);
+                    setTxt('chart-summary-avg-buy', Utils.fmtCurr(s.avgBuy));
+                    setTxt('chart-summary-avg-sell', Utils.fmtCurr(s.avgSell));
+                    setTxt('chart-summary-total-fees', Utils.fmtCurr(s.totalFees));
+                    setTxt('chart-summary-total-quantity', Utils.fmtNum(s.totalQuantity));
 
                     setTxt('sticky-net-profit', Utils.fmtCurr(s.netProfit));
                     setTxt('sticky-roi', Utils.fmtPct(s.roi));
