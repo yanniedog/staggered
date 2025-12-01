@@ -2323,15 +2323,12 @@
                     App.loadTheme();
                     App.bindEvents();
                     
-                    // Check if user has completed setup before - skip intro for returning users
-                    const setupCompleted = localStorage.getItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed');
-                    if (setupCompleted === 'true') {
-                        const introLayer = document.getElementById('intro-layer');
-                        if (introLayer) {
-                            introLayer.style.display = 'none';
-                            introLayer.style.opacity = '0';
-                            introLayer.style.pointerEvents = 'none';
-                        }
+                    // Always show welcome screen on initial load
+                    const introLayer = document.getElementById('intro-layer');
+                    if (introLayer) {
+                        introLayer.style.display = 'flex';
+                        introLayer.style.opacity = '1';
+                        introLayer.style.pointerEvents = 'auto';
                     }
                     
                     App.calculatePlan();
