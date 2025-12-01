@@ -98,29 +98,8 @@
             letter-spacing: -0.02em;
         }
         
-        @media (min-width: 1024px) {
-            body { padding-bottom: 0; }
-        }
-        
-        /* Extra spacing for table container elements on small screens */
-        @media (max-width: 1023px) {
-            #panel-buy,
-            #panel-sell {
-                padding-bottom: 0.5rem;
-            }
-            #buy-ladder-body,
-            #sell-ladder-body {
-                padding-bottom: 1rem;
-            }
-        }
-        
-        /* Desktop adjustments */
-        @media (min-width: 1024px) {
-            #panel-buy,
-            #panel-sell {
-                padding-bottom: 2rem;
-            }
-        }
+        @media (min-width: 1024px) { body { padding-bottom: 0; } #panel-buy, #panel-sell { padding-bottom: 2rem; } }
+        @media (max-width: 1023px) { #panel-buy, #panel-sell { padding-bottom: 0.5rem; } #buy-ladder-body, #sell-ladder-body { padding-bottom: 1rem; } }
 
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 
@@ -384,51 +363,21 @@
             opacity: 0.6;
         }
         .wizard-option {
-            padding: 1.125rem 1.5rem;
-            background-color: var(--color-card-muted);
-            border: 2px solid var(--color-border);
-            border-radius: 0.875rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-            font-size: 1rem;
-            font-weight: 500;
-            position: relative;
-            overflow: hidden;
+            padding: 1.125rem 1.5rem; background-color: var(--color-card-muted);
+            border: 2px solid var(--color-border); border-radius: 0.875rem;
+            cursor: pointer; transition: all 0.2s ease; text-align: left;
+            font-size: 1rem; font-weight: 500; position: relative; overflow: hidden;
         }
         .wizard-option::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 4px;
-            height: 100%;
+            content: ''; position: absolute; left: 0; top: 0; width: 4px; height: 100%;
             background: linear-gradient(to bottom, #0ea5e9, #0284c7);
-            transform: scaleY(0);
-            transition: transform 0.2s ease;
+            transform: scaleY(0); transition: transform 0.2s ease;
         }
-        .wizard-option:hover {
-            border-color: #0ea5e9;
-            background-color: var(--color-card);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2);
-        }
-        .wizard-option:hover::before {
-            transform: scaleY(1);
-        }
-        .wizard-option.selected {
-            border-color: #0ea5e9;
-            background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.1));
-            color: var(--color-text);
-            box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3);
-        }
-        .wizard-option.selected::before {
-            transform: scaleY(1);
-        }
-        .wizard-option:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3);
-        }
+        .wizard-option:hover, .wizard-option.selected { border-color: #0ea5e9; }
+        .wizard-option:hover { background-color: var(--color-card); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2); }
+        .wizard-option:hover::before, .wizard-option.selected::before { transform: scaleY(1); }
+        .wizard-option.selected { background: linear-gradient(135deg, rgba(14, 165, 233, 0.1), rgba(2, 132, 199, 0.1)); box-shadow: 0 0 0 2px rgba(14, 165, 233, 0.3); }
+        .wizard-option:focus { outline: none; box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.3); }
         .wizard-hint {
             font-size: 0.9375rem;
             color: var(--color-text-muted);
@@ -454,6 +403,63 @@
         }
         #wizard-progress {
             background: linear-gradient(to right, #0ea5e9, #0284c7, #06b6d4);
+        }
+
+        /* --- RESPONSIVE BUTTON STYLES --- */
+        
+        /* Base button touch target - ensure minimum 44px for accessibility */
+        button, .btn-primary, .btn-secondary, .mode-card, .fee-type-btn, .chart-toggle-btn, .wizard-option {
+            min-height: 44px;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Small buttons can have smaller height */
+        .helper-tooltip {
+            min-height: auto;
+        }
+        
+        /* Mobile button improvements */
+        @media (max-width: 639px) {
+            #enter-app-btn { width: 100%; max-width: 320px; padding: 1rem 1.5rem; font-size: 0.875rem; }
+            #quick-start-btn { padding: 0.75rem; font-size: 0.8125rem; }
+            #intro-video-link, #intro-how-it-works { padding: 0.5rem; font-size: 0.75rem; }
+            header .flex.items-center.gap-3 { flex-wrap: wrap; gap: 0.5rem; justify-content: flex-end; }
+            #sol-btn, #theme-toggle-btn, #video-btn-mobile, #sticky-expand-btn { padding: 0.75rem; min-width: 44px; min-height: 44px; }
+            #sticky-expand-btn { padding: 0.5rem; }
+            .btn-secondary.flex.items-center.gap-2 { padding: 0.625rem 0.875rem; font-size: 0.8125rem; }
+            #mode-buy-btn, #mode-sell-btn { padding: 0.75rem; }
+            #mode-simple, #mode-pro { padding: 0.5rem 0.75rem; font-size: 0.6875rem; }
+            #tab-buy, #tab-sell { padding: 0.875rem 0.5rem; font-size: 0.8125rem; }
+            .fee-type-btn, .chart-toggle-btn { padding: 0.625rem 0.75rem; font-size: 0.6875rem; min-height: 36px; }
+            #wizard-back, #wizard-next { padding: 0.875rem 1.5rem; font-size: 0.875rem; min-width: 100px; }
+            #wizard-skip { padding: 0.5rem 0.75rem; }
+            .helper-tooltip { width: 24px; height: 24px; font-size: 0.75rem; }
+            #qr-close, #video-close, #how-it-works-close { padding: 0.875rem; font-size: 0.875rem; }
+            details summary { padding: 0.875rem 1rem; }
+            .wizard-option { padding: 1rem 1.25rem; font-size: 0.9375rem; }
+        }
+        @media (min-width: 640px) and (max-width: 1023px) {
+            #tab-buy, #tab-sell { padding: 0.875rem; }
+        }
+        
+        /* Touch device button states */
+        @media (hover: none) and (pointer: coarse) {
+            .btn-primary:hover, .btn-secondary:hover, .mode-card:hover,
+            .fee-type-btn:not(.active):hover, .chart-toggle-btn:not(.active):hover, .wizard-option:hover { transform: none; }
+            .btn-primary:active, .btn-secondary:active, .mode-card:active, .wizard-option:active { transform: scale(0.98); }
+            .btn-primary:active { opacity: 0.9; }
+            .btn-secondary:active { background-color: var(--color-border); }
+            .wizard-option:active { border-color: #0ea5e9; }
+        }
+        
+        /* Focus and selection states for all buttons */
+        button:focus-visible, .btn-primary:focus-visible, .btn-secondary:focus-visible, .mode-card:focus-visible,
+        .fee-type-btn:focus-visible, .chart-toggle-btn:focus-visible, .wizard-option:focus-visible {
+            outline: 2px solid var(--color-primary); outline-offset: 2px;
+        }
+        button, .btn-primary, .btn-secondary, .mode-card, .fee-type-btn, .chart-toggle-btn, .wizard-option {
+            user-select: none; -webkit-user-select: none;
         }
 
     </style>
@@ -502,25 +508,25 @@
                 </div>
             </div>
             
-            <div class="flex flex-col items-center gap-4 pt-4">
-                <button id="enter-app-btn" class="group relative px-12 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden rounded-xl text-white font-bold tracking-wide uppercase shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105">
-                    <span class="relative z-10 flex items-center gap-2">
+            <div class="flex flex-col items-center gap-3 sm:gap-4 pt-4 w-full px-4 sm:px-0">
+                <button id="enter-app-btn" class="group relative w-full sm:w-auto px-8 sm:px-12 py-3.5 sm:py-4 bg-gradient-to-r from-cyan-500 to-blue-500 overflow-hidden rounded-xl text-white font-bold tracking-wide uppercase shadow-xl shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 hover:scale-105 active:scale-95 text-sm sm:text-base">
+                    <span class="relative z-10 flex items-center justify-center gap-2">
                         <span>Start Planning</span>
-                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
                     </span>
                 </button>
                 
-                <button id="quick-start-btn" class="text-cyan-400/70 hover:text-cyan-400 transition-colors text-sm underline underline-offset-4">
+                <button id="quick-start-btn" class="text-cyan-400/70 hover:text-cyan-400 active:text-cyan-300 transition-colors text-xs sm:text-sm underline underline-offset-4 py-2">
                     Quick start with example values →
                 </button>
                 
-                <div class="flex items-center gap-6 text-sm mt-2">
-                    <button id="intro-video-link" class="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-xs sm:text-sm mt-2">
+                    <button id="intro-video-link" class="flex items-center gap-1.5 sm:gap-2 text-gray-400 hover:text-cyan-400 active:text-cyan-300 transition-colors py-2 px-1">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>Watch Tutorial</span>
                     </button>
-                    <button id="intro-how-it-works" class="flex items-center gap-2 text-gray-400 hover:text-cyan-400 transition-colors">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <button id="intro-how-it-works" class="flex items-center gap-1.5 sm:gap-2 text-gray-400 hover:text-cyan-400 active:text-cyan-300 transition-colors py-2 px-1">
+                        <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                         <span>How It Works</span>
                     </button>
                 </div>
@@ -705,7 +711,7 @@
 
             <!-- Footer -->
             <div class="p-6 border-t border-[var(--color-border)] bg-[var(--color-card-muted)]">
-                <button id="how-it-works-close" class="btn-primary w-full py-3 rounded-lg text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 transition-all">
+                <button id="how-it-works-close" class="btn-primary w-full py-3.5 sm:py-3 rounded-lg text-sm font-semibold bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-400 hover:to-blue-400 active:scale-[0.98] transition-all">
                     Got It — Let's Start Planning!
                 </button>
             </div>
@@ -725,7 +731,7 @@
                         <span class="text-xs font-medium text-[var(--color-text-muted)]" aria-live="polite">
                             Step <span id="wizard-step-num">1</span> of <span id="wizard-total-steps">7</span>
                         </span>
-                        <button id="wizard-skip" class="text-xs text-[var(--color-text-muted)] hover:text-cyan-400 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 rounded px-2 py-1" aria-label="Skip setup wizard">
+                        <button id="wizard-skip" class="text-xs text-[var(--color-text-muted)] hover:text-cyan-400 active:text-cyan-300 transition-all focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 rounded px-3 py-1.5 active:scale-95" aria-label="Skip setup wizard">
                             Skip Setup
                         </button>
                     </div>
@@ -743,12 +749,12 @@
                 <div id="wizard-error" class="wizard-error" role="alert" aria-live="assertive"></div>
 
                 <!-- Navigation Buttons -->
-                <div class="flex justify-between items-center mt-8 pt-6 border-t border-[var(--color-border)]">
-                    <button id="wizard-back" class="px-6 py-2.5 rounded-lg bg-[var(--color-card-alt)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors font-medium text-sm hidden focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2" aria-label="Go to previous question">
+                <div class="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-4 mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-[var(--color-border)]">
+                    <button id="wizard-back" class="w-full sm:w-auto px-4 sm:px-6 py-3 sm:py-2.5 rounded-lg bg-[var(--color-card-alt)] text-[var(--color-text)] hover:bg-[var(--color-border)] active:scale-95 transition-all font-medium text-sm hidden focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2" aria-label="Go to previous question">
                         ← Back
                     </button>
-                    <div class="flex-1"></div>
-                    <button id="wizard-next" class="px-8 py-2.5 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 text-white hover:from-cyan-500 hover:to-blue-700 transition-all font-medium text-sm shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 transform hover:scale-105">
+                    <div class="hidden sm:block flex-1"></div>
+                    <button id="wizard-next" class="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-2.5 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-600 text-white hover:from-cyan-500 hover:to-blue-700 active:scale-95 transition-all font-medium text-sm shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2">
                         Next →
                     </button>
                 </div>
@@ -795,7 +801,7 @@
                 </div>
             </div>
             
-            <button id="qr-close" class="btn-secondary w-full py-2.5 rounded-lg text-sm font-medium hover:bg-[var(--color-border)] transition-colors">Close</button>
+            <button id="qr-close" class="btn-secondary w-full py-3 sm:py-2.5 rounded-lg text-sm font-medium hover:bg-[var(--color-border)] active:scale-[0.98] transition-all">Close</button>
         </div>
     </div>
 
@@ -806,7 +812,7 @@
             <div class="relative pb-[56.25%] h-0">
                 <iframe class="absolute top-0 left-0 w-full h-full" data-src="https://www.youtube.com/embed/LPaAtWphx2U" title="Order Skew Tutorial" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>
             </div>
-            <button id="video-close" class="w-full py-3 text-sm font-medium bg-[var(--color-card)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors">Close Tutorial</button>
+            <button id="video-close" class="w-full py-3.5 sm:py-3 text-sm font-medium bg-[var(--color-card)] text-[var(--color-text)] hover:bg-[var(--color-border)] active:scale-[0.98] transition-all">Close Tutorial</button>
         </div>
     </div>
 
@@ -817,7 +823,7 @@
                 <span class="text-[10px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wider">Net Profit</span>
                 <span id="sticky-net-profit" class="text-base font-bold text-[var(--color-primary)]">-</span>
             </div>
-            <button id="sticky-expand-btn" class="p-1 text-[var(--color-text-muted)] hover:text-[var(--color-text)] focus:outline-none transition-colors">
+            <button id="sticky-expand-btn" class="p-2.5 text-[var(--color-text-muted)] hover:text-[var(--color-text)] active:scale-90 focus:outline-none transition-all rounded-full hover:bg-[var(--color-card-alt)]">
                 <svg id="sticky-chevron" class="w-5 h-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
             </button>
             <div class="flex flex-col items-end">
@@ -868,43 +874,43 @@
                 <p class="text-sm text-[var(--color-text-secondary)] mt-1">Plan your trades.<br><span class="text-xs">Buy <span class="bg-red-500/30 text-white px-1.5 py-0.5 rounded text-[10px]">low</span>, sell <span class="bg-green-500/30 text-white px-1.5 py-0.5 rounded text-[10px]">high</span>.</span></p>
             </div>
 
-            <div class="flex items-center gap-3">
+            <div class="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
                 <!-- Video Tutorial -->
-                <button id="video-btn" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[var(--color-primary)] text-[var(--color-primary-contrast)] hover:bg-[var(--color-primary-accent)] transition-colors text-xs font-medium shadow-sm" title="Watch Tutorial">
+                <button id="video-btn" class="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-full bg-[var(--color-primary)] text-[var(--color-primary-contrast)] hover:bg-[var(--color-primary-accent)] active:scale-95 transition-all text-xs font-medium shadow-sm" title="Watch Tutorial">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <span>Tutorial</span>
                 </button>
-                <button id="video-btn-mobile" class="sm:hidden p-2 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-border)] transition-colors" title="Watch Tutorial">
+                <button id="video-btn-mobile" class="sm:hidden p-2.5 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--color-border)] active:scale-90 transition-all" title="Watch Tutorial">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                 </button>
 
                 <!-- Solana Donation -->
-                <button id="sol-btn" class="p-2 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[#9945FF] hover:bg-[var(--color-border)] transition-colors" title="Donate SOL">
+                <button id="sol-btn" class="p-2.5 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[#9945FF] hover:bg-[var(--color-border)] active:scale-90 transition-all" title="Donate SOL">
                     <svg viewBox="0 0 397.7 311.7" class="w-5 h-5" fill="currentColor"><path d="M64.6 237.9c2.4-2.4 5.7-3.8 9.2-3.8h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1l62.7-62.7z"/><path d="M64.6 3.8C67.1 1.4 70.4 0 73.8 0h317.4c5.8 0 8.7 7 4.6 11.1l-62.7 62.7c-2.4 2.4-5.7 3.8-9.2 3.8H6.5c-5.8 0-8.7-7-4.6-11.1L64.6 3.8z"/><path d="M333.1 120.1c-2.4-2.4-5.7-3.8-9.2-3.8H6.5c-5.8 0-8.7 7 4.6 11.1l62.7 62.7c2.4 2.4 5.7 3.8 9.2 3.8h317.4c5.8 0 8.7-7 4.6-11.1l-62.7-62.7z"/></svg>
                 </button>
 
                 <!-- GitHub -->
-                <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener" class="p-2 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors" title="View on GitHub">
+                <a href="https://github.com/yanniedog/OrderSkew" target="_blank" rel="noopener" class="p-2.5 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text-muted)] hover:text-[var(--color-text)] hover:bg-[var(--color-border)] active:scale-90 transition-all" title="View on GitHub">
                     <svg viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
                 </a>
 
                 <!-- Theme Toggle -->
-                <button id="theme-toggle-btn" class="p-2 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text)] hover:bg-[var(--color-border)] transition-colors" aria-label="Toggle Theme">
+                <button id="theme-toggle-btn" class="p-2.5 rounded-full bg-[var(--color-card-alt)] text-[var(--color-text)] hover:bg-[var(--color-border)] active:scale-90 transition-all" aria-label="Toggle Theme">
                     <svg id="icon-sun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"></circle><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path></svg>
                     <svg id="icon-moon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
                 </button>
                 
                 <!-- Export/Actions Menu -->
                 <div class="relative group z-50">
-                    <button class="btn-secondary flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium shadow-sm">
+                    <button class="btn-secondary flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium shadow-sm active:scale-95 transition-all">
                         <span>Export</span>
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                     </button>
                     <div class="absolute right-0 mt-2 w-48 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 transform origin-top-right">
                         <div class="py-1">
-                            <button type="button" id="download-csv-btn" class="block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)]">Download CSV</button>
-                            <button type="button" id="save-config-btn" class="block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)]">Save Config</button>
-                            <label class="block w-full text-left px-4 py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)] cursor-pointer">
+                            <button type="button" id="download-csv-btn" class="block w-full text-left px-4 py-2.5 sm:py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)] active:bg-[var(--color-border)]">Download CSV</button>
+                            <button type="button" id="save-config-btn" class="block w-full text-left px-4 py-2.5 sm:py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)] active:bg-[var(--color-border)]">Save Config</button>
+                            <label class="block w-full text-left px-4 py-2.5 sm:py-2 text-sm text-[var(--color-text)] hover:bg-[var(--color-card-alt)] active:bg-[var(--color-border)] cursor-pointer">
                                 Load Config <input type="file" id="load-config-file" accept=".json" class="hidden">
                             </label>
                         </div>
@@ -926,42 +932,42 @@
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
                             Strategy
                         </h2>
-                        <div class="flex items-center bg-[var(--color-card-muted)] rounded-lg p-1 border border-[var(--color-border)]">
-                            <button id="mode-simple" class="px-3 py-1 text-xs font-medium rounded-md transition-all shadow-sm bg-[var(--color-card)] text-[var(--color-primary)]">Current</button>
-                            <button id="mode-pro" class="px-3 py-1 text-xs font-medium rounded-md transition-all text-[var(--color-text-secondary)] hover:text-[var(--color-text)]">Customise</button>
+                        <div class="flex items-center bg-[var(--color-card-muted)] rounded-lg p-0.5 sm:p-1 border border-[var(--color-border)]">
+                            <button id="mode-simple" class="px-2.5 sm:px-3 py-1.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded-md transition-all shadow-sm bg-[var(--color-card)] text-[var(--color-primary)] active:scale-95">Current</button>
+                            <button id="mode-pro" class="px-2.5 sm:px-3 py-1.5 sm:py-1 text-[10px] sm:text-xs font-medium rounded-md transition-all text-[var(--color-text-secondary)] hover:text-[var(--color-text)] active:scale-95">Customise</button>
                         </div>
                     </div>
                     
                     <form id="trading-plan-form" class="space-y-6" onsubmit="return false;">
                         
                         <!-- Mode Selector (Buy vs Sell-Only) -->
-                        <div id="mode-selector" class="grid grid-cols-2 gap-3">
-                            <button type="button" id="mode-buy-btn" class="mode-card active relative p-4 rounded-xl border-2 border-red-500/50 bg-red-500/10 transition-all hover:border-red-500 group">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-red-500/20 flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        <div id="mode-selector" class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+                            <button type="button" id="mode-buy-btn" class="mode-card active relative p-3 sm:p-4 rounded-xl border-2 border-red-500/50 bg-red-500/10 transition-all hover:border-red-500 active:scale-[0.98] group">
+                                <div class="flex items-center gap-2.5 sm:gap-3">
+                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-red-500/20 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                                     </div>
-                                    <div class="text-left">
-                                        <div class="font-semibold text-red-500 text-sm">Buy Mode</div>
-                                        <div class="text-[10px] text-[var(--color-text-muted)]">Build buy & sell ladders</div>
+                                    <div class="text-left min-w-0">
+                                        <div class="font-semibold text-red-500 text-xs sm:text-sm">Buy Mode</div>
+                                        <div class="text-[9px] sm:text-[10px] text-[var(--color-text-muted)] truncate">Build buy & sell ladders</div>
                                     </div>
                                 </div>
-                                <div class="absolute top-2 right-2 w-5 h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-100 transition-opacity" id="mode-buy-check">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                <div class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-red-500 text-white flex items-center justify-center opacity-100 transition-opacity" id="mode-buy-check">
+                                    <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
                             </button>
-                            <button type="button" id="mode-sell-btn" class="mode-card relative p-4 rounded-xl border-2 border-[var(--color-border)] bg-[var(--color-card-muted)] transition-all hover:border-green-500/50 group">
-                                <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
-                                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <button type="button" id="mode-sell-btn" class="mode-card relative p-3 sm:p-4 rounded-xl border-2 border-[var(--color-border)] bg-[var(--color-card-muted)] transition-all hover:border-green-500/50 active:scale-[0.98] group">
+                                <div class="flex items-center gap-2.5 sm:gap-3">
+                                    <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                                     </div>
-                                    <div class="text-left">
-                                        <div class="font-semibold text-green-500 text-sm">Sell Mode</div>
-                                        <div class="text-[10px] text-[var(--color-text-muted)]">Plan exits for holdings</div>
+                                    <div class="text-left min-w-0">
+                                        <div class="font-semibold text-green-500 text-xs sm:text-sm">Sell Mode</div>
+                                        <div class="text-[9px] sm:text-[10px] text-[var(--color-text-muted)] truncate">Plan exits for holdings</div>
                                     </div>
                                 </div>
-                                <div class="absolute top-2 right-2 w-5 h-5 rounded-full bg-green-500 text-white flex items-center justify-center opacity-0 transition-opacity" id="mode-sell-check">
-                                    <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
+                                <div class="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-green-500 text-white flex items-center justify-center opacity-0 transition-opacity" id="mode-sell-check">
+                                    <svg class="w-2.5 h-2.5 sm:w-3 sm:h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
                                 </div>
                             </button>
                         </div>
@@ -1180,8 +1186,8 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                             <div class="flex rounded-lg border border-[var(--color-border)] overflow-hidden bg-[var(--color-card)]">
-                                        <button type="button" id="fee_type_percent" class="fee-type-btn active px-3 py-2 text-xs font-medium transition-colors" data-value="percent">%</button>
-                                        <button type="button" id="fee_type_fixed" class="fee-type-btn px-3 py-2 text-xs font-medium transition-colors" data-value="fixed">$</button>
+                                        <button type="button" id="fee_type_percent" class="fee-type-btn active px-3.5 sm:px-3 py-2.5 sm:py-2 text-xs font-medium transition-all active:scale-95" data-value="percent">%</button>
+                                        <button type="button" id="fee_type_fixed" class="fee-type-btn px-3.5 sm:px-3 py-2.5 sm:py-2 text-xs font-medium transition-all active:scale-95" data-value="fixed">$</button>
                                     </div>
                                     <div class="relative flex items-center flex-1">
                                         <span id="fee_dollar_prefix" class="absolute left-3 text-[var(--color-text-secondary)] font-mono hidden">$</span>
@@ -1228,25 +1234,25 @@
                         </div>
                         
                         <!-- Chart Display Options -->
-                        <div class="flex items-center gap-4 text-[10px]">
+                        <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px]">
                             <!-- Layer Toggles -->
-                            <div class="flex items-center gap-3">
-                                <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                                    <input type="checkbox" id="chart-show-bars" checked class="w-3 h-3 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
+                            <div class="flex items-center gap-2 sm:gap-3">
+                                <label class="flex items-center gap-1.5 cursor-pointer select-none py-1 px-0.5">
+                                    <input type="checkbox" id="chart-show-bars" checked class="w-4 h-4 sm:w-3 sm:h-3 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
                                     <span class="text-[var(--color-text-secondary)]">Bars</span>
                                 </label>
-                                <label class="flex items-center gap-1.5 cursor-pointer select-none">
-                                    <input type="checkbox" id="chart-show-cumulative" checked class="w-3 h-3 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
+                                <label class="flex items-center gap-1.5 cursor-pointer select-none py-1 px-0.5">
+                                    <input type="checkbox" id="chart-show-cumulative" checked class="w-4 h-4 sm:w-3 sm:h-3 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
                                     <span class="text-[var(--color-text-secondary)]">Cumulative</span>
                                 </label>
                             </div>
                             
                             <!-- Value Type Toggle -->
                             <div class="flex items-center gap-1.5">
-                                <span class="text-[var(--color-text-muted)]">Units:</span>
+                                <span class="text-[var(--color-text-muted)] hidden sm:inline">Units:</span>
                                 <div class="flex rounded-md border border-[var(--color-border)] overflow-hidden bg-[var(--color-card-muted)]">
-                                    <button type="button" id="chart-unit-volume" class="chart-toggle-btn active px-2 py-1 text-[10px] font-medium transition-colors" title="Asset quantity (volume)">Volume</button>
-                                    <button type="button" id="chart-unit-value" class="chart-toggle-btn px-2 py-1 text-[10px] font-medium transition-colors" title="Dollar value">Value ($)</button>
+                                    <button type="button" id="chart-unit-volume" class="chart-toggle-btn active px-2.5 sm:px-2 py-1.5 sm:py-1 text-[10px] font-medium transition-all active:scale-95" title="Asset quantity (volume)">Volume</button>
+                                    <button type="button" id="chart-unit-value" class="chart-toggle-btn px-2.5 sm:px-2 py-1.5 sm:py-1 text-[10px] font-medium transition-all active:scale-95" title="Dollar value">Value ($)</button>
                                 </div>
                             </div>
                         </div>
@@ -1295,13 +1301,13 @@
 
                 <!-- Data Tables -->
                 <div id="data-tables-card" class="card overflow-hidden animate-fade-in mb-48 lg:mb-8" style="animation-delay: 0.5s;">
-                    <div class="border-b border-[var(--color-border)] flex justify-between items-center bg-[var(--color-card-alt)]">
+                    <div class="border-b border-[var(--color-border)] flex flex-col sm:flex-row justify-between items-stretch sm:items-center bg-[var(--color-card-alt)]">
                         <div id="table-tabs" class="flex flex-1">
-                            <button id="tab-buy" class="buy-only-content flex-1 py-3 text-sm font-medium text-[var(--color-primary)] border-b-2 border-[var(--color-primary)] bg-[var(--color-card-alt)]">Buy Orders</button>
-                            <button id="tab-sell" class="flex-1 py-3 text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)]">Sell Orders</button>
+                            <button id="tab-buy" class="buy-only-content flex-1 py-3.5 sm:py-3 text-xs sm:text-sm font-medium text-[var(--color-primary)] border-b-2 border-[var(--color-primary)] bg-[var(--color-card-alt)] active:opacity-80 transition-opacity">Buy Orders</button>
+                            <button id="tab-sell" class="flex-1 py-3.5 sm:py-3 text-xs sm:text-sm font-medium text-[var(--color-text-muted)] hover:text-[var(--color-text)] active:opacity-80 transition-opacity">Sell Orders</button>
                         </div>
-                        <div class="px-4 flex items-center gap-2">
-                            <input type="checkbox" id="show-fees-toggle" class="w-3.5 h-3.5 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
+                        <div class="px-3 sm:px-4 py-2 sm:py-0 flex items-center justify-center sm:justify-end gap-2 border-t sm:border-t-0 border-[var(--color-border)]">
+                            <input type="checkbox" id="show-fees-toggle" class="w-4 h-4 sm:w-3.5 sm:h-3.5 rounded border-[var(--color-border-strong)] text-[var(--color-primary)] focus:ring-[var(--focus-ring-color)]">
                             <label for="show-fees-toggle" class="text-xs font-medium text-[var(--color-text-secondary)] cursor-pointer select-none">Show Fees</label>
                         </div>
                     </div>
@@ -1395,6 +1401,49 @@
                     return `${isNegative ? '-' : ''}${formattedInt}.${decimalPartRaw}`;
                 },
                 stripCommas: (value) => (value ?? '').toString().replace(/,/g, ''),
+                sanitizeInput: (value) => {
+                    if (value === null || value === undefined) return '';
+                    const strValue = value.toString();
+                    if (strValue === '' || strValue === '-' || strValue === '.' || strValue === '-.') return strValue;
+                    let sanitized = strValue.replace(/,/g, '');
+                    let sign = '';
+                    if (sanitized.startsWith('-')) { sign = '-'; sanitized = sanitized.slice(1); }
+                    sanitized = sanitized.replace(/[^0-9.]/g, '');
+                    const hadDecimal = sanitized.includes('.');
+                    const parts = sanitized.split('.');
+                    const integerPart = parts.shift() || '';
+                    const decimalPart = parts.join('');
+                    let normalized = sign + integerPart;
+                    if (hadDecimal) normalized += '.' + decimalPart;
+                    return normalized;
+                },
+                bindCurrencyInput: (el, callback) => {
+                    if (!el) return;
+                    el.addEventListener('focus', (e) => { e.target.value = Utils.stripCommas(e.target.value); });
+                    el.addEventListener('input', (e) => {
+                        const cursorPos = e.target.selectionStart || 0;
+                        const valueBefore = e.target.value;
+                        const normalized = Utils.sanitizeInput(valueBefore);
+                        e.target.value = normalized;
+                        const diff = e.target.value.length - valueBefore.length;
+                        e.target.setSelectionRange(Math.max(0, cursorPos + diff), Math.max(0, cursorPos + diff));
+                        if (callback) callback();
+                    });
+                    el.addEventListener('blur', (e) => { e.target.value = Utils.formatNumberWithCommas(Utils.sanitizeInput(e.target.value)); });
+                },
+                bindModal: (modal, openBtns, closeSelectors) => {
+                    const toggle = (show) => modal?.classList.toggle('open', show);
+                    openBtns.forEach(btn => btn?.addEventListener('click', () => toggle(true)));
+                    closeSelectors.forEach(el => el?.addEventListener('click', () => toggle(false)));
+                    return toggle;
+                },
+                hideIntro: (introLayer) => {
+                    if (!introLayer) return;
+                    introLayer.style.opacity = '0';
+                    introLayer.style.pointerEvents = 'none';
+                    setTimeout(() => { introLayer.style.display = 'none'; }, 500);
+                },
+                getSkewLabel: (v) => v === 0 ? "Flat" : v <= 30 ? "Gentle" : v <= 70 ? "Moderate" : "Aggressive",
                 copyToClipboard: (text) => {
                     const textArea = document.createElement("textarea");
                     textArea.value = text;
@@ -1560,6 +1609,40 @@
             const SetupWizard = {
                 currentStep: 0,
                 answers: {},
+                _handlers: {},
+                getFieldMap: () => ({
+                    'starting_capital': els.startCap,
+                    'existing_quantity': els.existQty,
+                    'current_price': els.currPrice,
+                    'number_of_rungs': els.rungsInput,
+                    'depth': els.depthInput,
+                    'skew_value': els.skew,
+                    'fee_value': els.feeValue,
+                    'sell_only_mode': els.sellOnlyCheck
+                }),
+                setFieldValue: (field, value, element) => {
+                    if (!element || value === undefined) return;
+                    if (field === 'starting_capital') {
+                        element.value = Utils.formatNumberWithCommas(value.toString());
+                    } else if (field === 'number_of_rungs') {
+                        const v = Math.round(value);
+                        element.value = v;
+                        els.rungs.value = v;
+                        els.rungsDisplay.textContent = v;
+                    } else if (field === 'depth') {
+                        element.value = value;
+                        els.depth.value = value;
+                    } else if (field === 'skew_value') {
+                        element.value = value;
+                        const v = parseInt(value);
+                        els.skewLabel.textContent = v === 0 ? "Flat" : v <= 30 ? "Gentle" : v <= 70 ? "Moderate" : "Aggressive";
+                    } else if (field === 'sell_only_mode') {
+                        element.checked = value;
+                        els.sellOnlyInputs?.classList.toggle('hidden', !value);
+                    } else {
+                        element.value = value;
+                    }
+                },
                 questions: [
                     {
                         question: "What's your goal?",
@@ -1639,7 +1722,73 @@
                     SetupWizard.answers['number_of_rungs'] = 8;
                 },
 
+                bindControls: () => {
+                    const wizard = document.getElementById('setup-wizard');
+                    if (!wizard) {
+                        console.error('SetupWizard: Wizard container not found during bindControls');
+                        return;
+                    }
+
+                    // Get button elements directly
+                    const nextBtn = document.getElementById('wizard-next');
+                    const backBtn = document.getElementById('wizard-back');
+                    const skipBtn = document.getElementById('wizard-skip');
+
+                    if (!SetupWizard._handlers.nextClick) {
+                        SetupWizard._handlers.nextClick = (e) => {
+                            console.log('SetupWizard: Next button clicked');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            SetupWizard.next();
+                        };
+                    }
+
+                    if (!SetupWizard._handlers.backClick) {
+                        SetupWizard._handlers.backClick = (e) => {
+                            console.log('SetupWizard: Back button clicked');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            SetupWizard.back();
+                        };
+                    }
+
+                    if (!SetupWizard._handlers.skipClick) {
+                        SetupWizard._handlers.skipClick = (e) => {
+                            console.log('SetupWizard: Skip button clicked');
+                            e.preventDefault();
+                            e.stopPropagation();
+                            SetupWizard.skip();
+                        };
+                    }
+
+                    if (!SetupWizard._handlers.keydown) {
+                        SetupWizard._handlers.keydown = (event) => {
+                            if (event.key === 'Escape') {
+                                SetupWizard.skip();
+                            }
+                        };
+                    }
+
+                    // Remove old listeners and attach new ones
+                    if (nextBtn) {
+                        nextBtn.removeEventListener('click', SetupWizard._handlers.nextClick);
+                        nextBtn.addEventListener('click', SetupWizard._handlers.nextClick);
+                    }
+                    if (backBtn) {
+                        backBtn.removeEventListener('click', SetupWizard._handlers.backClick);
+                        backBtn.addEventListener('click', SetupWizard._handlers.backClick);
+                    }
+                    if (skipBtn) {
+                        skipBtn.removeEventListener('click', SetupWizard._handlers.skipClick);
+                        skipBtn.addEventListener('click', SetupWizard._handlers.skipClick);
+                    }
+
+                    wizard.removeEventListener('keydown', SetupWizard._handlers.keydown);
+                    wizard.addEventListener('keydown', SetupWizard._handlers.keydown);
+                },
+
                 show: () => {
+                    console.log('SetupWizard.show called. Step:', SetupWizard.currentStep);
                     const wizard = document.getElementById('setup-wizard');
                     const wizardContent = document.getElementById('wizard-content');
                     const stepNum = document.getElementById('wizard-step-num');
@@ -1649,34 +1798,43 @@
                     const nextBtn = document.getElementById('wizard-next');
                     const skipBtn = document.getElementById('wizard-skip');
 
-                    totalSteps.textContent = SetupWizard.questions.length;
+                    if (!wizard) {
+                        console.error('SetupWizard: Wizard container not found');
+                        return;
+                    }
+                    if (!nextBtn) console.error('SetupWizard: Next button not found');
+                    if (!skipBtn) console.error('SetupWizard: Skip button not found');
+
+                    if (totalSteps) totalSteps.textContent = SetupWizard.questions.length;
                     SetupWizard.renderQuestion();
                     
+                    // Clear inline styles that may have been set by finish() - they override CSS classes
+                    wizard.style.opacity = '';
+                    wizard.style.pointerEvents = '';
+                    
                     wizard.classList.add('open');
-                    
-                    // Show/hide back button
-                    backBtn.classList.toggle('hidden', SetupWizard.currentStep === 0);
-                    
-                    // Update next button text
-                    if (SetupWizard.currentStep === SetupWizard.questions.length - 1) {
-                        nextBtn.textContent = '✨ Finish Setup';
-                        nextBtn.setAttribute('aria-label', 'Finish setup wizard');
-                    } else {
-                        nextBtn.textContent = 'Next →';
-                        nextBtn.setAttribute('aria-label', 'Go to next question');
-                    }
+                    // Force pointer-events/opacity inline to guarantee interactivity even if CSS class order changes
+                    wizard.style.opacity = '1';
+                    wizard.style.pointerEvents = 'auto';
 
-                    // Bind events
-                    nextBtn.onclick = () => SetupWizard.next();
-                    backBtn.onclick = () => SetupWizard.back();
-                    skipBtn.onclick = () => SetupWizard.skip();
-                    
-                    // Keyboard navigation
-                    wizard.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape') {
-                            SetupWizard.skip();
+                    // Bind event handlers (delegated click handling on wizard container)
+                    SetupWizard.bindControls();
+
+                    if (nextBtn) {
+                        // Update next button text
+                        if (SetupWizard.currentStep === SetupWizard.questions.length - 1) {
+                            nextBtn.textContent = '✨ Finish Setup';
+                            nextBtn.setAttribute('aria-label', 'Finish setup wizard');
+                        } else {
+                            nextBtn.textContent = 'Next →';
+                            nextBtn.setAttribute('aria-label', 'Go to next question');
                         }
-                    });
+                    }
+                    if (backBtn) {
+                        // Show/hide back button based on step
+                        backBtn.classList.toggle('hidden', SetupWizard.currentStep === 0);
+                    }
+                    // Skip button text is static, no update needed here
                 },
 
                 renderQuestion: () => {
@@ -1978,6 +2136,7 @@
                 },
 
                 next: () => {
+                    console.log('SetupWizard.next executing');
                     let question = SetupWizard.questions[SetupWizard.currentStep];
                     const input = document.getElementById('wizard-input');
                     
@@ -2087,6 +2246,7 @@
                 },
 
                 back: () => {
+                    console.log('SetupWizard.back executing');
                     if (SetupWizard.currentStep > 0) {
                         SetupWizard.currentStep--;
                         SetupWizard.show();
@@ -2094,10 +2254,12 @@
                 },
 
                 skip: () => {
+                    console.log('SetupWizard.skip executing');
                     SetupWizard.finish(true);
                 },
 
                 finish: (wasSkipped = false) => {
+                    console.log('SetupWizard.finish executing, skipped:', wasSkipped);
                     // Apply answers to form fields
                     SetupWizard.applyAnswers();
                     
@@ -2108,10 +2270,12 @@
                     
                     // Hide wizard
                     const wizard = document.getElementById('setup-wizard');
-                    wizard.classList.remove('open');
-                    // Reset inline opacity and pointer-events styles to ensure proper hiding
-                    wizard.style.opacity = '0';
-                    wizard.style.pointerEvents = 'none';
+                    if (wizard) {
+                        wizard.classList.remove('open');
+                        // Reset inline opacity and pointer-events styles to ensure proper hiding
+                        wizard.style.opacity = '0';
+                        wizard.style.pointerEvents = 'none';
+                    }
                     
                     // Mark as completed
                     localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
@@ -2123,131 +2287,35 @@
                 },
 
                 applyAnswers: () => {
-                    // Map wizard answers to form fields
-                    const fieldMap = {
-                        'starting_capital': els.startCap,
-                        'existing_quantity': els.existQty,
-                        'current_price': els.currPrice,
-                        'number_of_rungs': els.rungsInput,
-                        'depth': els.depthInput,
-                        'skew_value': els.skew,
-                        'fee_value': els.feeValue,
-                        'sell_only_mode': els.sellOnlyCheck
-                    };
-
-                    // Always ensure number_of_rungs is set (default 8)
-                    if (SetupWizard.answers['number_of_rungs'] === undefined) {
-                        SetupWizard.answers['number_of_rungs'] = 8;
-                    }
-
+                    if (SetupWizard.answers['number_of_rungs'] === undefined) SetupWizard.answers['number_of_rungs'] = 8;
+                    const fieldMap = SetupWizard.getFieldMap();
                     Object.keys(SetupWizard.answers).forEach(field => {
-                        const value = SetupWizard.answers[field];
-                        const element = fieldMap[field];
-                        
-                        if (element) {
-                            if (field === 'starting_capital') {
-                                element.value = Utils.formatNumberWithCommas(value.toString());
-                            } else if (field === 'existing_quantity') {
-                                element.value = value;
-                            } else if (field === 'number_of_rungs') {
-                                element.value = Math.round(value);
-                                els.rungs.value = Math.round(value);
-                                els.rungsDisplay.textContent = Math.round(value);
-                            } else if (field === 'depth') {
-                                element.value = value;
-                                els.depth.value = value;
-                            } else if (field === 'skew_value') {
-                                element.value = value;
-                                const v = parseInt(value);
-                                if (v === 0) els.skewLabel.textContent = "Flat";
-                                else if (v <= 30) els.skewLabel.textContent = "Gentle";
-                                else if (v <= 70) els.skewLabel.textContent = "Moderate";
-                                else els.skewLabel.textContent = "Aggressive";
-                            } else if (field === 'sell_only_mode') {
-                                element.checked = value;
-                                if (value) {
-                                    els.sellOnlyInputs.classList.remove('hidden');
-                                } else {
-                                    els.sellOnlyInputs.classList.add('hidden');
-                                }
-                            } else {
-                                element.value = value;
-                            }
-                        }
+                        SetupWizard.setFieldValue(field, SetupWizard.answers[field], fieldMap[field]);
                     });
                 },
 
                 updateFormInRealTime: () => {
-                    // Update form as user progresses through wizard
-                    let question = SetupWizard.questions[SetupWizard.currentStep];
+                    const question = SetupWizard.questions[SetupWizard.currentStep];
                     if (!question) return;
-                    
                     const isSellOnly = SetupWizard.answers['sell_only_mode'] === true;
                     
-                    // Recalculate depth from target price if needed
+                    // Recalculate depth from target price
                     if (question.field === 'target_price' || SetupWizard.answers['target_price'] !== undefined) {
                         const currentPrice = SetupWizard.answers['current_price'] || 0;
                         const targetPrice = SetupWizard.answers['target_price'];
                         if (currentPrice > 0 && targetPrice > 0) {
-                            const depth = isSellOnly
-                                ? ((targetPrice - currentPrice) / currentPrice) * 100
-                                : ((currentPrice - targetPrice) / currentPrice) * 100;
-                            SetupWizard.answers['depth'] = Math.abs(depth);
+                            SetupWizard.answers['depth'] = Math.abs((isSellOnly ? targetPrice - currentPrice : currentPrice - targetPrice) / currentPrice * 100);
                         }
                     }
                     
-                    // Check if we need to use the quantity field instead of capital
-                    let actualField = question.field;
-                    if (question.field === 'starting_capital' && isSellOnly) {
-                        actualField = 'existing_quantity';
-                    }
-                    
-                    const fieldMap = {
-                        'starting_capital': els.startCap,
-                        'existing_quantity': els.existQty,
-                        'current_price': els.currPrice,
-                        'number_of_rungs': els.rungsInput,
-                        'depth': els.depthInput,
-                        'skew_value': els.skew,
-                        'fee_value': els.feeValue,
-                        'sell_only_mode': els.sellOnlyCheck
-                    };
-
-                    const element = fieldMap[actualField];
-                    const answer = SetupWizard.answers[actualField] !== undefined ? SetupWizard.answers[actualField] : SetupWizard.answers[question.field];
-                    
-                    if (element && answer !== undefined) {
-                        if (actualField === 'starting_capital') {
-                            element.value = Utils.formatNumberWithCommas(answer.toString());
-                        } else if (actualField === 'existing_quantity') {
-                            element.value = answer;
-                        } else if (actualField === 'number_of_rungs') {
-                            element.value = Math.round(answer);
-                            els.rungs.value = Math.round(answer);
-                            els.rungsDisplay.textContent = Math.round(answer);
-                        } else if (actualField === 'depth') {
-                            element.value = answer;
-                            els.depth.value = answer;
-                        } else if (actualField === 'skew_value') {
-                            element.value = answer;
-                            const v = parseInt(answer);
-                            if (v === 0) els.skewLabel.textContent = "Flat";
-                            else if (v <= 30) els.skewLabel.textContent = "Gentle";
-                            else if (v <= 70) els.skewLabel.textContent = "Moderate";
-                            else els.skewLabel.textContent = "Aggressive";
-                        } else if (actualField === 'sell_only_mode') {
-                            element.checked = answer;
-                            if (answer) {
-                                els.sellOnlyInputs.classList.remove('hidden');
-                            } else {
-                                els.sellOnlyInputs.classList.add('hidden');
-                            }
-                        } else {
-                            element.value = answer;
-                        }
-                    }
+                    const actualField = (question.field === 'starting_capital' && isSellOnly) ? 'existing_quantity' : question.field;
+                    const fieldMap = SetupWizard.getFieldMap();
+                    const answer = SetupWizard.answers[actualField] ?? SetupWizard.answers[question.field];
+                    SetupWizard.setFieldValue(actualField, answer, fieldMap[actualField]);
                 }
             };
+
+            SetupWizard.bindControls();
 
             // --- APP LOGIC ---
             const App = {
@@ -2314,9 +2382,9 @@
                 },
 
                 bindEvents: () => {
-                    // Mode Switch
-                    els.modeSimple.addEventListener('click', () => App.setMode('simple'));
-                    els.modePro.addEventListener('click', () => App.setMode('pro'));
+                    // Mode Switch (with null checks)
+                    if (els.modeSimple) els.modeSimple.addEventListener('click', () => App.setMode('simple'));
+                    if (els.modePro) els.modePro.addEventListener('click', () => App.setMode('pro'));
 
                     // Fees Toggle
                     if (els.showFeesToggle) {
@@ -2368,38 +2436,23 @@
                     if (chartUnitValue) chartUnitValue.addEventListener('click', () => updateChartUnitType('value'));
 
                     // How It Works Modal
-                    const howItWorksBtn = document.getElementById('intro-how-it-works');
                     const howItWorksModal = document.getElementById('how-it-works-modal');
-                    const howItWorksBackdrop = document.getElementById('how-it-works-backdrop');
-                    const howItWorksClose = document.getElementById('how-it-works-close');
-                    
-                    const toggleHowItWorks = (show) => howItWorksModal?.classList.toggle('open', show);
-                    if (howItWorksBtn) howItWorksBtn.addEventListener('click', () => toggleHowItWorks(true));
-                    if (howItWorksBackdrop) howItWorksBackdrop.addEventListener('click', () => toggleHowItWorks(false));
-                    if (howItWorksClose) howItWorksClose.addEventListener('click', () => toggleHowItWorks(false));
+                    const toggleHowItWorks = Utils.bindModal(howItWorksModal, 
+                        [document.getElementById('intro-how-it-works')],
+                        [document.getElementById('how-it-works-backdrop'), document.getElementById('how-it-works-close')]);
 
                     // Handle Intro Page
                     const enterBtn = document.getElementById('enter-app-btn');
                     if (enterBtn) {
                         enterBtn.addEventListener('click', () => {
-                            const introLayer = document.getElementById('intro-layer');
                             const wizard = document.getElementById('setup-wizard');
-                            
-                            // Prepare wizard data first (without showing it yet)
+                            if (!wizard) { console.error('Setup wizard not found'); return; }
                             SetupWizard.prepare();
-                            
-                            // Make wizard background visible instantly to cover screen immediately
                             wizard.style.opacity = '1';
                             wizard.style.pointerEvents = 'auto';
-                            
-                            // Start both transitions simultaneously for seamless effect
                             requestAnimationFrame(() => {
                                 SetupWizard.show();
-                                introLayer.style.opacity = '0';
-                                introLayer.style.pointerEvents = 'none';
-                                setTimeout(() => {
-                                    introLayer.style.display = 'none';
-                                }, 500);
+                                Utils.hideIntro(document.getElementById('intro-layer'));
                             });
                         });
                     }
@@ -2408,36 +2461,26 @@
                     const quickStartBtn = document.getElementById('quick-start-btn');
                     if (quickStartBtn) {
                         quickStartBtn.addEventListener('click', () => {
-                            const introLayer = document.getElementById('intro-layer');
-                            
                             // Set example values directly
-                            els.startCap.value = '10,000';
-                            els.currPrice.value = '100';
-                            els.depth.value = '25';
-                            els.depthInput.value = '25';
-                            els.rungs.value = '10';
-                            els.rungsInput.value = '10';
-                            els.rungsDisplay.textContent = '10';
-                            els.skew.value = '50';
+                            if (els.startCap) els.startCap.value = '10,000';
+                            if (els.currPrice) els.currPrice.value = '100';
+                            if (els.depth) els.depth.value = '25';
+                            if (els.depthInput) els.depthInput.value = '25';
+                            if (els.rungs) els.rungs.value = '10';
+                            if (els.rungsInput) els.rungsInput.value = '10';
+                            if (els.rungsDisplay) els.rungsDisplay.textContent = '10';
+                            if (els.skew) els.skew.value = '50';
                             
-                            // Hide intro and skip wizard
-                            introLayer.style.opacity = '0';
-                            introLayer.style.pointerEvents = 'none';
-                            setTimeout(() => {
-                                introLayer.style.display = 'none';
-                            }, 500);
-                            
-                            // Mark setup as done
+                            Utils.hideIntro(document.getElementById('intro-layer'));
                             localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
-                            
-                            // Calculate with defaults
                             App.calculatePlan();
                             
-                            // Show a helpful toast
                             const toast = document.getElementById('toast');
-                            toast.textContent = '✨ Example plan loaded! Adjust values to customize.';
-                            toast.classList.add('show');
-                            setTimeout(() => toast.classList.remove('show'), 3000);
+                            if (toast) {
+                                toast.textContent = '✨ Example plan loaded! Adjust values to customize.';
+                                toast.classList.add('show');
+                                setTimeout(() => toast.classList.remove('show'), 3000);
+                            }
                         });
                     }
 
@@ -2473,113 +2516,13 @@
                     
                     // Skew Sync
                     els.skew.addEventListener('input', () => {
-                        const v = parseInt(els.skew.value);
-                        if (v === 0) els.skewLabel.textContent = "Flat";
-                        else if (v <= 30) els.skewLabel.textContent = "Gentle";
-                        else if (v <= 70) els.skewLabel.textContent = "Moderate";
-                        else els.skewLabel.textContent = "Aggressive";
+                        els.skewLabel.textContent = Utils.getSkewLabel(parseInt(els.skew.value));
                         App.debouncedCalc();
                     });
 
-                    // Format Initial Capital with commas
-                    if (els.startCap) {
-                        const sanitizeInput = (value) => {
-                            if (value === null || value === undefined) return '';
-                            const strValue = value.toString();
-                            if (strValue === '' || strValue === '-' || strValue === '.' || strValue === '-.') {
-                                return strValue;
-                            }
-                            let sanitized = strValue.replace(/,/g, '');
-                            let sign = '';
-                            if (sanitized.startsWith('-')) {
-                                sign = '-';
-                                sanitized = sanitized.slice(1);
-                            }
-                            sanitized = sanitized.replace(/[^0-9.]/g, '');
-                            const hadDecimal = sanitized.includes('.');
-                            const parts = sanitized.split('.');
-                            const integerPart = parts.shift() || '';
-                            const decimalPart = parts.join('');
-                            let normalized = sign + integerPart;
-                            if (hadDecimal) {
-                                normalized += '.' + decimalPart;
-                                if (sanitized.endsWith('.') && decimalPart.length === 0) {
-                                    normalized += '';
-                                }
-                            }
-                            return normalized;
-                        };
-
-                        els.startCap.addEventListener('focus', (e) => {
-                            e.target.value = Utils.stripCommas(e.target.value);
-                        });
-
-                        els.startCap.addEventListener('input', (e) => {
-                            const cursorPos = e.target.selectionStart || 0;
-                            const valueBefore = e.target.value;
-                            const normalized = sanitizeInput(valueBefore);
-                            e.target.value = normalized;
-                            const diff = e.target.value.length - valueBefore.length;
-                            const newPos = Math.max(0, cursorPos + diff);
-                            e.target.setSelectionRange(newPos, newPos);
-                            App.debouncedCalc();
-                        });
-                        
-                        els.startCap.addEventListener('blur', (e) => {
-                            const normalized = sanitizeInput(e.target.value);
-                            e.target.value = Utils.formatNumberWithCommas(normalized);
-                        });
-                    }
-
-                    // Format Asset Price with commas
-                    if (els.currPrice) {
-                        const sanitizeInput = (value) => {
-                            if (value === null || value === undefined) return '';
-                            const strValue = value.toString();
-                            if (strValue === '' || strValue === '-' || strValue === '.' || strValue === '-.') {
-                                return strValue;
-                            }
-                            let sanitized = strValue.replace(/,/g, '');
-                            let sign = '';
-                            if (sanitized.startsWith('-')) {
-                                sign = '-';
-                                sanitized = sanitized.slice(1);
-                            }
-                            sanitized = sanitized.replace(/[^0-9.]/g, '');
-                            const hadDecimal = sanitized.includes('.');
-                            const parts = sanitized.split('.');
-                            const integerPart = parts.shift() || '';
-                            const decimalPart = parts.join('');
-                            let normalized = sign + integerPart;
-                            if (hadDecimal) {
-                                normalized += '.' + decimalPart;
-                                if (sanitized.endsWith('.') && decimalPart.length === 0) {
-                                    normalized += '';
-                                }
-                            }
-                            return normalized;
-                        };
-
-                        els.currPrice.addEventListener('focus', (e) => {
-                            e.target.value = Utils.stripCommas(e.target.value);
-                        });
-
-                        els.currPrice.addEventListener('input', (e) => {
-                            const cursorPos = e.target.selectionStart || 0;
-                            const valueBefore = e.target.value;
-                            const normalized = sanitizeInput(valueBefore);
-                            e.target.value = normalized;
-                            const diff = e.target.value.length - valueBefore.length;
-                            const newPos = Math.max(0, cursorPos + diff);
-                            e.target.setSelectionRange(newPos, newPos);
-                            App.debouncedCalc();
-                        });
-                        
-                        els.currPrice.addEventListener('blur', (e) => {
-                            const normalized = sanitizeInput(e.target.value);
-                            e.target.value = Utils.formatNumberWithCommas(normalized);
-                        });
-                    }
+                    // Format currency inputs with commas
+                    Utils.bindCurrencyInput(els.startCap, App.debouncedCalc);
+                    Utils.bindCurrencyInput(els.currPrice, App.debouncedCalc);
 
                     // Standard Inputs
                     const inputs = [els.buyFloor, els.sellCeiling, 
@@ -2592,21 +2535,21 @@
                     const feeDollarPrefix = document.getElementById('fee_dollar_prefix');
                     if (feeTypePercent && feeTypeFixed) {
                         const updateFeeType = (value) => {
-                            els.feeType.value = value;
+                            if (els.feeType) els.feeType.value = value;
                             if (value === 'percent') {
                                 feeTypePercent.classList.add('active');
                                 feeTypeFixed.classList.remove('active');
                                 if (feeDollarPrefix) {
                                     feeDollarPrefix.classList.add('hidden');
-                                    els.feeValue.style.paddingLeft = '';
                                 }
+                                if (els.feeValue) els.feeValue.style.paddingLeft = '';
                             } else {
                                 feeTypeFixed.classList.add('active');
                                 feeTypePercent.classList.remove('active');
                                 if (feeDollarPrefix) {
                                     feeDollarPrefix.classList.remove('hidden');
-                                    els.feeValue.style.paddingLeft = '2.5rem';
                                 }
+                                if (els.feeValue) els.feeValue.style.paddingLeft = '2.5rem';
                             }
                             App.calculatePlan();
                         };
@@ -2636,39 +2579,27 @@
 
                     const setSellOnlyMode = (isSellOnly) => {
                         State.sellOnlyMode = isSellOnly;
-                        els.sellOnlyCheck.checked = isSellOnly;
+                        if (els.sellOnlyCheck) els.sellOnlyCheck.checked = isSellOnly;
                         
-                        // Update mode cards
-                        if (isSellOnly) {
-                            modeBuyBtn.classList.remove('active', 'border-red-500/50', 'bg-red-500/10');
-                            modeBuyBtn.classList.add('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                            modeBuyCheck.style.opacity = '0';
-                            
-                            modeSellBtn.classList.add('active', 'border-green-500/50', 'bg-green-500/10');
-                            modeSellBtn.classList.remove('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                            modeSellCheck.style.opacity = '1';
-                            
-                            buyModeInputs.classList.add('hidden');
-                            sellModeInputs.classList.remove('hidden');
-                            document.body.classList.add('sell-mode-active');
-                            
-                            // Auto-switch to sell tab
-                            App.switchTab('sell');
-                        } else {
-                            modeSellBtn.classList.remove('active', 'border-green-500/50', 'bg-green-500/10');
-                            modeSellBtn.classList.add('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                            modeSellCheck.style.opacity = '0';
-                            
-                            modeBuyBtn.classList.add('active', 'border-red-500/50', 'bg-red-500/10');
-                            modeBuyBtn.classList.remove('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                            modeBuyCheck.style.opacity = '1';
-                            
-                            sellModeInputs.classList.add('hidden');
-                            buyModeInputs.classList.remove('hidden');
-                            document.body.classList.remove('sell-mode-active');
-                            
-                            State.sellOnlyHighestExecuted = null;
-                        }
+                        const updateModeCard = (btn, check, isActive, color) => {
+                            if (btn) {
+                                btn.classList.toggle('active', isActive);
+                                btn.classList.toggle(`border-${color}-500/50`, isActive);
+                                btn.classList.toggle(`bg-${color}-500/10`, isActive);
+                                btn.classList.toggle('border-[var(--color-border)]', !isActive);
+                                btn.classList.toggle('bg-[var(--color-card-muted)]', !isActive);
+                            }
+                            if (check) check.style.opacity = isActive ? '1' : '0';
+                        };
+                        
+                        updateModeCard(modeBuyBtn, modeBuyCheck, !isSellOnly, 'red');
+                        updateModeCard(modeSellBtn, modeSellCheck, isSellOnly, 'green');
+                        buyModeInputs?.classList.toggle('hidden', isSellOnly);
+                        sellModeInputs?.classList.toggle('hidden', !isSellOnly);
+                        document.body.classList.toggle('sell-mode-active', isSellOnly);
+                        
+                        if (isSellOnly) App.switchTab('sell');
+                        else State.sellOnlyHighestExecuted = null;
                         
                         App.calculatePlan();
                     };
@@ -2677,7 +2608,7 @@
                     if (modeSellBtn) modeSellBtn.addEventListener('click', () => setSellOnlyMode(true));
                     
                     // Sync price inputs between modes
-                    if (currentPriceSell) {
+                    if (currentPriceSell && els.currPrice) {
                         currentPriceSell.addEventListener('input', () => {
                             els.currPrice.value = currentPriceSell.value;
                             App.debouncedCalc();
@@ -2688,56 +2619,47 @@
                     }
 
                     // Legacy checkbox handler (for compatibility)
-                    els.sellOnlyCheck.addEventListener('change', () => {
-                        setSellOnlyMode(els.sellOnlyCheck.checked);
-                    });
-
-                    els.equalQtyCheck.addEventListener('change', () => {
-                        els.skew.disabled = els.equalQtyCheck.checked;
-                        if(els.equalQtyCheck.checked) els.skew.classList.add('opacity-50');
-                        else els.skew.classList.remove('opacity-50');
-                        App.calculatePlan();
-                    });
-
-                    // Tabs & Buttons
-                    els.tabBuy.addEventListener('click', () => App.switchTab('buy'));
-                    els.tabSell.addEventListener('click', () => App.switchTab('sell'));
-                    els.themeBtn.addEventListener('click', App.toggleTheme);
-                    document.getElementById('download-csv-btn').addEventListener('click', App.exportCSV);
-                    document.getElementById('save-config-btn').addEventListener('click', App.saveConfig);
-                    document.getElementById('load-config-file').addEventListener('change', App.loadConfig);
-                    
-                    // Modal (QR/Donate)
-                    const toggleModal = (show) => els.qrModal.classList.toggle('open', show);
-                    els.solBtn.addEventListener('click', () => toggleModal(true));
-                    els.qrBackdrop.addEventListener('click', () => toggleModal(false));
-                    els.qrClose.addEventListener('click', () => toggleModal(false));
-
-                    // Video Modal - lazy load iframe to improve page performance
-                    const videoIframe = els.videoModal.querySelector('iframe');
-                    const videoSrc = videoIframe ? (videoIframe.dataset.src || videoIframe.src) : '';
-                    
-                    const toggleVideo = (show) => {
-                        els.videoModal.classList.toggle('open', show);
-                        if (!show && videoIframe) {
-                             // Stop video by resetting src
-                             videoIframe.src = '';
-                        } else if (show && videoIframe && videoSrc) {
-                             // Lazy load iframe only when modal opens
-                             videoIframe.src = videoSrc;
-                        }
-                    };
-                    
-                    if(els.videoBtn) els.videoBtn.addEventListener('click', () => toggleVideo(true));
-                    if(els.videoBtnMobile) els.videoBtnMobile.addEventListener('click', () => toggleVideo(true));
-                    els.videoBackdrop.addEventListener('click', () => toggleVideo(false));
-                    els.videoClose.addEventListener('click', () => toggleVideo(false));
-
-                    // Intro Video Link (on start screen)
-                    const introVideoLink = document.getElementById('intro-video-link');
-                    if (introVideoLink) {
-                        introVideoLink.addEventListener('click', () => toggleVideo(true));
+                    if (els.sellOnlyCheck) {
+                        els.sellOnlyCheck.addEventListener('change', () => {
+                            setSellOnlyMode(els.sellOnlyCheck.checked);
+                        });
                     }
+
+                    if (els.equalQtyCheck) {
+                        els.equalQtyCheck.addEventListener('change', () => {
+                            if (els.skew) {
+                                els.skew.disabled = els.equalQtyCheck.checked;
+                                if(els.equalQtyCheck.checked) els.skew.classList.add('opacity-50');
+                                else els.skew.classList.remove('opacity-50');
+                            }
+                            App.calculatePlan();
+                        });
+                    }
+
+                    // Tabs & Buttons (with null checks)
+                    if (els.tabBuy) els.tabBuy.addEventListener('click', () => App.switchTab('buy'));
+                    if (els.tabSell) els.tabSell.addEventListener('click', () => App.switchTab('sell'));
+                    if (els.themeBtn) els.themeBtn.addEventListener('click', App.toggleTheme);
+                    
+                    const downloadBtn = document.getElementById('download-csv-btn');
+                    const saveConfigBtn = document.getElementById('save-config-btn');
+                    const loadConfigFile = document.getElementById('load-config-file');
+                    if (downloadBtn) downloadBtn.addEventListener('click', App.exportCSV);
+                    if (saveConfigBtn) saveConfigBtn.addEventListener('click', App.saveConfig);
+                    if (loadConfigFile) loadConfigFile.addEventListener('change', App.loadConfig);
+                    
+                    // QR Modal
+                    const toggleModal = Utils.bindModal(els.qrModal, [els.solBtn], [els.qrBackdrop, els.qrClose]);
+
+                    // Video Modal with lazy loading
+                    const videoIframe = els.videoModal?.querySelector('iframe');
+                    const videoSrc = videoIframe?.dataset.src || videoIframe?.src || '';
+                    const toggleVideo = (show) => {
+                        els.videoModal?.classList.toggle('open', show);
+                        if (videoIframe) videoIframe.src = show ? videoSrc : '';
+                    };
+                    [els.videoBtn, els.videoBtnMobile, document.getElementById('intro-video-link')].forEach(btn => btn?.addEventListener('click', () => toggleVideo(true)));
+                    [els.videoBackdrop, els.videoClose].forEach(el => el?.addEventListener('click', () => toggleVideo(false)));
 
                     // Global Escape key handler for all modals (better UX)
                     document.addEventListener('keydown', (e) => {
@@ -2754,8 +2676,8 @@
                     // Sticky Footer
                     if(els.stickyBtn) {
                         els.stickyBtn.addEventListener('click', () => {
-                            els.stickyDetails.classList.toggle('hidden');
-                            els.stickyChevron.classList.toggle('rotate-180');
+                            if (els.stickyDetails) els.stickyDetails.classList.toggle('hidden');
+                            if (els.stickyChevron) els.stickyChevron.classList.toggle('rotate-180');
                         });
                     }
                 },
@@ -2768,11 +2690,11 @@
                     const activeClass = "shadow-sm bg-[var(--color-card)] text-[var(--color-primary)]";
                     const inactiveClass = "text-[var(--color-text-secondary)] hover:text-[var(--color-text)]";
                     
-                    els.modeSimple.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='simple'?activeClass:inactiveClass}`;
-                    els.modePro.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='pro'?activeClass:inactiveClass}`;
+                    if (els.modeSimple) els.modeSimple.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='simple'?activeClass:inactiveClass}`;
+                    if (els.modePro) els.modePro.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='pro'?activeClass:inactiveClass}`;
                     
                     // Show/Hide Pro Controls
-                    els.proControls.classList.toggle('hidden', mode === 'simple');
+                    if (els.proControls) els.proControls.classList.toggle('hidden', mode === 'simple');
                     
                     // Adjust layout for customise mode - graph sits on side of configuration card
                     const mainGrid = document.getElementById('main-content-grid');
@@ -3050,24 +2972,19 @@
                     const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
                     const setCls = (id, cls) => { const el = document.getElementById(id); if(el) el.className = cls; };
                     
-                    // Update chart overlay summary
-                    setTxt('chart-summary-net-profit', Utils.fmtCurr(s.netProfit));
+                    // Update summary displays
+                    const summaryMap = {
+                        'chart-summary-net-profit': Utils.fmtCurr(s.netProfit), 'chart-summary-roi': Utils.fmtPct(s.roi),
+                        'chart-summary-avg-buy': Utils.fmtCurr(s.avgBuy), 'chart-summary-avg-sell': Utils.fmtCurr(s.avgSell),
+                        'chart-summary-total-fees': Utils.fmtCurr(s.totalFees), 'chart-summary-total-quantity': Utils.fmtNum(s.totalQuantity),
+                        'sticky-net-profit': Utils.fmtCurr(s.netProfit), 'sticky-roi': Utils.fmtPct(s.roi),
+                        'sticky-avg-buy': Utils.fmtCurr(s.avgBuy), 'sticky-avg-sell': Utils.fmtCurr(s.avgSell),
+                        'sticky-fees': Utils.fmtCurr(s.totalFees), 'sticky-vol': Utils.fmtNum(s.totalQuantity),
+                        'sticky-floor': Utils.fmtCurr(s.lowestBuy), 'sticky-ceiling': Utils.fmtCurr(s.highestSell)
+                    };
+                    Object.entries(summaryMap).forEach(([id, val]) => setTxt(id, val));
                     setCls('chart-summary-net-profit', `text-lg font-bold ${s.netProfit >= 0 ? 'text-[var(--color-primary)]' : 'text-[var(--color-invalid)]'}`);
-                    setTxt('chart-summary-roi', Utils.fmtPct(s.roi));
                     setCls('chart-summary-roi', `text-lg font-bold ${s.roi >= 0 ? 'text-green-600' : 'text-red-500'}`);
-                    setTxt('chart-summary-avg-buy', Utils.fmtCurr(s.avgBuy));
-                    setTxt('chart-summary-avg-sell', Utils.fmtCurr(s.avgSell));
-                    setTxt('chart-summary-total-fees', Utils.fmtCurr(s.totalFees));
-                    setTxt('chart-summary-total-quantity', Utils.fmtNum(s.totalQuantity));
-
-                    setTxt('sticky-net-profit', Utils.fmtCurr(s.netProfit));
-                    setTxt('sticky-roi', Utils.fmtPct(s.roi));
-                    setTxt('sticky-avg-buy', Utils.fmtCurr(s.avgBuy));
-                    setTxt('sticky-avg-sell', Utils.fmtCurr(s.avgSell));
-                    setTxt('sticky-fees', Utils.fmtCurr(s.totalFees));
-                    setTxt('sticky-vol', Utils.fmtNum(s.totalQuantity));
-                    setTxt('sticky-floor', Utils.fmtCurr(s.lowestBuy));
-                    setTxt('sticky-ceiling', Utils.fmtCurr(s.highestSell));
                     els.stickyFooter.classList.add('visible');
 
                     // Toggle Fee Cols
@@ -3147,34 +3064,21 @@
                     const isValue = State.chartUnitType === 'value';
                     const isSellOnly = State.sellOnlyMode;
 
-                    // Prepare data - buys sorted by price descending (highest first), sells ascending
-                    const buySeries  = isSellOnly ? [] : (buys || []).slice().sort((a, b) => b.price - a.price);
+                    // Prepare data and compute cumulative values
+                    const computeCumulatives = (series, valKey) => {
+                        let cumQty = 0, cumVal = 0;
+                        series.forEach(d => {
+                            const qty = d.assetSize ?? d.qty ?? d.size ?? d.volume ?? 0;
+                            const val = d[valKey] ?? d.capital ?? (qty * d.price) ?? 0;
+                            d.individualQty = qty; d.individualVal = val;
+                            cumQty += qty; cumVal += val;
+                            d.cumulativeQty = cumQty; d.cumulativeVal = cumVal;
+                        });
+                    };
+                    const buySeries = isSellOnly ? [] : (buys || []).slice().sort((a, b) => b.price - a.price);
                     const sellSeries = (sells || []).slice().sort((a, b) => a.price - b.price);
-
-                    // Compute cumulative values
-                    let cumQty = 0, cumVal = 0;
-                    buySeries.forEach(d => {
-                        const qty = d.assetSize ?? d.qty ?? d.size ?? d.volume ?? 0;
-                        const val = d.capital ?? d.netCapital ?? (qty * d.price) ?? 0;
-                        cumQty += qty;
-                        cumVal += val;
-                        d.individualQty = qty;
-                        d.individualVal = val;
-                        d.cumulativeQty = cumQty;
-                        d.cumulativeVal = cumVal;
-                    });
-
-                    cumQty = 0; cumVal = 0;
-                    sellSeries.forEach(d => {
-                        const qty = d.assetSize ?? d.qty ?? d.size ?? d.volume ?? 0;
-                        const val = d.capital ?? d.netRevenue ?? (qty * d.price) ?? 0;
-                        cumQty += qty;
-                        cumVal += val;
-                        d.individualQty = qty;
-                        d.individualVal = val;
-                        d.cumulativeQty = cumQty;
-                        d.cumulativeVal = cumVal;
-                    });
+                    computeCumulatives(buySeries, 'netCapital');
+                    computeCumulatives(sellSeries, 'netRevenue');
 
                     // Value accessors
                     const getIndividualValue = (d) => isValue ? d.individualVal : d.individualQty;
@@ -3226,99 +3130,40 @@
 
                     // Draw bars if enabled
                     if (showBars) {
-                        // Buy bars (red)
-                        if (buySeries.length > 0) {
-                            barsGroup.selectAll(".buy-bar")
-                                .data(buySeries)
-                                .enter()
-                                .append("rect")
-                                .attr("class", "buy-bar")
+                        const drawBars = (series, className, colorVar) => {
+                            if (!series.length) return;
+                            barsGroup.selectAll(`.${className}`)
+                                .data(series).enter().append("rect")
+                                .attr("class", className)
                                 .attr("x", margin.left)
                                 .attr("y", d => y(d.price) - effectiveBarHeight / 2)
-                                .attr("width", 0)
-                                .attr("height", effectiveBarHeight)
-                                .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
-                                .attr("opacity", 0.7)
-                                .attr("rx", 2)
-                                .transition()
-                                .duration(600)
+                                .attr("width", 0).attr("height", effectiveBarHeight)
+                                .attr("fill", getComputedStyle(document.body).getPropertyValue(colorVar).trim())
+                                .attr("opacity", 0.7).attr("rx", 2)
+                                .transition().duration(600)
                                 .attr("width", d => Math.max(0, x(getIndividualValue(d)) - margin.left));
-                        }
-
-                        // Sell bars (green)
-                        barsGroup.selectAll(".sell-bar")
-                            .data(sellSeries)
-                            .enter()
-                            .append("rect")
-                            .attr("class", "sell-bar")
-                            .attr("x", margin.left)
-                            .attr("y", d => y(d.price) - effectiveBarHeight / 2)
-                            .attr("width", 0)
-                            .attr("height", effectiveBarHeight)
-                            .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
-                            .attr("opacity", 0.7)
-                            .attr("rx", 2)
-                            .transition()
-                            .duration(600)
-                            .attr("width", d => Math.max(0, x(getIndividualValue(d)) - margin.left));
+                        };
+                        drawBars(buySeries, "buy-bar", "--color-chart-buy-start");
+                        drawBars(sellSeries, "sell-bar", "--color-chart-sell-start");
                     }
 
                     // Draw cumulative lines if enabled
                     if (showCumulative) {
-                        const lineGenerator = d3.line()
-                            .x(d => x(getCumulativeValue(d)))
-                        .y(d => y(d.price))
-                        .curve(d3.curveStepAfter);
-
-                        // Buy cumulative line (red dashed)
-                        if (buySeries.length > 0) {
-                            lineGroup.append("path")
-                            .datum(buySeries)
-                                .attr("fill", "none")
-                                .attr("stroke", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
-                                .attr("stroke-width", 2.5)
-                                .attr("stroke-dasharray", "6 3")
-                                .attr("opacity", 0.9)
-                                .attr("d", lineGenerator);
-                            
-                            // Cumulative dots for buy
-                            lineGroup.selectAll(".buy-cum-dot")
-                                .data(buySeries)
-                                .enter()
-                                .append("circle")
-                                .attr("class", "buy-cum-dot")
-                                .attr("cx", d => x(getCumulativeValue(d)))
-                                .attr("cy", d => y(d.price))
-                                .attr("r", 4)
-                                .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
-                                .attr("stroke", "white")
-                                .attr("stroke-width", 1.5);
-                        }
-
-                        // Sell cumulative line (green dashed)
-                        if (sellSeries.length > 0) {
-                            lineGroup.append("path")
-                            .datum(sellSeries)
-                                .attr("fill", "none")
-                                .attr("stroke", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
-                                .attr("stroke-width", 2.5)
-                                .attr("stroke-dasharray", "6 3")
-                                .attr("opacity", 0.9)
-                                .attr("d", lineGenerator);
-                            
-                            // Cumulative dots for sell
-                            lineGroup.selectAll(".sell-cum-dot")
-                                .data(sellSeries)
-                                .enter()
-                                .append("circle")
-                                .attr("class", "sell-cum-dot")
-                                .attr("cx", d => x(getCumulativeValue(d)))
-                                .attr("cy", d => y(d.price))
-                                .attr("r", 4)
-                                .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
-                                .attr("stroke", "white")
-                                .attr("stroke-width", 1.5);
-                        }
+                        const lineGenerator = d3.line().x(d => x(getCumulativeValue(d))).y(d => y(d.price)).curve(d3.curveStepAfter);
+                        const drawCumulativeLine = (series, dotClass, colorVar) => {
+                            if (!series.length) return;
+                            const color = getComputedStyle(document.body).getPropertyValue(colorVar).trim();
+                            lineGroup.append("path").datum(series)
+                                .attr("fill", "none").attr("stroke", color)
+                                .attr("stroke-width", 2.5).attr("stroke-dasharray", "6 3")
+                                .attr("opacity", 0.9).attr("d", lineGenerator);
+                            lineGroup.selectAll(`.${dotClass}`).data(series).enter().append("circle")
+                                .attr("class", dotClass)
+                                .attr("cx", d => x(getCumulativeValue(d))).attr("cy", d => y(d.price))
+                                .attr("r", 4).attr("fill", color).attr("stroke", "white").attr("stroke-width", 1.5);
+                        };
+                        drawCumulativeLine(buySeries, "buy-cum-dot", "--color-chart-buy-start");
+                        drawCumulativeLine(sellSeries, "sell-cum-dot", "--color-chart-sell-start");
                     }
 
                     // Mid price line (only show in buy mode)
