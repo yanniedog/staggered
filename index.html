@@ -197,20 +197,20 @@
         }
         .helper-tooltip:hover { border-color: var(--color-primary); color: var(--color-primary); }
 
-        .fee-type-btn {
+        .fee-type-btn, .chart-toggle-btn {
             border: none;
             outline: none;
             cursor: pointer;
         }
-        .fee-type-btn.active {
+        .fee-type-btn.active, .chart-toggle-btn.active {
             background-color: var(--color-primary);
             color: var(--color-primary-contrast);
         }
-        .fee-type-btn:not(.active) {
+        .fee-type-btn:not(.active), .chart-toggle-btn:not(.active) {
             background-color: transparent;
             color: var(--color-text-secondary);
         }
-        .fee-type-btn:not(.active):hover {
+        .fee-type-btn:not(.active):hover, .chart-toggle-btn:not(.active):hover {
             color: var(--color-text);
             background-color: var(--color-card);
         }
@@ -725,190 +725,229 @@
                         </div>
 
                         <!-- Pro Controls Container -->
-                        <div id="pro-controls" class="hidden space-y-6 pt-2 border-t border-[var(--color-border)]">
+                        <div id="pro-controls" class="hidden space-y-4 pt-4 border-t border-[var(--color-border)]">
 
-                        <!-- Ladder Settings Group -->
-                        <div class="space-y-5">
-                            <div class="flex items-center gap-2 mb-4">
-                                <span class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Configuration</span>
-                            </div>
-                            
-                            <div id="section-ladder-settings" class="space-y-5">
-                            <!-- Rungs -->
-                            <div>
-                                <div class="flex justify-between mb-1.5">
-                                    <div class="flex items-center gap-1">
-                                        <label class="text-sm font-medium text-[var(--color-text-secondary)]">Number of Orders</label>
-                                        <button type="button" class="helper-tooltip" title="How many separate buy/sell orders (rungs) to place in the ladder.">?</button>
+                            <!-- Section 1: Order Structure -->
+                            <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                                <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                                        <span class="text-sm font-semibold text-[var(--color-text)]">Order Structure</span>
                                     </div>
-                                    <span id="number_of_rungs_display" class="text-sm font-mono font-bold text-[var(--color-primary)]">10</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <input type="range" id="number_of_rungs" min="2" max="50" value="10" class="flex-1">
-                                    <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" class="form-input w-16 rounded-md p-1 text-center text-xs">
-                                </div>
-                            </div>
-
-                            <!-- Range/Depth -->
-                            <div>
-                                <div class="flex justify-between mb-1.5">
-                                    <div class="flex items-center gap-1">
-                                        <label class="text-sm font-medium text-[var(--color-text-secondary)]">Price Range / Depth</label>
-                                        <button type="button" class="helper-tooltip" title="How far below/above the current price the ladder should extend. Use '%' for percentage width or 'Fixed' to set specific prices.">?</button>
-                                    </div>
-                                    <select id="price_range_mode" class="bg-transparent text-xs font-medium text-[var(--color-primary)] border-none p-0 focus:ring-0 cursor-pointer text-right">
-                                        <option value="width">Percentage (%)</option>
-                                        <option value="floor">Fixed Price Range</option>
-                                    </select>
-                                </div>
-                                
-                                <div id="width-mode-container">
-                                    <div class="flex items-center gap-3">
-                                        <input type="range" id="depth" min="0.1" max="99" step="0.1" value="20" class="flex-1">
-                                        <div class="relative">
-                                            <input type="number" id="depth_input" value="20" step="0.1" class="form-input w-16 rounded-md p-1 text-center text-xs pr-4">
-                                            <span class="absolute right-1 top-1 text-[10px] text-[var(--color-text-muted)]">%</span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div id="floor-mode-container" class="hidden grid grid-cols-2 gap-3 mt-2">
+                                    <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div class="p-4 space-y-4">
+                                    <!-- Number of Orders -->
                                     <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] text-[var(--color-text-muted)]">Buy Floor ($)</label>
-                                            <button type="button" class="helper-tooltip" title="The price of the absolute lowest buy order.">?</button>
+                                        <div class="flex justify-between mb-1.5">
+                                            <div class="flex items-center gap-1">
+                                                <label class="text-xs font-medium text-[var(--color-text-secondary)]">Number of Orders</label>
+                                                <button type="button" class="helper-tooltip" title="How many separate buy/sell orders (rungs) to place in the ladder.">?</button>
+                                            </div>
+                                            <span id="number_of_rungs_display" class="text-xs font-mono font-bold text-[var(--color-primary)]">10</span>
                                         </div>
-                                        <div class="relative flex items-center">
-                                            <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-xs">$</span>
-                                            <input type="number" id="buy_floor" class="form-input w-full rounded p-2 text-xs pl-6" placeholder="Low">
+                                        <div class="flex items-center gap-3">
+                                            <input type="range" id="number_of_rungs" min="2" max="50" value="10" class="flex-1">
+                                            <input type="number" id="number_of_rungs_input" value="10" min="2" max="50" class="form-input w-14 rounded-md p-1 text-center text-xs">
                                         </div>
                                     </div>
+
+                                    <!-- Spacing Mode -->
                                     <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] text-[var(--color-text-muted)]">Sell Ceiling ($)</label>
-                                            <button type="button" class="helper-tooltip" title="The price of the absolute highest sell order.">?</button>
+                                        <div class="flex items-center gap-1 mb-1.5">
+                                            <label class="text-xs font-medium text-[var(--color-text-secondary)]">Spacing Mode</label>
+                                            <button type="button" class="helper-tooltip" title="'Absolute' means equal dollar distance between orders. 'Relative' means geometric progression (percentage distance).">?</button>
                                         </div>
-                                        <div class="relative flex items-center">
-                                            <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-xs">$</span>
-                                            <input type="number" id="sell_ceiling" class="form-input w-full rounded p-2 text-xs pl-6" placeholder="High">
+                                        <select id="spacing_mode" class="form-input w-full rounded-lg p-2 text-sm">
+                                            <option value="absolute">Absolute (Equal Steps)</option>
+                                            <option value="relative">Relative (Geometric %)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- Section 2: Price Range -->
+                            <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                                <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                                        <span class="text-sm font-semibold text-[var(--color-text)]">Price Range</span>
+                                    </div>
+                                    <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div class="p-4 space-y-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-xs text-[var(--color-text-muted)]">Range Type</span>
+                                        <select id="price_range_mode" class="bg-[var(--color-card)] text-xs font-medium text-[var(--color-primary)] border border-[var(--color-border)] rounded-md px-2 py-1 focus:ring-1 focus:ring-[var(--color-primary)] cursor-pointer">
+                                            <option value="width">Percentage (%)</option>
+                                            <option value="floor">Fixed Price Range</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div id="width-mode-container">
+                                        <div class="flex items-center gap-3">
+                                            <input type="range" id="depth" min="0.1" max="99" step="0.1" value="20" class="flex-1">
+                                            <div class="relative">
+                                                <input type="number" id="depth_input" value="20" step="0.1" class="form-input w-16 rounded-md p-1.5 text-center text-xs pr-5">
+                                                <span class="absolute right-2 top-1/2 -translate-y-1/2 text-[10px] text-[var(--color-text-muted)]">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div id="floor-mode-container" class="hidden grid grid-cols-2 gap-3">
+                                        <div>
+                                            <div class="flex items-center gap-1 mb-1">
+                                                <label class="text-[10px] text-[var(--color-text-muted)]">Buy Floor</label>
+                                                <button type="button" class="helper-tooltip" title="The price of the absolute lowest buy order.">?</button>
+                                            </div>
+                                            <div class="relative flex items-center">
+                                                <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-xs">$</span>
+                                                <input type="number" id="buy_floor" class="form-input w-full rounded-lg p-2 text-xs pl-6" placeholder="Low">
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center gap-1 mb-1">
+                                                <label class="text-[10px] text-[var(--color-text-muted)]">Sell Ceiling</label>
+                                                <button type="button" class="helper-tooltip" title="The price of the absolute highest sell order.">?</button>
+                                            </div>
+                                            <div class="relative flex items-center">
+                                                <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-xs">$</span>
+                                                <input type="number" id="sell_ceiling" class="form-input w-full rounded-lg p-2 text-xs pl-6" placeholder="High">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </details>
 
-                            <!-- Skew -->
-                            <div>
-                                <div class="flex justify-between mb-1.5">
-                                    <div class="flex items-center gap-1">
-                                        <label class="text-sm font-medium text-[var(--color-text-secondary)]">Allocation Skew</label>
-                                        <button type="button" class="helper-tooltip" title="Adjusts capital distribution. 'Flat' means equal distribution. 'Curved' allocates more capital to lower buy prices (martingale style).">?</button>
+                            <!-- Section 3: Allocation -->
+                            <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                                <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                                        <span class="text-sm font-semibold text-[var(--color-text)]">Allocation</span>
                                     </div>
-                                    <span class="text-xs text-[var(--color-text-muted)]" id="skew_label">Moderate</span>
-                                </div>
-                                <div class="flex items-center gap-3">
-                                    <span class="text-[10px] font-bold text-[var(--color-text-muted)]">FLAT</span>
-                                    <input type="range" id="skew_value" min="0" max="100" value="50" class="flex-1">
-                                    <span class="text-[10px] font-bold text-[var(--color-text-muted)]">CURVED</span>
-                                    <input type="number" id="skew_value_input" min="0" max="100" value="50" class="form-input w-14 rounded-md p-1 text-center text-xs hidden">
-                                </div>
-                            </div>
-
-                            <!-- Fees -->
-                            <div>
-                                <div class="flex items-center gap-1 mb-1.5">
-                                    <label class="text-sm font-medium text-[var(--color-text-secondary)]">Fee</label>
-                                    <button type="button" class="helper-tooltip" title="Trading fee as a percentage or fixed dollar amount per trade.">?</button>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <div class="flex rounded-lg border border-[var(--color-border)] overflow-hidden bg-[var(--color-card-muted)]">
-                                        <button type="button" id="fee_type_percent" class="fee-type-btn active px-3 py-2 text-xs font-medium transition-colors" data-value="percent">%</button>
-                                        <button type="button" id="fee_type_fixed" class="fee-type-btn px-3 py-2 text-xs font-medium transition-colors" data-value="fixed">$</button>
-                                    </div>
-                                    <div class="relative flex items-center flex-1">
-                                        <span id="fee_dollar_prefix" class="absolute left-3 text-[var(--color-text-secondary)] font-mono hidden">$</span>
-                                        <input type="number" id="fee_value" value="0.1" step="0.01" class="form-input w-full rounded-lg p-2.5 font-mono">
-                                    </div>
-                                    <input type="hidden" id="fee_type" value="percent">
-                                </div>
-                            </div>
-                            </div>
-                        </div>
-
-                        <!-- Advanced Settings (Always visible in Pro Mode) -->
-                        <div class="pt-2">
-                            <div class="flex items-center gap-2 mb-4">
-                                <span class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Advanced</span>
-                            </div>
-                            
-                            <div id="advanced-settings" class="space-y-4">
-                                
-                                <!-- Sell Only Mode -->
-                                <div class="flex items-center justify-between p-2 bg-[var(--color-card)] rounded border border-[var(--color-border)]">
+                                    <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div class="p-4 space-y-4">
+                                    <!-- Skew -->
                                     <div>
-                                        <div class="flex items-center gap-1">
-                                            <span class="block text-sm font-medium text-[var(--color-text)]">Sell-Only Mode</span>
-                                            <button type="button" class="helper-tooltip" title="Enable this if you already hold the asset and want to plan a sell-ladder only.">?</button>
+                                        <div class="flex justify-between mb-1.5">
+                                            <div class="flex items-center gap-1">
+                                                <label class="text-xs font-medium text-[var(--color-text-secondary)]">Capital Skew</label>
+                                                <button type="button" class="helper-tooltip" title="Adjusts capital distribution. 'Flat' means equal distribution. 'Curved' allocates more capital to lower buy prices (martingale style).">?</button>
+                                            </div>
+                                            <span class="text-xs font-medium text-[var(--color-primary)]" id="skew_label">Moderate</span>
                                         </div>
-                                        <span class="block text-xs text-[var(--color-text-muted)]">Simulate exit from existing position</span>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-[9px] font-bold text-[var(--color-text-muted)] w-8">FLAT</span>
+                                            <input type="range" id="skew_value" min="0" max="100" value="50" class="flex-1">
+                                            <span class="text-[9px] font-bold text-[var(--color-text-muted)] w-12 text-right">CURVED</span>
+                                            <input type="number" id="skew_value_input" min="0" max="100" value="50" class="form-input w-14 rounded-md p-1 text-center text-xs hidden">
+                                        </div>
                                     </div>
-                                    <label class="relative inline-flex items-center cursor-pointer">
-                                        <input type="checkbox" id="sell_only_mode" class="sr-only peer">
-                                        <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--color-primary)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[var(--color-primary)]"></div>
-                                    </label>
+
+                                    <!-- Equal Quantity -->
+                                    <div class="flex items-center gap-2 p-2 bg-[var(--color-card)] rounded-lg border border-[var(--color-border)]">
+                                        <input type="checkbox" id="equal_quantity_mode" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
+                                        <div class="flex items-center gap-1 flex-1">
+                                            <label for="equal_quantity_mode" class="text-xs text-[var(--color-text)]">Force Equal Quantity</label>
+                                            <button type="button" class="helper-tooltip" title="Overrides skew settings to buy/sell the exact same amount of asset at every rung.">?</button>
+                                        </div>
+                                    </div>
                                 </div>
-                                
-                                <div id="sell-only-inputs" class="hidden grid grid-cols-2 gap-3">
+                            </details>
+
+                            <!-- Section 4: Fees -->
+                            <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden">
+                                <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-[var(--color-primary)]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                                        <span class="text-sm font-semibold text-[var(--color-text)]">Fees</span>
+                                    </div>
+                                    <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div class="p-4 space-y-4">
+                                    <!-- Fee Type & Value -->
                                     <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] font-medium">Held Qty</label>
-                                            <button type="button" class="helper-tooltip" title="The amount of the asset you currently possess.">?</button>
+                                        <div class="flex items-center gap-1 mb-1.5">
+                                            <label class="text-xs font-medium text-[var(--color-text-secondary)]">Trading Fee</label>
+                                            <button type="button" class="helper-tooltip" title="Trading fee as a percentage or fixed dollar amount per trade.">?</button>
                                         </div>
-                                        <input type="number" id="existing_quantity" value="50" class="form-input w-full rounded p-1.5 text-sm">
+                                        <div class="flex items-center gap-2">
+                                            <div class="flex rounded-lg border border-[var(--color-border)] overflow-hidden bg-[var(--color-card)]">
+                                                <button type="button" id="fee_type_percent" class="fee-type-btn active px-3 py-2 text-xs font-medium transition-colors" data-value="percent">%</button>
+                                                <button type="button" id="fee_type_fixed" class="fee-type-btn px-3 py-2 text-xs font-medium transition-colors" data-value="fixed">$</button>
+                                            </div>
+                                            <div class="relative flex items-center flex-1">
+                                                <span id="fee_dollar_prefix" class="absolute left-3 text-[var(--color-text-secondary)] font-mono hidden">$</span>
+                                                <input type="number" id="fee_value" value="0.1" step="0.01" class="form-input w-full rounded-lg p-2 font-mono text-sm">
+                                            </div>
+                                            <input type="hidden" id="fee_type" value="percent">
+                                        </div>
                                     </div>
+
+                                    <!-- Fee Settlement -->
                                     <div>
-                                        <div class="flex items-center gap-1 mb-1">
-                                            <label class="text-[10px] font-medium">Avg Cost</label>
-                                            <button type="button" class="helper-tooltip" title="Your average buy price for the assets you hold.">?</button>
+                                        <div class="flex items-center gap-1 mb-1.5">
+                                            <label class="text-xs font-medium text-[var(--color-text-secondary)]">Settlement</label>
+                                            <button type="button" class="helper-tooltip" title="'Net' means fees reduce the asset received. 'External' means fees are paid from a separate cash balance.">?</button>
                                         </div>
-                                        <div class="relative flex items-center">
-                                            <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-sm">$</span>
-                                            <input type="number" id="existing_avg_price" value="0" class="form-input w-full rounded p-1.5 text-sm pl-6">
+                                        <select id="fee_settlement" class="form-input w-full rounded-lg p-2 text-sm">
+                                            <option value="netted">Net (Deduct from Order)</option>
+                                            <option value="external">External (Separate Funds)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </details>
+
+                            <!-- Section 5: Sell Mode -->
+                            <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden">
+                                <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                                    <div class="flex items-center gap-2">
+                                        <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                                        <span class="text-sm font-semibold text-[var(--color-text)]">Sell-Only Mode</span>
+                                    </div>
+                                    <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </summary>
+                                <div class="p-4 space-y-4">
+                                    <!-- Toggle -->
+                                    <div class="flex items-center justify-between p-3 bg-[var(--color-card)] rounded-lg border border-[var(--color-border)]">
+                                        <div>
+                                            <div class="flex items-center gap-1">
+                                                <span class="text-xs font-medium text-[var(--color-text)]">Enable Sell-Only</span>
+                                                <button type="button" class="helper-tooltip" title="Enable this if you already hold the asset and want to plan a sell-ladder only.">?</button>
+                                            </div>
+                                            <span class="block text-[10px] text-[var(--color-text-muted)]">Plan exits for existing position</span>
+                                        </div>
+                                        <label class="relative inline-flex items-center cursor-pointer">
+                                            <input type="checkbox" id="sell_only_mode" class="sr-only peer">
+                                            <div class="w-9 h-5 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--color-primary)] rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-green-500"></div>
+                                        </label>
+                                    </div>
+                                    
+                                    <!-- Sell Only Inputs -->
+                                    <div id="sell-only-inputs" class="hidden grid grid-cols-2 gap-3">
+                                        <div>
+                                            <div class="flex items-center gap-1 mb-1">
+                                                <label class="text-[10px] font-medium text-[var(--color-text-secondary)]">Held Quantity</label>
+                                                <button type="button" class="helper-tooltip" title="The amount of the asset you currently possess.">?</button>
+                                            </div>
+                                            <input type="number" id="existing_quantity" value="50" class="form-input w-full rounded-lg p-2 text-sm">
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center gap-1 mb-1">
+                                                <label class="text-[10px] font-medium text-[var(--color-text-secondary)]">Avg Cost</label>
+                                                <button type="button" class="helper-tooltip" title="Your average buy price for the assets you hold.">?</button>
+                                            </div>
+                                            <div class="relative flex items-center">
+                                                <span class="absolute left-2 text-[var(--color-text-secondary)] font-mono text-sm">$</span>
+                                                <input type="number" id="existing_avg_price" value="0" class="form-input w-full rounded-lg p-2 text-sm pl-6">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+                            </details>
 
-                                <div>
-                                    <div class="flex items-center gap-1 mb-1">
-                                        <label class="text-[10px] font-medium">Fee Settlement</label>
-                                        <button type="button" class="helper-tooltip" title="'Net' means fees reduce the asset received. 'External' means fees are paid from a separate cash balance.">?</button>
-                                    </div>
-                                    <select id="fee_settlement" class="form-input w-full rounded p-1.5 text-sm">
-                                        <option value="netted">Net (Deduct from Order)</option>
-                                        <option value="external">External (Separate Funds)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Spacing Mode -->
-                                <div>
-                                    <div class="flex items-center gap-1 mb-1">
-                                        <label class="text-[10px] font-medium">Spacing Mode</label>
-                                        <button type="button" class="helper-tooltip" title="'Absolute' means equal dollar distance between orders. 'Relative' means geometric progression (percentage distance).">?</button>
-                                    </div>
-                                    <select id="spacing_mode" class="form-input w-full rounded p-1.5 text-sm">
-                                        <option value="absolute">Absolute (Equal Steps)</option>
-                                        <option value="relative">Relative (Geometric %)</option>
-                                    </select>
-                                </div>
-
-                                <div class="flex items-center gap-2 pt-2">
-                                    <input type="checkbox" id="equal_quantity_mode" class="rounded border-gray-300 text-[var(--color-primary)] focus:ring-[var(--color-primary)]">
-                                    <div class="flex items-center gap-1">
-                                        <label for="equal_quantity_mode" class="text-xs text-[var(--color-text-secondary)]">Force Equal Quantity</label>
-                                        <button type="button" class="helper-tooltip" title="Overrides skew settings to buy/sell the exact same amount of asset at every rung.">?</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         </div> <!-- End Pro Controls -->
 
                     </form>
@@ -921,16 +960,38 @@
                 
                 <!-- Combined Depth Chart (Vertical) -->
                 <div id="depth-chart-card" class="card p-4 h-[600px] flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.3s;">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-3 text-xs text-slate-300">
-                            <span class="inline-flex items-center gap-1">
+                    <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
+                        <div class="flex items-center gap-3 text-xs">
+                            <span class="inline-flex items-center gap-1 text-[var(--color-text-secondary)]">
                                 <span class="inline-block w-2 h-2 rounded-full bg-red-500"></span> Buy
                             </span>
-                            <span class="inline-flex items-center gap-1">
+                            <span class="inline-flex items-center gap-1 text-[var(--color-text-secondary)]">
                                 <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span> Sell
                             </span>
                         </div>
-                        <span id="mid-price-label" class="text-xs text-slate-400"></span>
+                        
+                        <!-- Chart Display Options -->
+                        <div class="flex items-center gap-4 text-[10px]">
+                            <!-- Data Type Toggle -->
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[var(--color-text-muted)]">Show:</span>
+                                <div class="flex rounded-md border border-[var(--color-border)] overflow-hidden bg-[var(--color-card-muted)]">
+                                    <button type="button" id="chart-data-individual" class="chart-toggle-btn active px-2 py-1 text-[10px] font-medium transition-colors" title="Individual order sizes">Individual</button>
+                                    <button type="button" id="chart-data-cumulative" class="chart-toggle-btn px-2 py-1 text-[10px] font-medium transition-colors" title="Cumulative order sizes">Cumulative</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Value Type Toggle -->
+                            <div class="flex items-center gap-1.5">
+                                <span class="text-[var(--color-text-muted)]">Units:</span>
+                                <div class="flex rounded-md border border-[var(--color-border)] overflow-hidden bg-[var(--color-card-muted)]">
+                                    <button type="button" id="chart-unit-volume" class="chart-toggle-btn active px-2 py-1 text-[10px] font-medium transition-colors" title="Asset quantity (volume)">Volume</button>
+                                    <button type="button" id="chart-unit-value" class="chart-toggle-btn px-2 py-1 text-[10px] font-medium transition-colors" title="Dollar value">Value ($)</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <span id="mid-price-label" class="text-xs text-[var(--color-text-muted)]"></span>
                     </div>
                     <div id="depth-wrapper" class="d3-chart flex-1 w-full h-full relative">
                         <svg id="depth-chart" width="100%" height="100%"></svg>
@@ -1101,7 +1162,9 @@
                 activeTab: 'buy',
                 theme: 'light',
                 mode: 'simple', // 'simple' or 'pro'
-                showFees: false
+                showFees: false,
+                chartDataType: 'individual', // 'individual' or 'cumulative'
+                chartUnitType: 'volume' // 'volume' or 'value'
             };
 
             // --- DOM ELEMENTS ---
@@ -1970,6 +2033,45 @@
                         });
                     }
 
+                    // Chart Display Toggles
+                    const chartDataIndividual = document.getElementById('chart-data-individual');
+                    const chartDataCumulative = document.getElementById('chart-data-cumulative');
+                    const chartUnitVolume = document.getElementById('chart-unit-volume');
+                    const chartUnitValue = document.getElementById('chart-unit-value');
+
+                    const updateChartDataType = (type) => {
+                        State.chartDataType = type;
+                        if (type === 'individual') {
+                            chartDataIndividual.classList.add('active');
+                            chartDataCumulative.classList.remove('active');
+                        } else {
+                            chartDataCumulative.classList.add('active');
+                            chartDataIndividual.classList.remove('active');
+                        }
+                        if (State.currentPlanData) {
+                            App.drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder);
+                        }
+                    };
+
+                    const updateChartUnitType = (type) => {
+                        State.chartUnitType = type;
+                        if (type === 'volume') {
+                            chartUnitVolume.classList.add('active');
+                            chartUnitValue.classList.remove('active');
+                        } else {
+                            chartUnitValue.classList.add('active');
+                            chartUnitVolume.classList.remove('active');
+                        }
+                        if (State.currentPlanData) {
+                            App.drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder);
+                        }
+                    };
+
+                    if (chartDataIndividual) chartDataIndividual.addEventListener('click', () => updateChartDataType('individual'));
+                    if (chartDataCumulative) chartDataCumulative.addEventListener('click', () => updateChartDataType('cumulative'));
+                    if (chartUnitVolume) chartUnitVolume.addEventListener('click', () => updateChartUnitType('volume'));
+                    if (chartUnitValue) chartUnitValue.addEventListener('click', () => updateChartUnitType('value'));
+
                     // Handle Intro Page
                     const enterBtn = document.getElementById('enter-app-btn');
                     if (enterBtn) {
@@ -2627,11 +2729,11 @@
 
                 // --- CHARTS ---
                 /**
-                 * Vertical combined depth chart:
-                 *  - Single SVG
-                 *  - Bids (buy) area on the bottom, Asks (sell) area on the top
-                 *  - Price on Y-axis (vertical), cumulative size on X-axis (horizontal)
-                 *  - No average buy/sell lines
+                 * Vertical bar chart showing buy/sell orders:
+                 *  - Horizontal bars for each order
+                 *  - Buy orders (red) on bottom, Sell orders (green) on top
+                 *  - Price on Y-axis (vertical), size on X-axis (horizontal)
+                 *  - Supports individual/cumulative and volume/value display modes
                  */
                 drawDepthChart: (selector, buys, sells) => {
                     const svgSel = d3.select(selector);
@@ -2645,133 +2747,130 @@
 
                     const width  = container.clientWidth;
                     const height = container.clientHeight;
-                    const margin = { top: 20, right: 40, bottom: 30, left: 40 };
+                    const margin = { top: 20, right: 50, bottom: 30, left: 55 };
 
                     const svg = svgSel
                         .attr("width", width)
                         .attr("height", height);
 
-                    // Sort; buys descending by price (best bid nearest mid), sells ascending
+                    // Get display modes
+                    const isCumulative = State.chartDataType === 'cumulative';
+                    const isValue = State.chartUnitType === 'value';
+
+                    // Prepare data - buys sorted by price descending (highest first), sells ascending
                     const buySeries  = (buys || []).slice().sort((a, b) => b.price - a.price);
                     const sellSeries = (sells || []).slice().sort((a, b) => a.price - b.price);
 
-                    // Compute cumulative qty if not already present
-                    let cum = 0;
+                    // Compute cumulative values
+                    let cumQty = 0, cumVal = 0;
                     buySeries.forEach(d => {
-                        cum += d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0;
-                        d.cumQty = d.cumQty ?? cum;
+                        const qty = d.assetSize ?? d.qty ?? d.size ?? d.volume ?? 0;
+                        const val = d.capital ?? d.netCapital ?? (qty * d.price) ?? 0;
+                        cumQty += qty;
+                        cumVal += val;
+                        d.individualQty = qty;
+                        d.individualVal = val;
+                        d.cumulativeQty = cumQty;
+                        d.cumulativeVal = cumVal;
                     });
 
-                    cum = 0;
+                    cumQty = 0; cumVal = 0;
                     sellSeries.forEach(d => {
-                        cum += d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0;
-                        d.cumSold = d.cumSold ?? cum;
+                        const qty = d.assetSize ?? d.qty ?? d.size ?? d.volume ?? 0;
+                        const val = d.capital ?? d.netRevenue ?? (qty * d.price) ?? 0;
+                        cumQty += qty;
+                        cumVal += val;
+                        d.individualQty = qty;
+                        d.individualVal = val;
+                        d.cumulativeQty = cumQty;
+                        d.cumulativeVal = cumVal;
                     });
 
-                    const all = buySeries.concat(sellSeries);
-                    if (!all.length) return;
+                    // Get the value accessor based on display mode
+                    const getValue = (d) => {
+                        if (isCumulative) {
+                            return isValue ? d.cumulativeVal : d.cumulativeQty;
+                        } else {
+                            return isValue ? d.individualVal : d.individualQty;
+                        }
+                    };
 
-                    const prices = all.map(d => d.price);
+                    const allData = [...buySeries, ...sellSeries];
+                    if (!allData.length) return;
+
+                    // Calculate price range
+                    const prices = allData.map(d => d.price);
                     const yMin = d3.min(prices);
                     const yMax = d3.max(prices);
+                    const mid = (yMin + yMax) / 2;
 
-                    let yDomainMin = yMin;
-                    let yDomainMax = yMax;
-                    if (yMin === yMax) {
-                        yDomainMin *= 0.99;
-                        yDomainMax *= 1.01;
-                    }
+                    // Calculate bar heights based on number of orders and available space
+                    const chartHeight = height - margin.top - margin.bottom;
+                    const totalBars = buySeries.length + sellSeries.length;
+                    const barPadding = 0.15; // 15% padding between bars
+                    const barHeight = Math.min(chartHeight / (totalBars + 1), 25);
+                    const effectiveBarHeight = barHeight * (1 - barPadding);
 
-                    // Y-axis: Price (vertical)
+                    // Build price scale with band-like positioning
+                    // Create positions for each bar centered on its price
+                    const priceExtent = yMax - yMin || 1;
+                    const paddedMin = yMin - priceExtent * 0.05;
+                    const paddedMax = yMax + priceExtent * 0.05;
+
                     const y = d3.scaleLinear()
-                        .range([height - margin.bottom, margin.top])
-                        .domain([yDomainMin, yDomainMax]);
+                        .domain([paddedMin, paddedMax])
+                        .range([height - margin.bottom, margin.top]);
 
-                    // X-axis: Cumulative size (horizontal)
-                    const xMax = d3.max([
-                        d3.max(buySeries, d => d.cumQty || 0) || 0,
-                        d3.max(sellSeries, d => d.cumSold || 0) || 0
-                    ]) || 1;
-
+                    // X scale for bar widths
+                    const maxValue = d3.max(allData, getValue) || 1;
                     const x = d3.scaleLinear()
-                        .range([margin.left, width - margin.right])
-                        .domain([0, xMax * 1.1]);
+                        .domain([0, maxValue * 1.1])
+                        .range([margin.left, width - margin.right]);
 
                     // Mid price label
-                    const mid = (yMin + yMax) / 2;
                     const midLabel = document.getElementById("mid-price-label");
                     if (midLabel) {
                         midLabel.textContent = `Mid ≈ ${Utils.fmtCurr(mid)}`;
                     }
 
-                    // Gradients
-                    const defs = svg.append("defs");
+                    // Create groups for each side
+                    const barsGroup = svg.append("g").attr("class", "bars");
 
-                    const gradBid = defs.append("linearGradient")
-                        .attr("id", "grad-bids")
-                        .attr("x1", "0%").attr("y1", "0%")
-                        .attr("x2", "100%").attr("y2", "0%");
-                    gradBid.append("stop")
-                        .attr("offset", "0%")
-                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
-                        .attr("stop-opacity", 0.9);
-                    gradBid.append("stop")
-                        .attr("offset", "100%")
-                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-end").trim())
-                        .attr("stop-opacity", 0.15);
+                    // Draw buy bars (red)
+                    const buyBars = barsGroup.selectAll(".buy-bar")
+                        .data(buySeries)
+                        .enter()
+                        .append("rect")
+                        .attr("class", "buy-bar")
+                        .attr("x", margin.left)
+                        .attr("y", d => y(d.price) - effectiveBarHeight / 2)
+                        .attr("width", 0)
+                        .attr("height", effectiveBarHeight)
+                        .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim())
+                        .attr("opacity", 0.8)
+                        .attr("rx", 2);
 
-                    const gradAsk = defs.append("linearGradient")
-                        .attr("id", "grad-asks")
-                        .attr("x1", "0%").attr("y1", "0%")
-                        .attr("x2", "100%").attr("y2", "0%");
-                    gradAsk.append("stop")
-                        .attr("offset", "0%")
-                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
-                        .attr("stop-opacity", 0.9);
-                    gradAsk.append("stop")
-                        .attr("offset", "100%")
-                        .attr("stop-color", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-end").trim())
-                        .attr("stop-opacity", 0.15);
+                    buyBars.transition()
+                        .duration(600)
+                        .attr("width", d => x(getValue(d)) - margin.left);
 
-                    // Area generators – depth style (vertical)
-                    // Bids: bottom half, extending right
-                    const midY = (height - margin.bottom + margin.top) / 2;
-                    const areaBids = d3.area()
-                        .x0(margin.left)
-                        .x1(d => x(d.cumQty || 0))
-                        .y(d => y(d.price))
-                        .curve(d3.curveStepAfter);
+                    // Draw sell bars (green)
+                    const sellBars = barsGroup.selectAll(".sell-bar")
+                        .data(sellSeries)
+                        .enter()
+                        .append("rect")
+                        .attr("class", "sell-bar")
+                        .attr("x", margin.left)
+                        .attr("y", d => y(d.price) - effectiveBarHeight / 2)
+                        .attr("width", 0)
+                        .attr("height", effectiveBarHeight)
+                        .attr("fill", getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim())
+                        .attr("opacity", 0.8)
+                        .attr("rx", 2);
 
-                    // Asks: top half, extending right
-                    const areaAsks = d3.area()
-                        .x0(margin.left)
-                        .x1(d => x(d.cumSold || 0))
-                        .y(d => y(d.price))
-                        .curve(d3.curveStepBefore);
-
-                    // Draw bids (bottom)
-                    if (buySeries.length) {
-                        svg.append("path")
-                            .datum(buySeries)
-                            .attr("fill", "url(#grad-bids)")
-                            .attr("d", areaBids)
-                            .attr("opacity", 0)
-                            .transition()
-                            .duration(600)
-                            .attr("opacity", 1);
-                    }
-
-                    // Draw asks (top)
-                    if (sellSeries.length) {
-                        svg.append("path")
-                            .datum(sellSeries)
-                            .attr("fill", "url(#grad-asks)")
-                            .attr("d", areaAsks)
-                            .attr("opacity", 0)
-                            .transition()
-                            .duration(600)
-                            .attr("opacity", 1);
-                    }
+                    sellBars.transition()
+                        .duration(600)
+                        .attr("width", d => x(getValue(d)) - margin.left);
 
                     // Mid price line
                     svg.append("line")
@@ -2781,79 +2880,87 @@
                         .attr("y2", y(mid))
                         .attr("stroke", "currentColor")
                         .attr("stroke-width", 1)
-                        .attr("stroke-dasharray", "2 2")
+                        .attr("stroke-dasharray", "4 2")
                         .attr("opacity", 0.3);
 
-                    // Axes
+                    // Y-axis (Price)
                     const yAxis = d3.axisLeft(y)
-                        .ticks(8)
-                        .tickFormat(d => "$" + d3.format(".2s")(d));
+                        .ticks(Math.min(totalBars, 10))
+                        .tickFormat(d => "$" + d3.format(",.0f")(d));
 
                     svg.append("g")
                         .attr("transform", `translate(${margin.left},0)`)
                         .call(yAxis)
                         .attr("class", "text-[9px] opacity-60")
-                        .call(g => g.selectAll("path").attr("stroke", "#475569"))
-                        .call(g => g.selectAll("line").attr("stroke", "#1e293b"));
+                        .call(g => g.selectAll("path").attr("stroke", "var(--color-border-strong)"))
+                        .call(g => g.selectAll("line").attr("stroke", "var(--color-border)"));
 
+                    // X-axis
                     const xAxis = d3.axisBottom(x)
                         .ticks(5)
-                        .tickSize(0);
+                        .tickFormat(d => isValue ? "$" + d3.format(".2s")(d) : d3.format(".3s")(d));
 
                     svg.append("g")
                         .attr("transform", `translate(0,${height - margin.bottom})`)
                         .call(xAxis)
                         .attr("class", "text-[9px] opacity-60")
-                        .call(g => g.selectAll("path").attr("stroke", "#475569"))
+                        .call(g => g.selectAll("path").attr("stroke", "var(--color-border-strong)"))
                         .call(g => g.selectAll("line").remove());
 
+                    // X-axis label
+                    const unitLabel = isCumulative 
+                        ? (isValue ? "Cumulative Value ($)" : "Cumulative Volume")
+                        : (isValue ? "Order Value ($)" : "Order Volume");
+                    
                     svg.append("text")
-                        .attr("x", width - margin.right)
-                        .attr("y", height - margin.bottom + 20)
+                        .attr("x", (width + margin.left - margin.right) / 2)
+                        .attr("y", height - 5)
                         .attr("fill", "currentColor")
                         .attr("text-anchor", "middle")
                         .attr("font-size", "9px")
-                        .attr("class", "opacity-60")
-                        .text("Cumulative size");
+                        .attr("class", "opacity-50")
+                        .text(unitLabel);
 
                     // Tooltip
                     const tooltip = d3.select("#tooltip");
-                    const bisect  = d3.bisector(d => d.price).left;
 
-                    // Combined interaction over full price range
-                    const allSeries = buySeries.concat(sellSeries).sort((a, b) => a.price - b.price);
+                    // Interactive overlay - one rect per bar for precise hover
+                    const allBarsData = [
+                        ...buySeries.map(d => ({ ...d, isBuy: true })),
+                        ...sellSeries.map(d => ({ ...d, isBuy: false }))
+                    ];
 
-                    svg.append("rect")
-                        .attr("width",  width - margin.left - margin.right)
-                        .attr("height", height - margin.top - margin.bottom)
+                    // Create invisible hover zones for each bar
+                    svg.selectAll(".hover-zone")
+                        .data(allBarsData)
+                        .enter()
+                        .append("rect")
+                        .attr("class", "hover-zone")
                         .attr("x", margin.left)
-                        .attr("y", margin.top)
+                        .attr("y", d => y(d.price) - effectiveBarHeight / 2 - 2)
+                        .attr("width", width - margin.left - margin.right)
+                        .attr("height", effectiveBarHeight + 4)
                         .attr("fill", "transparent")
-                        .on("mousemove", function (event) {
-                            const [, py] = d3.pointer(event);
-                            const y0   = y.invert(py);
+                        .style("cursor", "crosshair")
+                        .on("mouseenter", function(event, d) {
+                            // Highlight the bar
+                            const barClass = d.isBuy ? ".buy-bar" : ".sell-bar";
+                            barsGroup.selectAll(barClass)
+                                .filter(bd => bd.price === d.price)
+                                .attr("opacity", 1)
+                                .attr("stroke", d.isBuy ? "#dc2626" : "#16a34a")
+                                .attr("stroke-width", 2);
 
-                            let i = bisect(allSeries, y0, 1);
-                            i = Math.min(Math.max(i, 0), allSeries.length - 1);
-                            if (i > 0) {
-                                const d0 = allSeries[i - 1];
-                                const d1 = allSeries[i];
-                                if (y0 - d0.price < d1.price - y0) i = i - 1;
-                            }
-
-                            const d = allSeries[i];
-                            if (!d) return;
-
-                            const isBid = buySeries.includes(d);
-                            const cum   = isBid ? (d.cumQty || 0) : (d.cumSold || 0);
-
+                            // Show tooltip
+                            const value = getValue(d);
                             const html = `
-                                <div class="font-bold ${isBid ? "text-red-400" : "text-green-400"}">
-                                    ${isBid ? "Buy" : "Sell"}
+                                <div class="font-bold ${d.isBuy ? "text-red-400" : "text-green-400"}">
+                                    ${d.isBuy ? "Buy" : "Sell"} Order #${d.rung}
                                 </div>
                                 <div>Price: ${Utils.fmtCurr(d.price)}</div>
-                                <div>Level size: ${Utils.fmtNum(d.qty ?? d.size ?? d.volume ?? d.assetSize ?? 0)}</div>
-                                <div>Cumulative: ${Utils.fmtNum(cum)}</div>
+                                <div>Volume: ${Utils.fmtNum(d.individualQty, 4)}</div>
+                                <div>Value: ${Utils.fmtCurr(d.individualVal)}</div>
+                                ${isCumulative ? `<div class="border-t border-gray-600 mt-1 pt-1">Cum Vol: ${Utils.fmtNum(d.cumulativeQty, 4)}</div><div>Cum Val: ${Utils.fmtCurr(d.cumulativeVal)}</div>` : ''}
                             `;
 
                             tooltip
@@ -2861,17 +2968,17 @@
                                 .style("opacity", 1)
                                 .html(html);
 
-                            const box  = tooltip.node().getBoundingClientRect();
-                            let left   = event.pageX + 15;
+                            // Position tooltip
+                            const box = tooltip.node().getBoundingClientRect();
+                            let left = event.pageX + 15;
                             if (left + box.width > window.innerWidth) {
                                 left = event.pageX - box.width - 15;
                             }
-
                             tooltip
                                 .style("left", left + "px")
-                                .style("top",  (event.pageY - 40) + "px");
+                                .style("top", (event.pageY - 40) + "px");
 
-                            // Cursor line (horizontal for vertical chart)
+                            // Draw cursor line at bar center (mid-line)
                             svg.selectAll(".cursor-line").remove();
                             svg.append("line")
                                 .attr("class", "cursor-line")
@@ -2879,12 +2986,31 @@
                                 .attr("x2", width - margin.right)
                                 .attr("y1", y(d.price))
                                 .attr("y2", y(d.price))
-                                .attr("stroke", "currentColor")
+                                .attr("stroke", d.isBuy ? "#dc2626" : "#16a34a")
                                 .attr("stroke-width", 1)
                                 .attr("stroke-dasharray", "4 4")
-                                .attr("opacity", 0.5);
+                                .attr("opacity", 0.8);
                         })
-                        .on("mouseout", () => {
+                        .on("mousemove", function(event, d) {
+                            // Update tooltip position on move
+                            const box = tooltip.node().getBoundingClientRect();
+                            let left = event.pageX + 15;
+                            if (left + box.width > window.innerWidth) {
+                                left = event.pageX - box.width - 15;
+                            }
+                            tooltip
+                                .style("left", left + "px")
+                                .style("top", (event.pageY - 40) + "px");
+                        })
+                        .on("mouseleave", function(event, d) {
+                            // Reset bar style
+                            const barClass = d.isBuy ? ".buy-bar" : ".sell-bar";
+                            barsGroup.selectAll(barClass)
+                                .filter(bd => bd.price === d.price)
+                                .attr("opacity", 0.8)
+                                .attr("stroke", "none");
+
+                            // Hide tooltip
                             tooltip.classed("hidden", true).style("opacity", 0);
                             svg.selectAll(".cursor-line").remove();
                         });
