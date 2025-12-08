@@ -83,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const App = {
         init: () => {
             App.loadTheme();
+            App.loadAdvancedMode();
             App.bindEvents();
             
             // Always show welcome screen on initial load
@@ -92,6 +93,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 introLayer.style.opacity = '1';
                 introLayer.style.pointerEvents = 'auto';
             }
+            
+            // Ensure minimal interface is applied on init
+            App.applyAdvancedMode();
             
             App.calculatePlan();
             App.ensureTableBottomSpace();
@@ -134,7 +138,109 @@ document.addEventListener('DOMContentLoaded', function () {
                 els.iconSun?.classList.add('hidden');
                 els.iconMoon?.classList.remove('hidden');
             }
+            // Update theme toggle text in menu
+            const themeToggleText = document.getElementById('theme-toggle-text');
+            if (themeToggleText) {
+                themeToggleText.textContent = State.theme === 'dark' ? 'Light Mode' : 'Dark Mode';
+            }
             App.calculatePlan();
+        },
+
+        loadAdvancedMode: () => {
+            const saved = localStorage.getItem(CONSTANTS.STORAGE_PREFIX + 'advanced_mode');
+            State.advancedMode = saved === 'true';
+            App.applyAdvancedMode();
+        },
+
+        toggleAdvancedMode: () => {
+            State.advancedMode = !State.advancedMode;
+            localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'advanced_mode', State.advancedMode.toString());
+            App.applyAdvancedMode();
+        },
+
+        applyAdvancedMode: () => {
+            const advancedToggle = document.getElementById('advanced-mode-toggle');
+            const modeToggleContainer = document.getElementById('mode-toggle-container');
+            const chartDisplayOptions = document.getElementById('chart-display-options');
+            const tableOptions = document.getElementById('table-options');
+            const exportMenu = document.getElementById('export-menu');
+            
+            if (advancedToggle) {
+                if (State.advancedMode) {
+                    advancedToggle.classList.add('bg-[var(--color-primary)]/20', 'text-[var(--color-primary)]');
+                    advancedToggle.classList.remove('text-[var(--color-text-muted)]');
+                    advancedToggle.setAttribute('title', 'Advanced Mode: On - Click to hide options');
+                    advancedToggle.setAttribute('aria-label', 'Advanced Mode: On');
+                } else {
+                    advancedToggle.classList.remove('bg-[var(--color-primary)]/20', 'text-[var(--color-primary)]');
+                    advancedToggle.classList.add('text-[var(--color-text-muted)]');
+                    advancedToggle.setAttribute('title', 'Advanced Mode: Off - Click to show advanced features');
+                    advancedToggle.setAttribute('aria-label', 'Advanced Mode: Off');
+                }
+            }
+
+            const advancedHint = document.getElementById('advanced-hint');
+            
+            // Progressive disclosure: Advanced mode shows all controls, beginner mode shows minimal
+            if (State.advancedMode) {
+                // Show all advanced elements
+                if (els.proControls) {
+                    els.proControls.classList.remove('hidden');
+                    els.proControls.style.display = '';
+                }
+                if (modeToggleContainer) {
+                    modeToggleContainer.classList.remove('hidden');
+                    modeToggleContainer.style.display = '';
+                }
+                if (chartDisplayOptions) {
+                    chartDisplayOptions.classList.remove('hidden');
+                    chartDisplayOptions.style.display = '';
+                }
+                if (tableOptions) {
+                    tableOptions.classList.remove('hidden');
+                    tableOptions.style.display = '';
+                }
+                if (exportMenu) {
+                    exportMenu.classList.remove('hidden');
+                    exportMenu.style.display = '';
+                }
+                if (advancedHint) {
+                    advancedHint.style.display = 'none';
+                }
+                // Set mode to pro to show all customization options
+                if (State.mode !== 'pro') {
+                    App.setMode('pro');
+                }
+                // Expand all collapsible sections for easy access
+                const details = document.querySelectorAll('#pro-controls details');
+                details.forEach(detail => detail.setAttribute('open', ''));
+            } else {
+                // Hide all advanced elements for minimal beginner view
+                if (els.proControls) {
+                    els.proControls.classList.add('hidden');
+                    els.proControls.style.display = 'none';
+                }
+                if (modeToggleContainer) {
+                    modeToggleContainer.classList.add('hidden');
+                    modeToggleContainer.style.display = 'none';
+                }
+                if (chartDisplayOptions) {
+                    chartDisplayOptions.classList.add('hidden');
+                    chartDisplayOptions.style.display = 'none';
+                }
+                if (tableOptions) {
+                    tableOptions.classList.add('hidden');
+                    tableOptions.style.display = 'none';
+                }
+                if (exportMenu) {
+                    exportMenu.classList.add('hidden');
+                    exportMenu.style.display = 'none';
+                }
+                if (advancedHint) {
+                    advancedHint.style.display = 'block';
+                }
+                // Keep mode as is - don't force simple mode, but hide advanced controls
+            }
         },
 
         bindEvents: () => {
@@ -193,9 +299,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // How It Works Modal
             const howItWorksModal = document.getElementById('how-it-works-modal');
-            const toggleHowItWorks = Utils.bindModal(howItWorksModal, 
-                [document.getElementById('intro-how-it-works')],
-                [document.getElementById('how-it-works-backdrop'), document.getElementById('how-it-works-close')]);
+            const howItWorksVolumeChart = document.getElementById('how-it-works-volume-chart');
+            const howItWorksValueChart = document.getElementById('how-it-works-value-chart');
+            
+            const toggleHowItWorks = (show) => {
+                if (!howItWorksModal) return;
+                howItWorksModal.classList.toggle('open', show);
+                
+                // Draw charts when modal opens - match main page style
+                if (show && window.drawHowItWorksChart) {
+                    setTimeout(() => {
+                        if (howItWorksVolumeChart) {
+                            // Volume chart - shows quantity
+                            window.drawHowItWorksChart('#how-it-works-volume-chart svg', 100, false);
+                        }
+                        if (howItWorksValueChart) {
+                            // Value chart - shows dollar amounts
+                            window.drawHowItWorksChart('#how-it-works-value-chart svg', 100, true);
+                        }
+                    }, 100);
+                }
+            };
+            
+            const introHowItWorks = document.getElementById('intro-how-it-works');
+            const howItWorksBackdrop = document.getElementById('how-it-works-backdrop');
+            const howItWorksClose = document.getElementById('how-it-works-close');
+            
+            if (introHowItWorks) introHowItWorks.addEventListener('click', () => toggleHowItWorks(true));
+            if (howItWorksBackdrop) howItWorksBackdrop.addEventListener('click', () => toggleHowItWorks(false));
+            if (howItWorksClose) howItWorksClose.addEventListener('click', () => toggleHowItWorks(false));
 
             // Handle Intro Page
             const enterBtn = document.getElementById('enter-app-btn');
@@ -213,31 +345,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
 
-            // Quick Start Button
-            const quickStartBtn = document.getElementById('quick-start-btn');
-            if (quickStartBtn) {
-                quickStartBtn.addEventListener('click', () => {
-                    if (els.startCap) els.startCap.value = '10,000';
-                    if (els.currPrice) els.currPrice.value = '100';
-                    if (els.depth) els.depth.value = '25';
-                    if (els.depthInput) els.depthInput.value = '25';
-                    if (els.rungs) els.rungs.value = '10';
-                    if (els.rungsInput) els.rungsInput.value = '10';
-                    if (els.rungsDisplay) els.rungsDisplay.textContent = '10';
-                    if (els.skew) els.skew.value = '50';
-                    
-                    Utils.hideIntro(document.getElementById('intro-layer'));
-                    localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
-                    App.calculatePlan();
-                    
-                    const toast = document.getElementById('toast');
-                    if (toast) {
-                        toast.textContent = 'Example plan loaded! Adjust values to customize.';
-                        toast.classList.add('show');
-                        setTimeout(() => toast.classList.remove('show'), 3000);
-                    }
-                });
-            }
 
             // Skip to Customization Button
             const skipToCustomizeBtn = document.getElementById('skip-to-customize-btn');
@@ -330,16 +437,53 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             });
 
-            // Mode Selector Buttons
-            const modeBuyBtn = document.getElementById('mode-buy-btn');
-            const modeSellBtn = document.getElementById('mode-sell-btn');
-            const modeBuyOnlyBtn = document.getElementById('mode-buy-only-btn');
-            const modeBuyCheck = document.getElementById('mode-buy-check');
-            const modeSellCheck = document.getElementById('mode-sell-check');
-            const modeBuyOnlyCheck = document.getElementById('mode-buy-only-check');
+            // Mode Selector Dropdown
+            const modeSelectorBtn = document.getElementById('mode-selector-btn');
+            const modeSelectorDropdown = document.getElementById('mode-selector-dropdown');
+            const modeSelectorText = document.getElementById('mode-selector-text');
+            const modeSelectorIcon = document.getElementById('mode-selector-icon');
+            const modeSelectorChevron = document.getElementById('mode-selector-chevron');
+            const modeDropdownOptions = document.querySelectorAll('.mode-dropdown-option');
             const buyModeInputs = document.getElementById('buy-mode-inputs');
             const sellModeInputs = document.getElementById('sell-mode-inputs');
             const currentPriceSell = document.getElementById('current_price_sell');
+
+            const modeConfig = {
+                'buy-only': {
+                    text: 'Buy Only',
+                    icon: '<svg class="w-3.5 h-3.5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>',
+                    iconBg: 'bg-red-500/20',
+                    color: 'red'
+                },
+                'sell-only': {
+                    text: 'Sell Only',
+                    icon: '<svg class="w-3.5 h-3.5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path></svg>',
+                    iconBg: 'bg-green-500/20',
+                    color: 'green'
+                },
+                'buy-sell': {
+                    text: 'Buy + Sell',
+                    icon: '<svg class="w-3.5 h-3.5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>',
+                    iconBg: 'bg-cyan-500/20',
+                    color: 'cyan'
+                }
+            };
+
+            const toggleDropdown = (open) => {
+                if (!modeSelectorDropdown || !modeSelectorBtn || !modeSelectorChevron) return;
+                
+                if (open) {
+                    modeSelectorDropdown.classList.remove('opacity-0', 'invisible', 'translate-y-1');
+                    modeSelectorDropdown.classList.add('opacity-100', 'visible', 'translate-y-0');
+                    modeSelectorChevron.classList.add('rotate-180');
+                    modeSelectorBtn.setAttribute('aria-expanded', 'true');
+                } else {
+                    modeSelectorDropdown.classList.add('opacity-0', 'invisible', 'translate-y-1');
+                    modeSelectorDropdown.classList.remove('opacity-100', 'visible', 'translate-y-0');
+                    modeSelectorChevron.classList.remove('rotate-180');
+                    modeSelectorBtn.setAttribute('aria-expanded', 'false');
+                }
+            };
 
             const setTradingMode = (mode) => {
                 State.tradingMode = mode;
@@ -347,23 +491,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 State.buyOnlyMode = mode === 'buy-only';
                 if (els.sellOnlyCheck) els.sellOnlyCheck.checked = mode === 'sell-only';
                 
-                const updateModeCard = (btn, check, isActive, color) => {
-                    if (btn) {
-                        btn.classList.toggle('active', isActive);
-                        if (isActive) {
-                            btn.classList.add(`border-${color}-500/50`, `bg-${color}-500/10`);
-                            btn.classList.remove('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                        } else {
-                            btn.classList.remove(`border-${color}-500/50`, `bg-${color}-500/10`);
-                            btn.classList.add('border-[var(--color-border)]', 'bg-[var(--color-card-muted)]');
-                        }
+                // Update label based on mode
+                if (els.startCapLabel) {
+                    if (mode === 'buy-only') {
+                        els.startCapLabel.textContent = 'Initial Capital';
+                    } else if (mode === 'sell-only') {
+                        els.startCapLabel.textContent = 'Held Quantity';
+                    } else if (mode === 'buy-sell') {
+                        els.startCapLabel.textContent = 'Initial Capital';
                     }
-                    if (check) check.style.opacity = isActive ? '1' : '0';
-                };
+                }
                 
-                updateModeCard(modeBuyBtn, modeBuyCheck, mode === 'buy-sell', 'red');
-                updateModeCard(modeSellBtn, modeSellCheck, mode === 'sell-only', 'green');
-                updateModeCard(modeBuyOnlyBtn, modeBuyOnlyCheck, mode === 'buy-only', 'cyan');
+                // Update dropdown button
+                if (modeSelectorText && modeSelectorIcon) {
+                    const config = modeConfig[mode];
+                    if (config) {
+                        modeSelectorText.textContent = config.text;
+                        modeSelectorIcon.className = `w-5 h-5 rounded ${config.iconBg} flex items-center justify-center`;
+                        modeSelectorIcon.innerHTML = config.icon;
+                    }
+                }
+                
+                // Update dropdown options
+                modeDropdownOptions.forEach(option => {
+                    const optionMode = option.getAttribute('data-mode');
+                    const checkIcon = option.querySelector('svg:last-child');
+                    if (optionMode === mode) {
+                        option.setAttribute('aria-selected', 'true');
+                        if (checkIcon) checkIcon.classList.remove('opacity-0');
+                        if (checkIcon) checkIcon.classList.add('opacity-100');
+                    } else {
+                        option.setAttribute('aria-selected', 'false');
+                        if (checkIcon) checkIcon.classList.add('opacity-0');
+                        if (checkIcon) checkIcon.classList.remove('opacity-100');
+                    }
+                });
                 
                 buyModeInputs?.classList.toggle('hidden', mode === 'sell-only');
                 sellModeInputs?.classList.toggle('hidden', mode !== 'sell-only');
@@ -380,9 +542,80 @@ document.addEventListener('DOMContentLoaded', function () {
             // Expose setTradingMode for wizard
             App.setTradingMode = setTradingMode;
 
-            if (modeBuyBtn) modeBuyBtn.addEventListener('click', () => setTradingMode('buy-sell'));
-            if (modeSellBtn) modeSellBtn.addEventListener('click', () => setTradingMode('sell-only'));
-            if (modeBuyOnlyBtn) modeBuyOnlyBtn.addEventListener('click', () => setTradingMode('buy-only'));
+            // Dropdown button click
+            if (modeSelectorBtn) {
+                modeSelectorBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const isOpen = modeSelectorDropdown?.classList.contains('opacity-100');
+                    toggleDropdown(!isOpen);
+                });
+            }
+
+            // Dropdown option clicks
+            modeDropdownOptions.forEach(option => {
+                option.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const mode = option.getAttribute('data-mode');
+                    if (mode) {
+                        setTradingMode(mode);
+                        toggleDropdown(false);
+                    }
+                });
+            });
+
+            // Close dropdown when clicking outside
+            document.addEventListener('click', (e) => {
+                if (modeSelectorDropdown && modeSelectorBtn && 
+                    !modeSelectorDropdown.contains(e.target) && 
+                    !modeSelectorBtn.contains(e.target)) {
+                    toggleDropdown(false);
+                }
+            });
+
+            // Keyboard navigation
+            if (modeSelectorBtn) {
+                modeSelectorBtn.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        const isOpen = modeSelectorDropdown?.classList.contains('opacity-100');
+                        toggleDropdown(!isOpen);
+                    } else if (e.key === 'Escape') {
+                        toggleDropdown(false);
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        toggleDropdown(true);
+                        const firstOption = modeDropdownOptions[0];
+                        if (firstOption) firstOption.focus();
+                    }
+                });
+            }
+
+            modeDropdownOptions.forEach((option, index) => {
+                option.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        option.click();
+                    } else if (e.key === 'Escape') {
+                        toggleDropdown(false);
+                        modeSelectorBtn?.focus();
+                    } else if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        const next = modeDropdownOptions[index + 1];
+                        if (next) next.focus();
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        if (index === 0) {
+                            modeSelectorBtn?.focus();
+                        } else {
+                            const prev = modeDropdownOptions[index - 1];
+                            if (prev) prev.focus();
+                        }
+                    }
+                });
+            });
+
+            // Initialize with default mode
+            setTradingMode(State.tradingMode);
             
             // Sync price inputs between modes
             if (currentPriceSell && els.currPrice) {
@@ -417,6 +650,61 @@ document.addEventListener('DOMContentLoaded', function () {
             if (els.tabBuy) els.tabBuy.addEventListener('click', () => App.switchTab('buy'));
             if (els.tabSell) els.tabSell.addEventListener('click', () => App.switchTab('sell'));
             if (els.themeBtn) els.themeBtn.addEventListener('click', App.toggleTheme);
+            
+            // Hamburger Menu Toggle
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const menuDropdown = document.getElementById('menu-dropdown');
+            const menuIcon = document.getElementById('menu-icon');
+            const menuCloseIcon = document.getElementById('menu-close-icon');
+            
+            if (menuToggleBtn && menuDropdown) {
+                const toggleMenu = () => {
+                    const isOpen = menuDropdown.classList.contains('opacity-100');
+                    if (isOpen) {
+                        menuDropdown.classList.remove('opacity-100', 'visible');
+                        menuDropdown.classList.add('opacity-0', 'invisible');
+                        menuIcon.classList.remove('hidden');
+                        menuCloseIcon.classList.add('hidden');
+                    } else {
+                        menuDropdown.classList.remove('opacity-0', 'invisible');
+                        menuDropdown.classList.add('opacity-100', 'visible');
+                        menuIcon.classList.add('hidden');
+                        menuCloseIcon.classList.remove('hidden');
+                    }
+                };
+                
+                menuToggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleMenu();
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menuDropdown.contains(e.target) && !menuToggleBtn.contains(e.target)) {
+                        if (menuDropdown.classList.contains('opacity-100')) {
+                            toggleMenu();
+                        }
+                    }
+                });
+                
+                // Close menu when clicking on menu items (except theme toggle which needs to stay open)
+                const menuItems = menuDropdown.querySelectorAll('a, button');
+                menuItems.forEach(item => {
+                    if (item.id !== 'theme-toggle-btn' && item.id !== 'sol-btn') {
+                        item.addEventListener('click', () => {
+                            if (menuDropdown.classList.contains('opacity-100')) {
+                                toggleMenu();
+                            }
+                        });
+                    }
+                });
+            }
+            
+            // Advanced Mode Toggle
+            const advancedModeToggle = document.getElementById('advanced-mode-toggle');
+            if (advancedModeToggle) {
+                advancedModeToggle.addEventListener('click', App.toggleAdvancedMode);
+            }
             
             const downloadBtn = document.getElementById('download-csv-btn');
             const saveConfigBtn = document.getElementById('save-config-btn');
@@ -486,17 +774,24 @@ document.addEventListener('DOMContentLoaded', function () {
             if (els.modeSimple) els.modeSimple.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='simple'?activeClass:inactiveClass}`;
             if (els.modePro) els.modePro.className = `px-3 py-1 text-xs font-medium rounded-md transition-all ${mode==='pro'?activeClass:inactiveClass}`;
             
-            if (els.proControls) els.proControls.classList.toggle('hidden', mode === 'simple');
+            // Pro controls visibility is handled by applyAdvancedMode
+            // Only toggle here if advanced mode is on
+            if (State.advancedMode && els.proControls) {
+                els.proControls.classList.toggle('hidden', mode === 'simple');
+                els.proControls.style.display = mode === 'simple' ? 'none' : '';
+            }
             
             const mainGrid = document.getElementById('main-content-grid');
             const configColumn = document.getElementById('config-column');
             const graphColumn = document.getElementById('graph-column');
             
-            if (mode === 'pro') {
+            // Layout: Use side-by-side only when advanced mode is on AND mode is pro
+            if (State.advancedMode && mode === 'pro') {
                 if (mainGrid) mainGrid.className = 'grid grid-cols-1 lg:grid-cols-12 gap-6';
                 if (configColumn) configColumn.className = 'lg:col-span-5 space-y-6';
                 if (graphColumn) graphColumn.className = 'lg:col-span-7 space-y-6';
             } else {
+                // Minimal mode: single column for cleaner, focused view
                 if (mainGrid) mainGrid.className = 'grid grid-cols-1 gap-6';
                 if (configColumn) configColumn.className = 'space-y-6';
                 if (graphColumn) graphColumn.className = 'space-y-6';

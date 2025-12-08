@@ -194,6 +194,22 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+/* Mode Dropdown Styles */
+.mode-dropdown-option {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.mode-dropdown-option:hover {
+    background-color: var(--color-card-alt);
+}
+.mode-dropdown-option:focus {
+    outline: none;
+    background-color: var(--color-card-alt);
+}
+.mode-dropdown-option[aria-selected="true"] {
+    background-color: var(--color-card-alt);
+}
+
 /* Sell Mode Active State */
 .sell-mode-active .buy-only-content {
     display: none !important;

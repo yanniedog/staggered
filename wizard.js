@@ -52,13 +52,6 @@ const SetupWizard = {
             field: "trading_mode",
             options: [
                 { 
-                    label: "Buy + Sell", 
-                    value: "buy-sell", 
-                    description: "Plan both buy and sell ladders",
-                    icon: "↕",
-                    color: "cyan"
-                },
-                { 
                     label: "Buy Only", 
                     value: "buy-only", 
                     description: "I want to accumulate",
@@ -71,9 +64,16 @@ const SetupWizard = {
                     description: "I already own the asset",
                     icon: "↑",
                     color: "green"
+                },
+                { 
+                    label: "Buy + Sell", 
+                    value: "buy-sell", 
+                    description: "Plan both buy and sell ladders",
+                    icon: "↕",
+                    color: "cyan"
                 }
             ],
-            default: "buy-sell"
+            default: "buy-only"
         },
         {
             question: "How much are you working with?",
@@ -229,20 +229,43 @@ const SetupWizard = {
         const stepNum = document.getElementById('wizard-step-num');
         const progress = document.getElementById('wizard-progress');
         
-        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-sell';
+        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         const isSellOnly = tradingMode === 'sell-only';
         const isBuyOnly = tradingMode === 'buy-only';
+        const isBuySell = tradingMode === 'buy-sell';
         
-        if (question.field === 'starting_capital' && isSellOnly) {
-            question = {
-                ...question,
-                question: "How many units to sell?",
-                hint: "Quantity you hold",
-                type: "number",
-                field: "existing_quantity",
-                placeholder: "50",
-                default: 50
-            };
+        if (question.field === 'starting_capital') {
+            if (isSellOnly) {
+                question = {
+                    ...question,
+                    question: "How many shares would you like to sell?",
+                    hint: "Quantity you hold",
+                    type: "number",
+                    field: "existing_quantity",
+                    placeholder: "50",
+                    default: 50
+                };
+            } else if (isBuyOnly) {
+                question = {
+                    ...question,
+                    question: "How much money would you like to invest?",
+                    hint: "Total capital available for buying",
+                    type: "currency",
+                    field: "starting_capital",
+                    placeholder: "10,000",
+                    default: 10000
+                };
+            } else if (isBuySell) {
+                question = {
+                    ...question,
+                    question: "How much money would you like to invest?",
+                    hint: "Total capital available for buying",
+                    type: "currency",
+                    field: "starting_capital",
+                    placeholder: "10,000",
+                    default: 10000
+                };
+            }
         }
         
         if (question.field === 'target_price') {
@@ -504,7 +527,7 @@ const SetupWizard = {
         let question = SetupWizard.questions[SetupWizard.currentStep];
         const input = document.getElementById('wizard-input');
         
-        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-sell';
+        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         const isSellOnly = tradingMode === 'sell-only';
         let actualField = question.field;
         if (question.field === 'starting_capital' && isSellOnly) {
@@ -643,7 +666,7 @@ const SetupWizard = {
         });
         
         // Apply trading mode
-        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-sell';
+        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         if (window.App && window.App.setTradingMode) {
             window.App.setTradingMode(tradingMode);
         }
@@ -652,7 +675,7 @@ const SetupWizard = {
     updateFormInRealTime: () => {
         const question = SetupWizard.questions[SetupWizard.currentStep];
         if (!question) return;
-        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-sell';
+        const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         const isSellOnly = tradingMode === 'sell-only';
         
         if (question.field === 'target_price' || SetupWizard.answers['target_price'] !== undefined) {

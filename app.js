@@ -119,8 +119,9 @@ const State = {
     chartShowCumulative: true,
     chartUnitType: 'volume',
     sellOnlyMode: false,
-    buyOnlyMode: false,
-    tradingMode: 'buy-sell' // 'buy-sell', 'buy-only', 'sell-only'
+    buyOnlyMode: true,
+    tradingMode: 'buy-only', // 'buy-sell', 'buy-only', 'sell-only'
+    advancedMode: false
 };
 
 // --- CALCULATOR ENGINE ---
