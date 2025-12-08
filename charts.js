@@ -293,3 +293,7 @@ function drawDepthChart(selector, buys, sells) {
 // Expose to global scope
 window.drawDepthChart = drawDepthChart;
 
+
+
+
+
