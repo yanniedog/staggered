@@ -158,11 +158,21 @@ input[type=range]::-webkit-slider-thumb:hover { transform: scale(1.1); }
     width: 16px; height: 16px;
     font-size: .7rem;
     display: flex; align-items: center; justify-content: center;
-    cursor: help;
+    cursor: pointer;
     transition: all .2s;
     flex-shrink: 0;
 }
 .helper-tooltip:hover { border-color: var(--color-primary); color: var(--color-primary); }
+.helper-tooltip-popup {
+    left: 0;
+    top: 100%;
+    margin-top: 4px;
+    white-space: normal;
+    line-height: 1.4;
+}
+.helper-tooltip-popup.hidden {
+    display: none;
+}
 
 .fee-type-btn, .chart-toggle-btn {
     border: none;

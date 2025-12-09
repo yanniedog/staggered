@@ -48,6 +48,7 @@ const SetupWizard = {
         {
             question: "What's your goal?",
             hint: "This determines how the calculator works",
+            tooltip: "Choose your trading strategy: Buy Only for accumulation, Sell Only for exit planning, or Buy + Sell for a complete round-trip strategy.",
             type: "mode_choice",
             field: "trading_mode",
             options: [
@@ -78,6 +79,7 @@ const SetupWizard = {
         {
             question: "How much are you working with?",
             hint: "Enter your capital (buy mode) or quantity held (sell mode)",
+            tooltip: "For Buy Only or Buy + Sell: Enter total capital available. For Sell Only: Enter the quantity of assets you currently hold.",
             type: "currency",
             field: "starting_capital",
             placeholder: "10,000",
@@ -86,6 +88,7 @@ const SetupWizard = {
         {
             question: "What's the current price?",
             hint: "The asset's market price right now",
+            tooltip: "Enter the current market price of the asset. This serves as the baseline for calculating your buy and sell order ladders.",
             type: "currency",
             field: "current_price",
             placeholder: "100",
@@ -94,6 +97,7 @@ const SetupWizard = {
         {
             question: "What's your target?",
             hint: "Your lowest buy price or highest sell price",
+            tooltip: "For Buy Only: Enter the lowest price you want to buy at. For Sell Only: Enter the highest price you want to sell at. For Buy + Sell: Enter the range percentage (default 25% means buys 25% below and sells 25% above current price).",
             type: "currency",
             field: "target_price",
             placeholder: "80",
@@ -274,18 +278,59 @@ const SetupWizard = {
                     ...question,
                     question: "Highest sell price?",
                     hint: "Top of your sell ladder. Range calculated automatically.",
+                    tooltip: "Enter the highest price at which you want to place a sell order. All sell orders will be distributed between current price and this target.",
                     field: "target_price",
                     placeholder: "120"
+                };
+            } else if (isBuySell) {
+                question = {
+                    ...question,
+                    question: "How wide should your price range be?",
+                    hint: "Enter a percentage. For example, 25% means buy orders will be 25% below current price and sell orders 25% above.",
+                    tooltip: "This sets how far your buy and sell orders spread from the current price. A higher percentage means orders are placed further away, capturing bigger price swings.",
+                    type: "percentage",
+                    field: "range_percent",
+                    placeholder: "25",
+                    default: 25,
+                    min: 0.1,
+                    max: 99
                 };
             } else {
                 question = {
                     ...question,
                     question: "Lowest buy price?",
                     hint: "Bottom of your buy ladder. Range calculated automatically.",
+                    tooltip: "Enter the lowest price at which you want to place a buy order. All buy orders will be distributed between current price and this target.",
                     field: "target_price",
                     placeholder: "80"
                 };
             }
+        }
+        
+        if (question.field === 'starting_capital') {
+            if (isSellOnly) {
+                question = {
+                    ...question,
+                    tooltip: "Enter the total quantity of assets you currently hold and want to sell using the ladder strategy."
+                };
+            } else if (isBuySell) {
+                question = {
+                    ...question,
+                    tooltip: "Enter the total capital you want to invest. This will be distributed across buy orders, and the resulting assets will be used for sell orders."
+                };
+            } else {
+                question = {
+                    ...question,
+                    tooltip: "Enter the total capital available for buying. This amount will be distributed across multiple buy orders at different price levels."
+                };
+            }
+        }
+        
+        if (question.field === 'current_price') {
+            question = {
+                ...question,
+                tooltip: "The current market price serves as the baseline. Buy orders will be placed below this price, and sell orders above it (in Buy + Sell mode)."
+            };
         }
         
         stepNum.textContent = SetupWizard.currentStep + 1;
@@ -301,7 +346,22 @@ const SetupWizard = {
         
         let html = `
             <div class="wizard-question">
-                <h3 class="text-2xl md:text-3xl font-bold text-[var(--color-text)] mb-4">${question.question}</h3>
+                <div class="flex items-start justify-between gap-3 mb-4 relative">
+                    <h3 class="text-2xl md:text-3xl font-bold text-[var(--color-text)] flex-1">${question.question}</h3>
+                    ${question.tooltip ? `
+                        <div class="relative flex-shrink-0">
+                            <button type="button" 
+                                    class="wizard-tooltip-btn w-6 h-6 rounded-full bg-[var(--color-card-muted)] border border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all flex items-center justify-center text-xs font-medium active:scale-95"
+                                    onclick="const tooltip = this.parentElement.querySelector('.wizard-tooltip-content'); tooltip?.classList.toggle('hidden')"
+                                    aria-label="Show explanation">
+                                ?
+                            </button>
+                            <div class="wizard-tooltip-content hidden absolute right-0 top-full mt-2 w-64 p-3 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg shadow-lg text-xs text-[var(--color-text-secondary)] z-50">
+                                ${question.tooltip}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
                 <p class="wizard-hint">${question.hint}</p>
         `;
 
@@ -311,7 +371,7 @@ const SetupWizard = {
             const currentPrice = SetupWizard.answers['current_price'] || 0;
             
             let defaultValue = question.default;
-            if (question.field === 'target_price' && currentPrice > 0) {
+            if (question.field === 'target_price' && currentPrice > 0 && !isBuySell) {
                 const calculatedDefault = isSellOnly ? currentPrice * 1.25 : currentPrice * 0.75;
                 defaultValue = calculatedDefault;
                 
@@ -324,6 +384,12 @@ const SetupWizard = {
                         actualValue = calculatedDefault;
                         SetupWizard.answers[valueField] = calculatedDefault;
                     }
+                }
+            } else if (question.field === 'range_percent' && isBuySell) {
+                defaultValue = 25;
+                if (actualValue === undefined || actualValue === null) {
+                    actualValue = 25;
+                    SetupWizard.answers['range_percent'] = 25;
                 }
             }
             
@@ -343,7 +409,10 @@ const SetupWizard = {
             }
             const inputType = question.type === 'number' ? 'number' : 'text';
             const isCurrency = question.type === 'currency';
-            const showRangeCalc = question.field === 'target_price';
+            const isPercentage = question.type === 'percentage' || question.field === 'range_percent';
+            const showRangeCalc = question.field === 'target_price' && !isBuySell;
+            const showBuySellTargets = question.field === 'range_percent' && isBuySell;
+            
             html += `
                 <div class="mt-6">
                     <label for="wizard-input" class="sr-only">${question.question}</label>
@@ -361,9 +430,24 @@ const SetupWizard = {
                                 aria-describedby="wizard-hint"
                                 autocomplete="off"
                             >
+                            ${isPercentage ? '<span class="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--color-text-secondary)] font-mono">%</span>' : ''}
                         </div>
                         ${showRangeCalc ? `<div id="wizard-range-display" class="text-sm text-[var(--color-text-muted)] whitespace-nowrap">Range: <span class="font-mono">0%</span></div>` : ''}
                     </div>
+                    ${showBuySellTargets ? `
+                        <div id="wizard-buysell-targets" class="mt-4 p-3 bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)]">
+                            <div class="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                    <div class="text-[10px] text-[var(--color-text-muted)] uppercase mb-1">Lowest Buy Price</div>
+                                    <div id="wizard-buy-target" class="font-mono font-semibold text-red-400">-</div>
+                                </div>
+                                <div>
+                                    <div class="text-[10px] text-[var(--color-text-muted)] uppercase mb-1">Highest Sell Price</div>
+                                    <div id="wizard-sell-target" class="font-mono font-semibold text-green-400">-</div>
+                                </div>
+                            </div>
+                        </div>
+                    ` : ''}
                 </div>
             `;
         } else if (question.type === 'mode_choice') {
@@ -422,7 +506,7 @@ const SetupWizard = {
         html += '</div>';
         wizardContent.innerHTML = html;
 
-        if (question.field === 'target_price') {
+        if (question.field === 'target_price' && !isBuySell) {
             const currentPrice = SetupWizard.answers['current_price'] || 0;
             let targetPrice = SetupWizard.answers['target_price'];
             if ((!targetPrice || targetPrice === null) && currentPrice > 0) {
@@ -445,7 +529,33 @@ const SetupWizard = {
                 rangeDisplay.innerHTML = `Range: <span class="font-mono">${Math.abs(range).toFixed(1)}%</span>`;
             }
         }
+        
+        if (question.field === 'range_percent' && isBuySell) {
+            const currentPrice = SetupWizard.answers['current_price'] || 0;
+            let rangePercent = SetupWizard.answers['range_percent'] || 25;
+            const input = document.getElementById('wizard-input');
+            if (input && (!input.value || input.value === '')) {
+                input.value = '25';
+                SetupWizard.answers['range_percent'] = 25;
+            }
+            SetupWizard.updateBuySellTargets(currentPrice, rangePercent);
+        }
 
+        // Close tooltips when clicking outside (only add once)
+        if (!SetupWizard._tooltipCloseHandler) {
+            SetupWizard._tooltipCloseHandler = (e) => {
+                if (!e.target.closest('.wizard-tooltip-btn') && !e.target.closest('.wizard-tooltip-content')) {
+                    const wizardContent = document.getElementById('wizard-content');
+                    if (wizardContent) {
+                        wizardContent.querySelectorAll('.wizard-tooltip-content').forEach(tooltip => {
+                            tooltip.classList.add('hidden');
+                        });
+                    }
+                }
+            };
+            document.addEventListener('click', SetupWizard._tooltipCloseHandler, true);
+        }
+        
         const input = document.getElementById('wizard-input');
         if (input) {
             setTimeout(() => {
@@ -464,7 +574,7 @@ const SetupWizard = {
                 const errorEl = document.getElementById('wizard-error');
                 if (errorEl) errorEl.classList.remove('show');
                 
-                if (question.field === 'target_price') {
+                if (question.field === 'target_price' && !isBuySell) {
                     const currentPrice = SetupWizard.answers['current_price'] || 0;
                     const targetPrice = parseFloat(input.value.replace(/,/g, '')) || 0;
                     const rangeDisplay = document.getElementById('wizard-range-display');
@@ -474,6 +584,10 @@ const SetupWizard = {
                             : ((currentPrice - targetPrice) / currentPrice) * 100;
                         rangeDisplay.innerHTML = `Range: <span class="font-mono">${Math.abs(range).toFixed(1)}%</span>`;
                     }
+                } else if (question.field === 'range_percent' && isBuySell) {
+                    const currentPrice = SetupWizard.answers['current_price'] || 0;
+                    const rangePercent = parseFloat(input.value) || 0;
+                    SetupWizard.updateBuySellTargets(currentPrice, rangePercent);
                 }
             });
         }
@@ -529,15 +643,25 @@ const SetupWizard = {
         
         const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         const isSellOnly = tradingMode === 'sell-only';
+        const isBuySell = tradingMode === 'buy-sell';
+        
+        // Determine the actual field being used (may differ from original question field)
         let actualField = question.field;
+        let actualQuestionType = question.type;
+        
         if (question.field === 'starting_capital' && isSellOnly) {
             actualField = 'existing_quantity';
+            actualQuestionType = 'number';
+        } else if (question.field === 'target_price' && isBuySell) {
+            actualField = 'range_percent';
+            actualQuestionType = 'percentage';
         }
         
         if (input) {
             let value = input.value.trim();
             
-            if (!value && question.field === 'target_price') {
+            // Handle default value for target_price (but not for range_percent in buy-sell)
+            if (!value && question.field === 'target_price' && !isBuySell) {
                 const currentPrice = SetupWizard.answers['current_price'] || 0;
                 if (currentPrice > 0) {
                     value = (isSellOnly ? currentPrice * 1.25 : currentPrice * 0.75).toString();
@@ -550,7 +674,7 @@ const SetupWizard = {
                 return;
             }
             
-            if (question.type === 'currency' || question.type === 'number' || question.type === 'percentage' || question.type === 'fee') {
+            if (actualQuestionType === 'currency' || actualQuestionType === 'number' || actualQuestionType === 'percentage' || actualQuestionType === 'fee') {
                 value = parseFloat(value.replace(/,/g, ''));
                 if (isNaN(value) || value <= 0) {
                     SetupWizard.showError('Enter a valid positive number.');
@@ -570,7 +694,7 @@ const SetupWizard = {
                     input.select();
                     return;
                 }
-                if (question.field === 'target_price') {
+                if (actualField === 'target_price' && !isBuySell) {
                     const currentPrice = SetupWizard.answers['current_price'] || 0;
                     if (currentPrice > 0) {
                         if (isSellOnly && value <= currentPrice) {
@@ -588,7 +712,8 @@ const SetupWizard = {
                 }
             }
             
-            if (question.field === 'target_price') {
+            // Save the value based on actual field
+            if (actualField === 'target_price') {
                 const currentPrice = SetupWizard.answers['current_price'] || 0;
                 if (currentPrice > 0 && value > 0) {
                     const depth = isSellOnly
@@ -597,14 +722,26 @@ const SetupWizard = {
                     SetupWizard.answers['depth'] = Math.abs(depth);
                 }
                 SetupWizard.answers['target_price'] = value;
+            } else if (actualField === 'range_percent') {
+                SetupWizard.answers['range_percent'] = value;
+                const currentPrice = SetupWizard.answers['current_price'] || 0;
+                if (currentPrice > 0) {
+                    SetupWizard.answers['depth'] = value;
+                }
             } else {
                 SetupWizard.answers[actualField] = value;
                 
                 if (question.field === 'current_price' && value > 0) {
-                    const calculatedTargetPrice = isSellOnly ? value * 1.25 : value * 0.75;
-                    if (SetupWizard.answers['target_price'] === undefined || 
-                        SetupWizard.answers['target_price'] === null) {
-                        SetupWizard.answers['target_price'] = calculatedTargetPrice;
+                    if (isBuySell) {
+                        // For buy-sell, update range targets if range_percent is set
+                        const rangePercent = SetupWizard.answers['range_percent'] || 25;
+                        SetupWizard.updateBuySellTargets(value, rangePercent);
+                    } else {
+                        const calculatedTargetPrice = isSellOnly ? value * 1.25 : value * 0.75;
+                        if (SetupWizard.answers['target_price'] === undefined || 
+                            SetupWizard.answers['target_price'] === null) {
+                            SetupWizard.answers['target_price'] = calculatedTargetPrice;
+                        }
                     }
                 }
             }
@@ -651,6 +788,9 @@ const SetupWizard = {
         
         localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
         
+        // Update history state when wizard finishes
+        history.pushState({ introVisible: false }, '');
+        
         setTimeout(() => {
             if (window.App) {
                 window.App.calculatePlan();
@@ -670,13 +810,37 @@ const SetupWizard = {
         if (window.App && window.App.setTradingMode) {
             window.App.setTradingMode(tradingMode);
         }
+        
+        // Apply range_percent to depth for buy-sell mode
+        if (tradingMode === 'buy-sell' && SetupWizard.answers['range_percent']) {
+            const depthInput = document.getElementById('depth_input');
+            const depthSlider = document.getElementById('depth');
+            if (depthInput) depthInput.value = SetupWizard.answers['range_percent'];
+            if (depthSlider) depthSlider.value = SetupWizard.answers['range_percent'];
+        }
     },
 
+    updateBuySellTargets: (currentPrice, rangePercent) => {
+        if (!currentPrice || !rangePercent) return;
+        const buyTarget = currentPrice * (1 - rangePercent / 100);
+        const sellTarget = currentPrice * (1 + rangePercent / 100);
+        const overallRange = rangePercent * 2;
+        
+        const buyTargetEl = document.getElementById('wizard-buy-target');
+        const sellTargetEl = document.getElementById('wizard-sell-target');
+        const overallRangeEl = document.getElementById('wizard-overall-range');
+        
+        if (buyTargetEl) buyTargetEl.textContent = Utils.fmtCurr(buyTarget);
+        if (sellTargetEl) sellTargetEl.textContent = Utils.fmtCurr(sellTarget);
+        if (overallRangeEl) overallRangeEl.textContent = overallRange.toFixed(1) + '%';
+    },
+    
     updateFormInRealTime: () => {
         const question = SetupWizard.questions[SetupWizard.currentStep];
         if (!question) return;
         const tradingMode = SetupWizard.answers['trading_mode'] || 'buy-only';
         const isSellOnly = tradingMode === 'sell-only';
+        const isBuySell = tradingMode === 'buy-sell';
         
         if (question.field === 'target_price' || SetupWizard.answers['target_price'] !== undefined) {
             const currentPrice = SetupWizard.answers['current_price'] || 0;
@@ -684,6 +848,13 @@ const SetupWizard = {
             if (currentPrice > 0 && targetPrice > 0) {
                 SetupWizard.answers['depth'] = Math.abs((isSellOnly ? targetPrice - currentPrice : currentPrice - targetPrice) / currentPrice * 100);
             }
+        }
+        
+        if (question.field === 'range_percent' && isBuySell) {
+            const currentPrice = SetupWizard.answers['current_price'] || 0;
+            const rangePercent = SetupWizard.answers['range_percent'] || 25;
+            SetupWizard.answers['depth'] = rangePercent;
+            SetupWizard.updateBuySellTargets(currentPrice, rangePercent);
         }
         
         const actualField = (question.field === 'starting_capital' && isSellOnly) ? 'existing_quantity' : question.field;

@@ -97,6 +97,16 @@ document.addEventListener('DOMContentLoaded', function () {
             // Ensure minimal interface is applied on init
             App.applyAdvancedMode();
             
+            // Initialize history state
+            if (!history.state || !history.state.introVisible) {
+                history.replaceState({ introVisible: true }, '');
+            }
+            
+            // Handle browser back button - consolidated handler
+            window.addEventListener('popstate', (e) => {
+                App.handleBackNavigation();
+            });
+            
             App.calculatePlan();
             App.ensureTableBottomSpace();
             window.addEventListener('resize', Utils.debounce(() => {
@@ -347,6 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     requestAnimationFrame(() => {
                         SetupWizard.show();
                         Utils.hideIntro(document.getElementById('intro-layer'));
+                        history.pushState({ introVisible: false }, '');
                     });
                 });
             }
@@ -360,6 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     localStorage.setItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed', 'true');
                     App.setMode('pro');
                     App.calculatePlan();
+                    history.pushState({ introVisible: false }, '');
                 });
             }
 
@@ -367,12 +379,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const logoHeader = document.getElementById('logo-header');
             if (logoHeader) {
                 logoHeader.addEventListener('click', () => {
-                    const introLayer = document.getElementById('intro-layer');
-                    if (introLayer) {
-                        introLayer.style.display = 'flex';
-                        introLayer.style.opacity = '1';
-                        introLayer.style.pointerEvents = 'auto';
-                    }
+                    App.returnToWelcome();
                 });
             }
 
@@ -380,14 +387,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const startOverBtn = document.getElementById('start-over-btn');
             if (startOverBtn) {
                 startOverBtn.addEventListener('click', () => {
-                    const introLayer = document.getElementById('intro-layer');
-                    if (introLayer) {
-                        introLayer.style.display = 'flex';
-                        introLayer.style.opacity = '1';
-                        introLayer.style.pointerEvents = 'auto';
-                    }
+                    App.returnToWelcome();
                 });
             }
+            
 
             // Slider Syncs
             const syncSlider = (slider, input, display) => {
@@ -781,6 +784,44 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (els.stickyChevron) els.stickyChevron.classList.toggle('rotate-180');
                 });
             }
+            
+            // Make helper tooltips clickable
+            const helperTooltips = document.querySelectorAll('.helper-tooltip');
+            helperTooltips.forEach(tooltipBtn => {
+                // Create tooltip content div if it doesn't exist
+                if (!tooltipBtn.dataset.tooltipInitialized) {
+                    tooltipBtn.dataset.tooltipInitialized = 'true';
+                    const title = tooltipBtn.getAttribute('title');
+                    if (title) {
+                        tooltipBtn.removeAttribute('title'); // Remove native tooltip
+                        
+                        const tooltipContent = document.createElement('div');
+                        tooltipContent.className = 'helper-tooltip-popup hidden absolute z-50 mt-2 p-2 bg-[var(--color-card)] border border-[var(--color-border)] rounded-lg shadow-lg text-xs text-[var(--color-text-secondary)] max-w-xs';
+                        tooltipContent.textContent = title;
+                        tooltipBtn.parentElement.style.position = 'relative';
+                        tooltipBtn.parentElement.appendChild(tooltipContent);
+                        
+                        tooltipBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            const isHidden = tooltipContent.classList.contains('hidden');
+                            // Close all other tooltips
+                            document.querySelectorAll('.helper-tooltip-popup').forEach(t => {
+                                if (t !== tooltipContent) t.classList.add('hidden');
+                            });
+                            tooltipContent.classList.toggle('hidden', !isHidden);
+                        });
+                    }
+                }
+            });
+            
+            // Close tooltips when clicking outside
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.helper-tooltip') && !e.target.closest('.helper-tooltip-popup')) {
+                    document.querySelectorAll('.helper-tooltip-popup').forEach(tooltip => {
+                        tooltip.classList.add('hidden');
+                    });
+                }
+            });
         },
 
         debouncedCalc: () => Utils.debounce(App.calculatePlan, 50)(),
@@ -1206,6 +1247,123 @@ document.addEventListener('DOMContentLoaded', function () {
                 } catch(err) { alert('Invalid Config'); }
             };
             reader.readAsText(file);
+        },
+        
+        handleBackNavigation: () => {
+            const introLayer = document.getElementById('intro-layer');
+            if (!introLayer) return;
+            
+            // Check if we're on main screen (intro hidden)
+            const isMainScreen = introLayer.style.display === 'none' || 
+                (introLayer.style.opacity === '0' && introLayer.style.pointerEvents === 'none');
+            
+            // Check if any modal/wizard is open
+            const wizard = document.getElementById('setup-wizard');
+            const howItWorksModal = document.getElementById('how-it-works-modal');
+            const videoModal = document.getElementById('video-modal');
+            const qrModal = document.getElementById('qr-modal');
+            
+            const hasOpenModal = (wizard && wizard.classList.contains('open')) ||
+                (howItWorksModal && howItWorksModal.classList.contains('open')) ||
+                (videoModal && videoModal.classList.contains('open')) ||
+                (qrModal && qrModal.classList.contains('open'));
+            
+            // If modal is open, just close it
+            if (hasOpenModal) {
+                if (wizard && wizard.classList.contains('open')) {
+                    wizard.classList.remove('open');
+                    wizard.style.opacity = '0';
+                    wizard.style.pointerEvents = 'none';
+                }
+                if (howItWorksModal && howItWorksModal.classList.contains('open')) {
+                    howItWorksModal.classList.remove('open');
+                }
+                if (videoModal && videoModal.classList.contains('open')) {
+                    videoModal.classList.remove('open');
+                }
+                if (qrModal && qrModal.classList.contains('open')) {
+                    qrModal.classList.remove('open');
+                }
+                // Push state to prevent going back further
+                history.pushState({ introVisible: !isMainScreen }, '');
+                return;
+            }
+            
+            // If on main screen, show confirmation
+            if (isMainScreen) {
+                const shouldLeave = confirm('Leave and return to welcome screen?\n\nClick OK to continue, or Cancel to stay.');
+                if (!shouldLeave) {
+                    // User cancelled, push state to prevent going back
+                    history.pushState({ introVisible: false }, '');
+                    return;
+                }
+                
+                // Offer to save
+                if (State.currentPlanData) {
+                    const saveNow = confirm('Save your current plan before leaving?');
+                    if (saveNow) {
+                        App.saveConfig();
+                    }
+                }
+            }
+            
+            // Return to welcome screen
+            introLayer.style.display = 'flex';
+            introLayer.style.opacity = '1';
+            introLayer.style.pointerEvents = 'auto';
+            history.replaceState({ introVisible: true }, '');
+        },
+        
+        returnToWelcome: (fromBackButton = false) => {
+            const introLayer = document.getElementById('intro-layer');
+            if (!introLayer) return;
+            
+            // Check if we're on main screen
+            const isMainScreen = introLayer.style.display === 'none' || 
+                (introLayer.style.opacity === '0' && introLayer.style.pointerEvents === 'none');
+            
+            if (isMainScreen && !fromBackButton) {
+                // Show confirmation dialog with save option
+                const shouldSave = confirm('Leave and return to welcome screen?\n\nClick OK to continue, or Cancel to stay.');
+                if (!shouldSave) {
+                    return;
+                }
+                
+                // Offer to save config
+                if (State.currentPlanData) {
+                    const saveNow = confirm('Save your current plan before leaving?');
+                    if (saveNow) {
+                        App.saveConfig();
+                    }
+                }
+            }
+            
+            // Close any open modals/wizard
+            const wizard = document.getElementById('setup-wizard');
+            const howItWorksModal = document.getElementById('how-it-works-modal');
+            const videoModal = document.getElementById('video-modal');
+            const qrModal = document.getElementById('qr-modal');
+            
+            if (wizard && wizard.classList.contains('open')) {
+                wizard.classList.remove('open');
+                wizard.style.opacity = '0';
+                wizard.style.pointerEvents = 'none';
+            }
+            if (howItWorksModal && howItWorksModal.classList.contains('open')) {
+                howItWorksModal.classList.remove('open');
+            }
+            if (videoModal && videoModal.classList.contains('open')) {
+                videoModal.classList.remove('open');
+            }
+            if (qrModal && qrModal.classList.contains('open')) {
+                qrModal.classList.remove('open');
+            }
+            
+            // Show welcome screen
+            introLayer.style.display = 'flex';
+            introLayer.style.opacity = '1';
+            introLayer.style.pointerEvents = 'auto';
+            history.replaceState({ introVisible: true }, '');
         }
     };
 
