@@ -62,7 +62,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Video
         videoBtn: document.getElementById('video-btn'),
-        videoBtnMobile: document.getElementById('video-btn-mobile'),
         videoModal: document.getElementById('video-modal'),
         videoBackdrop: document.getElementById('video-backdrop'),
         videoClose: document.getElementById('video-close'),
@@ -425,9 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // How It Works button in header
             const howItWorksBtn = document.getElementById('how-it-works-btn');
-            const howItWorksBtnMobile = document.getElementById('how-it-works-btn-mobile');
             if (howItWorksBtn) howItWorksBtn.addEventListener('click', () => toggleHowItWorks(true));
-            if (howItWorksBtnMobile) howItWorksBtnMobile.addEventListener('click', () => toggleHowItWorks(true));
 
             // Handle Intro Page
             const enterBtn = document.getElementById('enter-app-btn');
@@ -840,7 +837,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             };
             if (els.videoBtn) els.videoBtn.addEventListener('click', openVideo);
-            if (els.videoBtnMobile) els.videoBtnMobile.addEventListener('click', openVideo);
             if (introVideoLink) introVideoLink.addEventListener('click', openVideo);
             [els.videoBackdrop, els.videoClose].forEach(el => {
                 if (el) {
@@ -1403,23 +1399,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const introLayer = document.getElementById('intro-layer');
             if (!introLayer) return;
             
-            // Check if we're on main screen
-            const isMainScreen = introLayer.style.display === 'none' || 
-                (introLayer.style.opacity === '0' && introLayer.style.pointerEvents === 'none');
+            // Check if we're on main screen (intro is hidden)
+            const computedDisplay = window.getComputedStyle(introLayer).display;
+            const isMainScreen = computedDisplay === 'none' || introLayer.style.opacity === '0';
             
             if (isMainScreen && !fromBackButton) {
-                // Show confirmation dialog with save option
-                const shouldSave = confirm('Leave and return to welcome screen?\n\nClick OK to continue, or Cancel to stay.');
-                if (!shouldSave) {
-                    return;
-                }
-                
-                // Offer to save config
-                if (State.currentPlanData) {
-                    const saveNow = confirm('Save your current plan before leaving?');
-                    if (saveNow) {
-                        App.saveConfig();
-                    }
+                // Offer to save config first
+                const saveNow = confirm('Would you like to save your current configuration before returning to the welcome screen?\n\nClick OK to save, or Cancel to continue without saving.');
+                if (saveNow) {
+                    App.saveConfig();
                 }
             }
             
