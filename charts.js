@@ -186,29 +186,31 @@ function drawDepthChart(selector, buys, sells) {
             .attr("opacity", 0.3);
     }
 
-    // Y-axis (Price)
+    // Y-axis (Price) - use evenly spaced ticks for clean labels
     const yAxis = d3.axisLeft(y)
-        .ticks(Math.min(totalBars, 10))
+        .ticks(8)
         .tickFormat(d => "$" + d3.format(",.0f")(d));
 
     svg.append("g")
         .attr("transform", `translate(${margin.left},0)`)
         .call(yAxis)
-        .attr("class", "text-[9px] opacity-60")
+        .attr("class", "text-[10px]")
         .call(g => g.selectAll("path").attr("stroke", "var(--color-border-strong)"))
-        .call(g => g.selectAll("line").attr("stroke", "var(--color-border)"));
+        .call(g => g.selectAll("line").attr("stroke", "var(--color-border)").attr("opacity", 0.3))
+        .call(g => g.selectAll("text").attr("fill", "var(--color-text-secondary)"));
 
     // X-axis
     const xAxis = d3.axisBottom(x)
-        .ticks(5)
-        .tickFormat(d => isValue ? "$" + d3.format(".2s")(d) : d3.format(".3s")(d));
+        .ticks(6)
+        .tickFormat(d => isValue ? "$" + d3.format(",.0f")(d) : d3.format(",.0f")(d));
 
     svg.append("g")
         .attr("transform", `translate(0,${height - margin.bottom})`)
         .call(xAxis)
-        .attr("class", "text-[9px] opacity-60")
+        .attr("class", "text-[10px]")
         .call(g => g.selectAll("path").attr("stroke", "var(--color-border-strong)"))
-        .call(g => g.selectAll("line").remove());
+        .call(g => g.selectAll("line").remove())
+        .call(g => g.selectAll("text").attr("fill", "var(--color-text-secondary)"));
 
     // X-axis label
     const unitLabel = isValue ? "Value ($)" : "Volume";
