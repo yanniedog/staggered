@@ -1,9 +1,9 @@
 // OrderSkew - D3 Chart Module (charts.js)
 
 /**
- * Combined bar chart with cumulative line overlay:
+ * Combined bar chart with cumulative area overlay:
  *  - Horizontal bars for each individual order
- *  - Cumulative line showing running total
+ *  - Cumulative area showing running total
  *  - Both layers can be toggled on/off
  *  - In sell-only mode, only shows sell orders
  *  - In buy-only mode, only shows buy orders
@@ -100,9 +100,59 @@ function drawDepthChart(selector, buys, sells) {
         }
     }
 
-    // Create layer groups
+    // Create layer groups - areaGroup first so it renders behind bars
+    const areaGroup = svg.append("g").attr("class", "cumulative-layer");
     const barsGroup = svg.append("g").attr("class", "bars-layer");
-    const lineGroup = svg.append("g").attr("class", "cumulative-layer");
+
+    // Draw cumulative areas if enabled (draw first so they appear behind bars)
+    if (showCumulative) {
+        const drawCumulativeArea = (series, areaClass, colorVar) => {
+            if (!series.length) return;
+            const color = getComputedStyle(document.body).getPropertyValue(colorVar).trim();
+            
+            // Manually construct the area path to ensure left edge always starts at margin.left
+            // Create a stepped area: each segment is a rectangle from margin.left to cumulative value
+            let pathData = [];
+            
+            for (let i = 0; i < series.length; i++) {
+                const d = series[i];
+                const yTop = y(d.price) - effectiveBarHeight / 2;
+                const yBottom = y(d.price) + effectiveBarHeight / 2;
+                const xRight = x(getCumulativeValue(d));
+                
+                if (i === 0) {
+                    // Start at top-left of first segment
+                    pathData.push(`M ${margin.left} ${yTop}`);
+                } else {
+                    // From previous segment's bottom-left, step up to current top
+                    const prevD = series[i - 1];
+                    const prevYBottom = y(prevD.price) + effectiveBarHeight / 2;
+                    pathData.push(`L ${margin.left} ${prevYBottom}`);
+                    pathData.push(`L ${margin.left} ${yTop}`);
+                }
+                
+                // Draw rectangle for this segment: top-right -> bottom-right -> bottom-left
+                pathData.push(`L ${xRight} ${yTop}`);      // Extend right
+                pathData.push(`L ${xRight} ${yBottom}`);   // Step down
+                pathData.push(`L ${margin.left} ${yBottom}`); // Back to left
+            }
+            
+            // Close the path back to start
+            if (series.length > 0) {
+                const firstYTop = y(series[0].price) - effectiveBarHeight / 2;
+                pathData.push(`L ${margin.left} ${firstYTop}`);
+                pathData.push('Z');
+            }
+            
+            areaGroup.append("path")
+                .attr("class", areaClass)
+                .attr("fill", color)
+                .attr("opacity", 0.4)
+                .attr("d", pathData.join(' '));
+        };
+        drawCumulativeArea(buySeries, "buy-cum-area", "--color-chart-buy-area");
+        drawCumulativeArea(sellSeries, "sell-cum-area", "--color-chart-sell-area");
+    }
 
     // Draw bars if enabled
     if (showBars) {
@@ -121,25 +171,6 @@ function drawDepthChart(selector, buys, sells) {
         };
         drawBars(buySeries, "buy-bar", "--color-chart-buy-start");
         drawBars(sellSeries, "sell-bar", "--color-chart-sell-start");
-    }
-
-    // Draw cumulative lines if enabled
-    if (showCumulative) {
-        const lineGenerator = d3.line().x(d => x(getCumulativeValue(d))).y(d => y(d.price)).curve(d3.curveStepAfter);
-        const drawCumulativeLine = (series, dotClass, colorVar) => {
-            if (!series.length) return;
-            const color = getComputedStyle(document.body).getPropertyValue(colorVar).trim();
-            lineGroup.append("path").datum(series)
-                .attr("fill", "none").attr("stroke", color)
-                .attr("stroke-width", 2.5).attr("stroke-dasharray", "6 3")
-                .attr("opacity", 0.9).attr("d", lineGenerator);
-            lineGroup.selectAll(`.${dotClass}`).data(series).enter().append("circle")
-                .attr("class", dotClass)
-                .attr("cx", d => x(getCumulativeValue(d))).attr("cy", d => y(d.price))
-                .attr("r", 4).attr("fill", color).attr("stroke", "white").attr("stroke-width", 1.5);
-        };
-        drawCumulativeLine(buySeries, "buy-cum-dot", "--color-chart-buy-start");
-        drawCumulativeLine(sellSeries, "sell-cum-dot", "--color-chart-sell-start");
     }
 
     // Mid price line (only show in buy+sell mode)
@@ -219,12 +250,11 @@ function drawDepthChart(selector, buys, sells) {
                     .attr("stroke-width", 2);
             }
 
-            // Highlight cumulative dot
+            // Highlight cumulative area
             if (showCumulative) {
-                const dotClass = d.isBuy ? ".buy-cum-dot" : ".sell-cum-dot";
-                lineGroup.selectAll(dotClass)
-                    .filter(bd => bd.price === d.price)
-                    .attr("r", 6);
+                const areaClass = d.isBuy ? ".buy-cum-area" : ".sell-cum-area";
+                areaGroup.selectAll(areaClass)
+                    .attr("opacity", 0.6);
             }
 
             // Show tooltip
@@ -280,10 +310,9 @@ function drawDepthChart(selector, buys, sells) {
                     .attr("stroke", "none");
             }
             if (showCumulative) {
-                const dotClass = d.isBuy ? ".buy-cum-dot" : ".sell-cum-dot";
-                lineGroup.selectAll(dotClass)
-                    .filter(bd => bd.price === d.price)
-                    .attr("r", 4);
+                const areaClass = d.isBuy ? ".buy-cum-area" : ".sell-cum-area";
+                areaGroup.selectAll(areaClass)
+                    .attr("opacity", 0.4);
             }
             tooltip.classed("hidden", true).style("opacity", 0);
             svg.selectAll(".cursor-line").remove();
@@ -495,8 +524,3 @@ function drawHowItWorksChart(selector, currentPrice = 100, showValue = false) {
 
 // Expose to global scope
 window.drawHowItWorksChart = drawHowItWorksChart;
-
-
-
-
-
