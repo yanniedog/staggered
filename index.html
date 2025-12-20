@@ -76,125 +76,134 @@
                 <p class="text-center text-[var(--color-text-secondary)] text-sm mt-2">Strategic order placement made simple</p>
             </div>
             
-            <div class="p-6 space-y-6">
-                <!-- Core Concept - Visual -->
-                <div class="space-y-4">
-                    <h4 class="text-base font-semibold text-[var(--color-text)] flex items-center gap-2">
-                        <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                        The Core Concept
-                    </h4>
-                    <p class="text-sm text-[var(--color-text-secondary)] leading-relaxed">
-                        Instead of one big order, spread across multiple price levels. <strong class="text-red-400">Buy low</strong>, <strong class="text-green-400">sell high</strong> - automatically.
-                    </p>
-                    
-                    <!-- Visual Diagram: Volume vs Value -->
-                    <div class="grid grid-cols-2 gap-4 mt-4">
-                        <div class="p-4 rounded-lg bg-[var(--color-card-muted)] border border-[var(--color-border)]">
-                            <div class="flex items-center justify-between mb-3">
-                                <p class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Volume</p>
-                                <span class="text-[9px] px-1.5 py-0.5 rounded bg-[var(--color-border)] text-[var(--color-text-muted)]">Symmetrical</span>
-                            </div>
-                            <div class="h-36 w-full relative" id="how-it-works-volume-chart">
-                                <svg width="100%" height="100%"></svg>
-                                <!-- Annotation arrow pointing to larger bars -->
-                                <div class="absolute right-0 top-1/4 text-[8px] text-[var(--color-text-muted)] flex items-center gap-0.5 pointer-events-none">
-                                    <span class="hidden sm:inline">←</span>
-                                    <span class="hidden sm:inline">Larger far from price</span>
-                                </div>
-                            </div>
-                            <!-- Chart Legend -->
-                            <div class="flex items-center justify-center gap-4 mt-2 pt-2 border-t border-[var(--color-border)]">
-                                <div class="flex items-center gap-1">
-                                    <span class="w-2 h-2 rounded-sm bg-red-500/70"></span>
-                                    <span class="text-[9px] text-red-400">Buy</span>
-                                </div>
-                                <div class="flex items-center gap-1">
-                                    <span class="w-2 h-2 rounded-sm bg-green-500/70"></span>
-                                    <span class="text-[9px] text-green-400">Sell</span>
-                                </div>
-                            </div>
-                            <p class="text-[10px] text-[var(--color-text-muted)] mt-2 text-center">Equal quantity on both sides</p>
+            <div class="p-6 space-y-4">
+                <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                    <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-sm font-semibold text-[var(--color-text)]">Beginner walk-through</span>
                         </div>
-                        <div class="p-4 rounded-lg bg-[var(--color-card-muted)] border border-[var(--color-border)] relative overflow-hidden">
-                            <!-- Profit highlight glow -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-green-500/5 to-transparent pointer-events-none"></div>
-                            <div class="relative z-10">
+                        <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-4 space-y-2 text-sm text-[var(--color-text-secondary)]">
+                        <p>Order Skew uses <strong class="text-[var(--color-text)]">limit orders</strong> placed in a ladder. Each rung is a pre-set buy or sell at a specific price, so you don’t chase the market.</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Buy ladder: rungs below the current price to accumulate cheaper.</li>
+                            <li>Sell ladder: rungs above the current price to take profit gradually.</li>
+                            <li>First rung: the closest order; you can set where it starts.</li>
+                            <li>Spacing: even (absolute) or geometric (percentage) steps between rungs.</li>
+                        </ul>
+                    </div>
+                </details>
+
+                <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                    <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-sm font-semibold text-[var(--color-text)]">Volume vs Value (what the charts show)</span>
+                        </div>
+                        <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-4 space-y-3 text-sm text-[var(--color-text-secondary)]">
+                        <p>Bars = individual rungs. Shaded columns = cumulative size. Volume is units of the asset; Value is dollars.</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <div class="p-4 rounded-lg bg-[var(--color-card-muted)] border border-[var(--color-border)]">
                                 <div class="flex items-center justify-between mb-3">
-                                    <p class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Value ($)</p>
-                                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-green-500/20 text-green-400 font-medium">Asymmetrical</span>
+                                    <div class="flex items-center gap-2">
+                                        <p class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Volume</p>
+                                        <span class="text-[10px] px-1.5 py-0.5 rounded bg-[var(--color-border)] text-[var(--color-text-muted)]">Units</span>
+                                    </div>
+                                    <span class="text-[9px] px-1.5 py-0.5 rounded bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text-muted)]">Bars + cumulative</span>
                                 </div>
-                                <div class="h-36 w-full relative" id="how-it-works-value-chart">
+                                <div class="h-40 w-full relative" id="how-it-works-volume-chart">
                                     <svg width="100%" height="100%"></svg>
-                                    <!-- Annotation for value difference -->
-                                    <div class="absolute right-0 bottom-1/4 text-[8px] text-green-400 flex items-center gap-0.5 pointer-events-none">
-                                        <span class="hidden sm:inline">←</span>
-                                        <span class="hidden sm:inline font-medium">More $</span>
-                                    </div>
+                                    <div class="absolute left-2 top-2 text-[10px] text-[var(--color-text-muted)] bg-[var(--color-card)]/80 px-2 py-0.5 rounded">Volume = asset units</div>
                                 </div>
-                                <!-- Chart Legend -->
-                                <div class="flex items-center justify-center gap-4 mt-2 pt-2 border-t border-[var(--color-border)]">
-                                    <div class="flex items-center gap-1">
-                                        <span class="w-2 h-2 rounded-sm bg-red-500/70"></span>
-                                        <span class="text-[9px] text-red-400">Buy $</span>
+                                <p class="text-[10px] text-[var(--color-text-muted)] mt-2 text-center">Even quantities on each side</p>
+                            </div>
+                            <div class="p-4 rounded-lg bg-[var(--color-card-muted)] border border-[var(--color-border)] relative overflow-hidden">
+                                <div class="absolute inset-0 bg-gradient-to-t from-green-500/5 to-transparent pointer-events-none"></div>
+                                <div class="relative z-10">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center gap-2">
+                                            <p class="text-xs font-bold text-[var(--color-text-muted)] uppercase tracking-wider">Value</p>
+                                            <span class="text-[10px] px-1.5 py-0.5 rounded bg-green-500/10 text-green-500">Dollars</span>
+                                        </div>
+                                        <span class="text-[9px] px-1.5 py-0.5 rounded bg-[var(--color-card)] border border-[var(--color-border)] text-[var(--color-text-muted)]">Bars + cumulative</span>
                                     </div>
-                                    <div class="flex items-center gap-1">
-                                        <span class="w-2 h-2 rounded-sm bg-green-500/70"></span>
-                                        <span class="text-[9px] text-green-400">Sell $</span>
+                                    <div class="h-40 w-full relative" id="how-it-works-value-chart">
+                                        <svg width="100%" height="100%"></svg>
+                                        <div class="absolute left-2 top-2 text-[10px] text-green-400 bg-[var(--color-card)]/80 px-2 py-0.5 rounded">Value = dollars per rung</div>
                                     </div>
+                                    <p class="text-[10px] text-green-400 mt-2 text-center font-medium">Sells accumulate more $ than buys → profit</p>
                                 </div>
-                                <p class="text-[10px] text-green-400 mt-2 text-center font-medium">Sell value > Buy value = Profit ↗</p>
                             </div>
                         </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- Three Modes -->
-                <div class="space-y-3">
-                    <h4 class="text-base font-semibold text-[var(--color-text)] flex items-center gap-2">
-                        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                        Three Trading Modes
-                    </h4>
-                    <div class="grid grid-cols-3 gap-2">
-                        <div class="p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-center">
-                            <p class="font-medium text-red-400 text-sm">Buy Only</p>
-                            <p class="text-[10px] text-[var(--color-text-muted)] mt-1">DCA accumulation</p>
+                <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden" open>
+                    <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                            <span class="text-sm font-semibold text-[var(--color-text)]">Trading modes</span>
                         </div>
-                        <div class="p-3 rounded-lg bg-green-500/10 border border-green-500/30 text-center">
-                            <p class="font-medium text-green-400 text-sm">Sell Only</p>
-                            <p class="text-[10px] text-[var(--color-text-muted)] mt-1">Exit strategy</p>
-                        </div>
-                        <div class="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30 text-center">
-                            <p class="font-medium text-cyan-400 text-sm">Buy + Sell</p>
-                            <p class="text-[10px] text-[var(--color-text-muted)] mt-1">Full round-trip</p>
+                        <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                            <div class="p-3 rounded-lg bg-red-500/10 border border-red-500/30">
+                                <p class="font-medium text-red-400 text-sm">Buy Only</p>
+                                <p class="text-[10px] text-[var(--color-text-muted)] mt-1">Stack positions (DCA). First rung can start below current price.</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-green-500/10 border border-green-500/30">
+                                <p class="font-medium text-green-400 text-sm">Sell Only</p>
+                                <p class="text-[10px] text-[var(--color-text-muted)] mt-1">Take profit ladder. First rung can start above current price.</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-gradient-to-br from-cyan-500/10 to-blue-500/10 border border-cyan-500/30">
+                                <p class="font-medium text-cyan-400 text-sm">Buy + Sell</p>
+                                <p class="text-[10px] text-[var(--color-text-muted)] mt-1">Full round-trip: buy below, sell above with continuous spacing.</p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </details>
 
-                <!-- Benefits -->
-                <div class="p-4 bg-gradient-to-r from-cyan-500/10 to-blue-500/10 rounded-lg border border-cyan-500/20">
-                    <h4 class="font-semibold text-cyan-400 text-sm mb-3 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-                        Why Use Order Skew?
-                    </h4>
-                    <ul class="grid grid-cols-2 gap-2 text-xs text-[var(--color-text-secondary)]">
-                        <li class="flex gap-2 items-start">
-                            <span class="text-cyan-400 mt-0.5">-</span>
-                            <span>Never miss partial moves</span>
-                        </li>
-                        <li class="flex gap-2 items-start">
-                            <span class="text-cyan-400 mt-0.5">-</span>
-                            <span>Avoid FOMO decisions</span>
-                        </li>
-                        <li class="flex gap-2 items-start">
-                            <span class="text-cyan-400 mt-0.5">-</span>
-                            <span>Set and forget</span>
-                        </li>
-                        <li class="flex gap-2 items-start">
-                            <span class="text-cyan-400 mt-0.5">-</span>
-                            <span>Let volatility work for you</span>
-                        </li>
-                    </ul>
-                </div>
+                <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden">
+                    <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-sm font-semibold text-[var(--color-text)]">Step-by-step</span>
+                        </div>
+                        <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-4 text-sm text-[var(--color-text-secondary)] space-y-2">
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li>Pick a trading mode (Buy only, Sell only, or Buy + Sell).</li>
+                            <li>Set your first rung start (percent or exact price) so the nearest order is where you expect action.</li>
+                            <li>Choose spacing: <em>Absolute</em> = equal dollar gaps, <em>Relative</em> = geometric % gaps.</li>
+                            <li>Set range (percentage or fixed floor/ceiling). The app spreads rungs from the first rung to your range ends.</li>
+                            <li>Review volume/value charts. Bars are individual rungs; shaded areas show cumulative totals.</li>
+                        </ol>
+                    </div>
+                </details>
+
+                <details class="group bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] overflow-hidden">
+                    <summary class="flex items-center justify-between cursor-pointer px-4 py-3 bg-[var(--color-card-alt)] hover:bg-[var(--color-border)] transition-colors">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            <span class="text-sm font-semibold text-[var(--color-text)]">Tips for newcomers</span>
+                        </div>
+                        <svg class="w-4 h-4 text-[var(--color-text-muted)] transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </summary>
+                    <div class="p-4 text-sm text-[var(--color-text-secondary)] space-y-2">
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Use small position sizes while learning. Laddering reduces timing risk.</li>
+                            <li>Fees matter: enable “Show Fees” to see impact on each rung.</li>
+                            <li>Geometric spacing widens faster the further you go from the current price.</li>
+                            <li>Always double-check the first rung location and total capital before placing orders at your broker/exchange.</li>
+                        </ul>
+                    </div>
+                </details>
             </div>
 
             <!-- Footer -->
@@ -256,36 +265,50 @@
     <!-- QR Modal -->
     <div id="qr-modal" class="qr-modal">
         <div class="qr-backdrop" id="qr-backdrop"></div>
-        <div class="qr-content flex flex-col items-center gap-5">
+        <div class="qr-content flex flex-col gap-5 w-full max-w-xl">
             <div class="text-center space-y-2">
                 <h3 class="text-lg font-bold text-[var(--color-text)] font-solana">Fuel the Development</h3>
-                <p class="text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-[280px]">
-                    If Order Skew brings value to your trading, consider supporting its development.
+                <p class="text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-[420px] mx-auto">
+                    Choose a network, scan the QR, or copy the wallet to support Order Skew.
                 </p>
             </div>
-            
-            <div class="bg-white p-1.5 rounded-xl border border-[var(--color-border)] shadow-sm inline-block overflow-hidden">
-                 <img src="https://raw.githubusercontent.com/yanniedog/OrderSkew/main/QRcode.jpg" 
-                      alt="Donate SOL" 
-                      class="w-40 h-40 object-contain" 
-                      style="transform: scale(1.15);"
-                      onerror="this.style.display='none'; this.parentElement.innerHTML='<span class=\'text-xs text-red-500\'>QR Not Found</span>'"> 
-            </div>
 
-            <div class="w-full space-y-3">
-                <div class="flex items-center justify-center gap-2">
-                    <img src="https://cryptologos.cc/logos/solana-sol-logo.svg" alt="Solana" class="h-5 w-auto object-contain" onerror="this.style.display='none'">
-                    <span class="text-xs font-bold text-[var(--color-text-secondary)] uppercase tracking-widest font-solana">Solana Network</span>
+            <div class="space-y-3 w-full">
+                <div class="flex flex-col sm:flex-row gap-3 items-start">
+                    <div class="flex-1">
+                        <label class="text-xs font-semibold text-[var(--color-text-secondary)]">Blockchain</label>
+                        <select id="donation-chain" class="form-input w-full rounded-lg p-2 text-sm mt-1">
+                            <option value="sol">Solana (SOL)</option>
+                            <option value="ada">Cardano (ADA)</option>
+                            <option value="bnb">Binance (BNB)</option>
+                            <option value="doge">Dogecoin (DOGE)</option>
+                            <option value="xmr">Monero (XMR)</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 text-right">
+                        <p id="donation-network-label" class="text-[10px] uppercase font-semibold text-[var(--color-text-muted)]">SOL wallet</p>
+                    </div>
                 </div>
 
-                <div class="relative group cursor-pointer transition-all" onclick="App.copy('F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1')" title="Click to copy">
-                    <div class="absolute inset-0 bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] group-hover:border-[var(--color-primary)] transition-colors"></div>
-                    <code class="relative z-10 block text-[10px] sm:text-[11px] text-[var(--color-text-muted)] font-mono break-all p-3 text-center group-hover:text-[var(--color-text)] transition-colors">
-                        F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1
-                    </code>
+                <div class="flex flex-col sm:flex-row gap-4 items-start">
+                    <div class="bg-white p-2 rounded-xl border border-[var(--color-border)] shadow-sm min-w-[180px] min-h-[180px] flex items-center justify-center">
+                        <div id="donation-qr" class="w-[170px] h-[170px] flex items-center justify-center"></div>
+                    </div>
+                    <div class="flex-1 space-y-2 w-full">
+                        <div class="text-[10px] font-semibold text-[var(--color-text-muted)] uppercase">Wallet Address</div>
+                        <div class="relative group">
+                            <div class="absolute inset-0 bg-[var(--color-card-muted)] rounded-lg border border-[var(--color-border)] group-hover:border-[var(--color-primary)] transition-colors"></div>
+                            <code id="donation-address" data-address="" class="relative z-10 block text-[11px] sm:text-[12px] text-[var(--color-text-muted)] font-mono break-all p-3 text-left group-hover:text-[var(--color-text)] transition-colors">
+                            </code>
+                        </div>
+                        <button id="donation-copy" class="btn-secondary w-full py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h9a2 2 0 002-2v-3m-3-12h5a2 2 0 012 2v5m-6 6l6-6m0 0h-3.5M21 21l-3.5-3.5"></path></svg>
+                            Copy address
+                        </button>
+                    </div>
                 </div>
             </div>
-            
+
             <button id="qr-close" class="btn-secondary w-full py-3 sm:py-2.5 rounded-lg text-sm font-medium hover:bg-[var(--color-border)] active:scale-[0.98] transition-all">Close</button>
         </div>
     </div>
@@ -320,7 +343,7 @@
         <!-- Expanded Details -->
         <div id="sticky-details" class="hidden w-full pt-3 mt-2 border-t border-[var(--color-border)] grid grid-cols-2 gap-y-3 gap-x-4 text-xs animate-fade-in">
             <div><span class="text-[var(--color-text-muted)]">Avg Buy:</span><span id="sticky-avg-buy" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
-            <div><span class="text-[var(--color-text-muted)]">Avg Sell:</span><span id="sticky-avg-sell" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
+            <div class="avg-sell-section"><span class="text-[var(--color-text-muted)]">Avg Sell:</span><span id="sticky-avg-sell" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
             <div><span class="text-[var(--color-text-muted)]">Fees:</span><span id="sticky-fees" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
             <div><span class="text-[var(--color-text-muted)]">Vol:</span><span id="sticky-vol" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
             <div><span class="text-[var(--color-text-muted)]">Floor:</span><span id="sticky-floor" class="float-right font-mono font-medium text-[var(--color-text)]">-</span></div>
@@ -698,6 +721,38 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div id="first-rung-container" class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2 border-t border-[var(--color-border)]">
+                                        <div id="buy-start-row" class="space-y-1.5">
+                                            <div class="flex items-center gap-1">
+                                                <label class="text-[10px] text-[var(--color-text-muted)] uppercase whitespace-nowrap">First Buy Rung</label>
+                                                <button type="button" class="helper-tooltip flex-shrink-0" title="Where the closest buy order sits. Percent is below current price; exact sets a specific price.">?</button>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <select id="buy-start-mode" class="form-input w-20 rounded-lg p-2 text-xs flex-shrink-0 font-semibold">
+                                                    <option value="percent">&lt;</option>
+                                                    <option value="price">=</option>
+                                                </select>
+                                                <div class="relative flex-1 min-w-0">
+                                                    <input type="number" step="0.01" id="buy-start-value" class="form-input w-full rounded-lg p-2 text-sm" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="sell-start-row" class="space-y-1.5">
+                                            <div class="flex items-center gap-1">
+                                                <label class="text-[10px] text-[var(--color-text-muted)] uppercase whitespace-nowrap">First Sell Rung</label>
+                                                <button type="button" class="helper-tooltip flex-shrink-0" title="Where the closest sell order sits. Percent is above current price; exact sets a specific price.">?</button>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <select id="sell-start-mode" class="form-input w-20 rounded-lg p-2 text-xs flex-shrink-0 font-semibold">
+                                                    <option value="percent">&gt;</option>
+                                                    <option value="price">=</option>
+                                                </select>
+                                                <div class="relative flex-1 min-w-0">
+                                                    <input type="number" step="0.01" id="sell-start-value" class="form-input w-full rounded-lg p-2 text-sm" placeholder="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </details>
 
@@ -789,12 +844,12 @@
                 <!-- Combined Depth Chart -->
                 <div id="depth-chart-card" class="card p-4 h-[600px] flex flex-col animate-fade-in relative z-0" style="animation-delay: 0.3s;">
                     <div class="flex flex-wrap justify-between items-center gap-2 mb-3">
-                        <div id="chart-legend" class="flex items-center gap-4 text-xs">
+                        <div id="chart-legend" class="flex flex-wrap items-center gap-4 text-xs">
                             <!-- Buy Legend -->
                             <div id="chart-buy-legend" class="chart-buy-legend buy-only-content flex items-center gap-2">
                                 <div class="flex items-center gap-1.5">
                                     <span class="inline-block w-3 h-3 rounded bg-red-500/70 border border-red-500"></span>
-                                    <span class="text-red-500 font-semibold">Buy</span>
+                                    <span class="text-red-500 font-semibold">Buy (orders)</span>
                                 </div>
                                 <span id="legend-buy-summary" class="text-[10px] text-[var(--color-text-muted)] hidden sm:inline"></span>
                             </div>
@@ -802,19 +857,27 @@
                             <div class="chart-sell-legend sell-only-content flex items-center gap-2">
                                 <div class="flex items-center gap-1.5">
                                     <span class="inline-block w-3 h-3 rounded bg-green-500/70 border border-green-500"></span>
-                                    <span class="text-green-500 font-semibold">Sell</span>
+                                    <span class="text-green-500 font-semibold">Sell (orders)</span>
                                 </div>
                                 <span id="legend-sell-summary" class="text-[10px] text-[var(--color-text-muted)] hidden sm:inline"></span>
                             </div>
                             <!-- Visual Key Separator -->
                             <div class="hidden sm:flex items-center gap-3 pl-3 border-l border-[var(--color-border)]">
-                                <div class="flex items-center gap-1.5" title="Individual order sizes">
-                                    <span class="inline-block w-4 h-2 rounded-sm bg-[var(--color-text-muted)]/60"></span>
-                                    <span class="text-[10px] text-[var(--color-text-muted)]">Bars</span>
+                                <div class="buy-only-content flex items-center gap-1.5" title="Individual order sizes">
+                                    <span class="inline-block w-4 h-2 rounded-sm bg-red-500/70 border border-red-500/60"></span>
+                                    <span class="text-[10px] text-[var(--color-text-muted)]">Buy bars</span>
                                 </div>
-                                <div class="flex items-center gap-1.5" title="Cumulative running total">
-                                    <span class="inline-block w-4 h-2 rounded-sm bg-[var(--color-text-muted)]/25 border border-[var(--color-text-muted)]/40"></span>
-                                    <span class="text-[10px] text-[var(--color-text-muted)]">Cumulative</span>
+                                <div class="buy-only-content flex items-center gap-1.5" title="Cumulative running total (buy)">
+                                    <span class="inline-block w-4 h-2 rounded-sm bg-[var(--color-chart-buy-area)] border border-red-500/50"></span>
+                                    <span class="text-[10px] text-[var(--color-text-muted)]">Buy cumulative</span>
+                                </div>
+                                <div class="sell-only-content flex items-center gap-1.5" title="Individual order sizes">
+                                    <span class="inline-block w-4 h-2 rounded-sm bg-green-500/70 border border-green-500/60"></span>
+                                    <span class="text-[10px] text-[var(--color-text-muted)]">Sell bars</span>
+                                </div>
+                                <div class="sell-only-content flex items-center gap-1.5" title="Cumulative running total (sell)">
+                                    <span class="inline-block w-4 h-2 rounded-sm bg-[var(--color-chart-sell-area)] border border-green-500/50"></span>
+                                    <span class="text-[10px] text-[var(--color-text-muted)]">Sell cumulative</span>
                                 </div>
                             </div>
                         </div>
@@ -897,7 +960,7 @@
                                                 <p class="text-[9px] text-[var(--color-text-secondary)]">Avg Buy</p>
                                                 <p id="chart-summary-avg-buy" class="text-sm font-semibold text-[var(--color-text)]">-</p>
                                             </div>
-                                            <div>
+                                            <div class="avg-sell-section">
                                                 <p class="text-[9px] text-[var(--color-text-secondary)]">Avg Sell</p>
                                                 <p id="chart-summary-avg-sell" class="text-sm font-semibold text-[var(--color-text)]">-</p>
                                             </div>
@@ -974,6 +1037,7 @@
     <div id="tooltip" class="tooltip"></div>
 
     <!-- Load External Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="app.js"></script>
     <script src="wizard.js"></script>
     <script src="charts.js"></script>

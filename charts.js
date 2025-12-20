@@ -8,7 +8,7 @@
  *  - In sell-only mode, only shows sell orders
  *  - In buy-only mode, only shows buy orders
  */
-function drawDepthChart(selector, buys, sells) {
+function drawDepthChart(selector, buys, sells, avgBuyPrice = null, avgSellPrice = null) {
     const svgSel = d3.select(selector);
     const svgNode = svgSel.node();
     if (!svgNode) return;
@@ -103,6 +103,7 @@ function drawDepthChart(selector, buys, sells) {
     // Create layer groups - areaGroup first so it renders behind bars
     const areaGroup = svg.append("g").attr("class", "cumulative-layer");
     const barsGroup = svg.append("g").attr("class", "bars-layer");
+    const avgLinesGroup = svg.append("g").attr("class", "avg-lines-layer");
 
     // Draw cumulative areas if enabled (draw first so they appear behind bars)
     if (showCumulative) {
@@ -184,6 +185,42 @@ function drawDepthChart(selector, buys, sells) {
             .attr("stroke-width", 1)
             .attr("stroke-dasharray", "4 2")
             .attr("opacity", 0.3);
+    }
+
+    // Average entry price line (white line, shown in all modes when avgBuyPrice is available)
+    // Works in both Volume and Value ($) modes since it's positioned on the price (Y) axis
+    if (avgBuyPrice !== null && Number.isFinite(avgBuyPrice) && avgBuyPrice > 0) {
+        const avgY = y(avgBuyPrice);
+        // Only draw if the average price is within the visible range
+        if (avgY >= margin.top && avgY <= height - margin.bottom) {
+            avgLinesGroup.append("line")
+                .attr("x1", margin.left)
+                .attr("x2", width - margin.right)
+                .attr("y1", avgY)
+                .attr("y2", avgY)
+                .attr("stroke", "white")
+                .attr("stroke-width", 2)
+                .attr("opacity", 0.9)
+                .attr("class", "avg-entry-line");
+        }
+    }
+
+    // Average sell price line (white line, shown in buy+sell mode when avgSellPrice is available)
+    // Works in both Volume and Value ($) modes since it's positioned on the price (Y) axis
+    if (!isSellOnly && !isBuyOnly && avgSellPrice !== null && Number.isFinite(avgSellPrice) && avgSellPrice > 0) {
+        const avgSellY = y(avgSellPrice);
+        // Only draw if the average price is within the visible range
+        if (avgSellY >= margin.top && avgSellY <= height - margin.bottom) {
+            avgLinesGroup.append("line")
+                .attr("x1", margin.left)
+                .attr("x2", width - margin.right)
+                .attr("y1", avgSellY)
+                .attr("y2", avgSellY)
+                .attr("stroke", "white")
+                .attr("stroke-width", 2)
+                .attr("opacity", 0.9)
+                .attr("class", "avg-sell-line");
+        }
     }
 
     // Y-axis (Price) - use actual bar prices so ticks align with bar centers
@@ -419,6 +456,10 @@ function drawHowItWorksChart(selector, currentPrice = 100, showValue = false) {
     const allData = [...buyData, ...sellData];
     if (!allData.length) return;
 
+    // Sort data - buy by price descending, sell by price ascending (matching main chart)
+    const sortedBuyData = [...buyData].sort((a, b) => b.price - a.price);
+    const sortedSellData = [...sellData].sort((a, b) => a.price - b.price);
+
     // Calculate price range
     const prices = allData.map(d => d.price);
     const yMin = d3.min(prices);
@@ -433,9 +474,24 @@ function drawHowItWorksChart(selector, currentPrice = 100, showValue = false) {
         .range([height - margin.bottom, margin.top]);
 
     // X scale - use value or volume based on showValue parameter
-    const maxValue = showValue 
+    const computeCumulatives = (series) => {
+        let cum = 0;
+        series.forEach(d => {
+            const val = showValue ? d.value : d.volume;
+            cum += val;
+            d.individualVal = val;
+            d.cumulativeVal = cum;
+        });
+    };
+
+    computeCumulatives(sortedBuyData);
+    computeCumulatives(sortedSellData);
+
+    const maxIndividual = showValue 
         ? d3.max(allData, d => d.value) 
         : d3.max(allData, d => d.volume);
+    const maxCumulative = d3.max([...sortedBuyData, ...sortedSellData], d => d.cumulativeVal);
+    const maxValue = Math.max(maxIndividual || 1, maxCumulative || 1);
     const x = d3.scaleLinear()
         .domain([0, maxValue * 1.1])
         .range([margin.left, width - margin.right]);
@@ -447,15 +503,34 @@ function drawHowItWorksChart(selector, currentPrice = 100, showValue = false) {
     const barHeight = Math.min(chartHeight / (totalBars + 1), 12);
     const effectiveBarHeight = barHeight * (1 - barPadding);
 
-    // Draw bars
+    // Draw cumulative areas then bars
+    const areaGroup = svg.append("g").attr("class", "howitworks-cumulative");
     const barsGroup = svg.append("g").attr("class", "bars-layer");
+
+    const drawCumulativeRects = (series, colorVar) => {
+        if (!series.length) return;
+        const fill = getComputedStyle(document.body).getPropertyValue(colorVar).trim() || "rgba(0,0,0,0.2)";
+        areaGroup.selectAll(`.cum-${colorVar}`)
+            .data(series)
+            .enter()
+            .append("rect")
+            .attr("x", margin.left)
+            .attr("y", d => y(d.price) - effectiveBarHeight / 2)
+            .attr("width", d => Math.max(0, x(d.cumulativeVal) - margin.left))
+            .attr("height", effectiveBarHeight)
+            .attr("fill", fill)
+            .attr("opacity", 0.25)
+            .attr("rx", 2);
+    };
+
+    drawCumulativeRects(sortedBuyData, "--color-chart-buy-area");
+    drawCumulativeRects(sortedSellData, "--color-chart-sell-area");
 
     // Get colors from CSS variables (matching main chart)
     const buyColor = getComputedStyle(document.body).getPropertyValue("--color-chart-buy-start").trim() || "#ef4444";
     const sellColor = getComputedStyle(document.body).getPropertyValue("--color-chart-sell-start").trim() || "#22c55e";
 
     // Buy bars (red) - sorted by price descending
-    const sortedBuyData = [...buyData].sort((a, b) => b.price - a.price);
     barsGroup.selectAll(".buy-bar")
         .data(sortedBuyData)
         .enter()
@@ -473,7 +548,6 @@ function drawHowItWorksChart(selector, currentPrice = 100, showValue = false) {
         .attr("width", d => Math.max(0, x(showValue ? d.value : d.volume) - margin.left));
 
     // Sell bars (green) - sorted by price ascending
-    const sortedSellData = [...sellData].sort((a, b) => a.price - b.price);
     barsGroup.selectAll(".sell-bar")
         .data(sortedSellData)
         .enter()

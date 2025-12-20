@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
         floorContainer: document.getElementById('floor-mode-container'),
         buyFloor: document.getElementById('buy_floor'),
         sellCeiling: document.getElementById('sell_ceiling'),
+        buyStartMode: document.getElementById('buy-start-mode'),
+        buyStartValue: document.getElementById('buy-start-value'),
+        sellStartMode: document.getElementById('sell-start-mode'),
+        sellStartValue: document.getElementById('sell-start-value'),
         
         // Advanced
         sellOnlyCheck: document.getElementById('sell_only_mode'),
@@ -59,6 +63,10 @@ document.addEventListener('DOMContentLoaded', function () {
         qrModal: document.getElementById('qr-modal'),
         qrBackdrop: document.getElementById('qr-backdrop'),
         qrClose: document.getElementById('qr-close'),
+        donationChain: document.getElementById('donation-chain'),
+        donationAddress: document.getElementById('donation-address'),
+        donationCopy: document.getElementById('donation-copy'),
+        donationQr: document.getElementById('donation-qr'),
 
         // Video
         videoBtn: document.getElementById('video-btn'),
@@ -93,6 +101,10 @@ document.addEventListener('DOMContentLoaded', function () {
         feeValue: els.feeValue?.value || '0.1',
         feeSettlement: els.feeSettlement?.value || 'netted',
         spacingMode: els.spacingMode?.value || 'absolute',
+        buyStartMode: els.buyStartMode?.value || 'percent',
+        buyStartValue: els.buyStartValue?.value || '0',
+        sellStartMode: els.sellStartMode?.value || 'percent',
+        sellStartValue: els.sellStartValue?.value || '0',
         equalQty: false,
         showFees: false,
         chartShowBars: true,
@@ -151,6 +163,31 @@ document.addEventListener('DOMContentLoaded', function () {
             tableContainer.style.marginBottom = isMobile ? '24px' : '48px';
         },
 
+        donationWallets: {
+            sol: 'F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1',
+            ada: 'addr_test1qplacholderexampleforada0000000000000000000',
+            bnb: 'bnb1placeholderaddress0000000000000000000000',
+            doge: 'DPlaceholderAddrForDOGE00000000000000000',
+            xmr: '48PlaceholderAddressForXMR000000000000000000000000000000000'
+        },
+
+        updateDonationUI: (chainKey = 'sol') => {
+            const chain = chainKey in App.donationWallets ? chainKey : 'sol';
+            const address = App.donationWallets[chain];
+            const label = document.getElementById('donation-network-label');
+            if (label) label.textContent = `${chain.toUpperCase()} wallet`;
+            if (els.donationAddress) {
+                els.donationAddress.textContent = address;
+                els.donationAddress.setAttribute('data-address', address);
+            }
+            if (els.donationQr) {
+                els.donationQr.innerHTML = '';
+                if (window.QRCode) {
+                    new QRCode(els.donationQr, { text: address, width: 180, height: 180 });
+                }
+            }
+        },
+
         resetApp: () => {
             // Clear persisted state
             localStorage.removeItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed');
@@ -191,6 +228,10 @@ document.addEventListener('DOMContentLoaded', function () {
             setVal(els.feeValue, DEFAULTS.feeValue);
             setVal(els.feeSettlement, DEFAULTS.feeSettlement);
             setVal(els.spacingMode, DEFAULTS.spacingMode);
+            setVal(els.buyStartMode, DEFAULTS.buyStartMode);
+            setVal(els.buyStartValue, DEFAULTS.buyStartValue);
+            setVal(els.sellStartMode, DEFAULTS.sellStartMode);
+            setVal(els.sellStartValue, DEFAULTS.sellStartValue);
 
             if (els.equalQtyCheck) els.equalQtyCheck.checked = DEFAULTS.equalQty;
             if (els.showFeesToggle) els.showFeesToggle.checked = DEFAULTS.showFees;
@@ -357,7 +398,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const redrawChart = () => {
                 if (State.currentPlanData) {
-                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder);
+                    const s = State.currentPlanData.summary;
+                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder, s?.avgBuy, s?.avgSell);
                 }
             };
 
@@ -468,7 +510,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const startOverBtn = document.getElementById('start-over-btn');
             if (startOverBtn) {
                 startOverBtn.addEventListener('click', () => {
-                    App.returnToWelcome();
+                    App.returnToWelcome({ source: 'start-over', forceSavePrompt: true });
                 });
             }
             
@@ -504,7 +546,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Utils.bindCurrencyInput(els.currPrice, App.debouncedCalc);
 
             // Standard Inputs
-            const inputs = [els.buyFloor, els.sellCeiling, els.existQty, els.existAvg, els.feeValue];
+            const inputs = [els.buyFloor, els.sellCeiling, els.existQty, els.existAvg, els.feeValue, els.buyStartValue, els.sellStartValue];
             inputs.forEach(el => { if(el) el.addEventListener('input', App.debouncedCalc); });
 
             // Fee Type Toggle Buttons
@@ -533,7 +575,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Selects
-            [els.priceRangeMode, els.feeSettlement, els.spacingMode].forEach(el => {
+            [els.priceRangeMode, els.feeSettlement, els.spacingMode, els.buyStartMode, els.sellStartMode].forEach(el => {
                 if(el) el.addEventListener('change', (e) => {
                     if (e.target === els.priceRangeMode) App.togglePriceMode();
                     App.calculatePlan();
@@ -634,6 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 sellModeInputs?.classList.toggle('hidden', mode !== 'sell-only');
                 document.body.classList.toggle('sell-mode-active', mode === 'sell-only');
                 document.body.classList.toggle('buy-only-mode-active', mode === 'buy-only');
+                App.updateStartOffsetVisibility();
                 
                 if (mode === 'sell-only') App.switchTab('sell');
                 else if (mode === 'buy-only') App.switchTab('buy');
@@ -838,6 +881,18 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // QR Modal
             const toggleModal = Utils.bindModal(els.qrModal, [els.solBtn], [els.qrBackdrop, els.qrClose]);
+            if (els.donationChain) {
+                els.donationChain.addEventListener('change', (e) => {
+                    App.updateDonationUI(e.target.value);
+                });
+            }
+            if (els.donationCopy && els.donationAddress) {
+                els.donationCopy.addEventListener('click', () => {
+                    const addr = els.donationAddress.getAttribute('data-address') || els.donationAddress.textContent;
+                    if (addr) App.copy(addr);
+                });
+            }
+            App.updateDonationUI(els.donationChain?.value || 'sol');
 
             // Video Modal with lazy loading
             const videoIframe = els.videoModal?.querySelector('iframe');
@@ -965,6 +1020,14 @@ document.addEventListener('DOMContentLoaded', function () {
             const mode = els.priceRangeMode.value;
             els.widthContainer?.classList.toggle('hidden', mode !== 'width');
             els.floorContainer?.classList.toggle('hidden', mode !== 'floor');
+            App.updateStartOffsetVisibility();
+        },
+
+        updateStartOffsetVisibility: () => {
+            const buyStartRow = document.getElementById('buy-start-row');
+            const sellStartRow = document.getElementById('sell-start-row');
+            if (buyStartRow) buyStartRow.classList.toggle('hidden', State.tradingMode === 'sell-only');
+            if (sellStartRow) sellStartRow.classList.toggle('hidden', State.tradingMode === 'buy-only');
         },
 
         switchTab: (tab) => {
@@ -1029,15 +1092,66 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const buyStep = (!isRelativeSpacing && N > 0) ? (currentPrice - buyPriceEnd) / N : 0;
             const sellStep = (!isRelativeSpacing && N > 0) ? (sellPriceEnd - currentPrice) / N : 0;
-            const buyRatio = (isRelativeSpacing && N > 0) ? Math.pow(Math.max(buyPriceEnd/currentPrice, 0), 1/N) : 1;
-            const sellRatio = (isRelativeSpacing && N > 0) ? Math.pow(sellPriceEnd/currentPrice, 1/N) : 1;
+            const parseStartPrice = (modeEl, valueEl, isBuy) => {
+                const mode = modeEl?.value || 'percent';
+                const raw = parseFloat(Utils.stripCommas(valueEl?.value));
+                if (!Number.isFinite(raw)) return null;
+                if (mode === 'percent') {
+                    const pct = Math.abs(raw);
+                    const signedPct = isBuy ? -pct : pct;
+                    return currentPrice * (1 + signedPct / 100);
+                }
+                return raw;
+            };
 
-            let buyPrices = Array.from({length: N}, (_, i) => isRelativeSpacing ? currentPrice * Math.pow(buyRatio, i+1) : currentPrice - ((i+1)*buyStep));
-            let sellPrices = Array.from({length: N}, (_, i) => isRelativeSpacing ? currentPrice * Math.pow(sellRatio, i+1) : currentPrice + ((i+1)*sellStep));
-            
-            if (N > 0) {
-                buyPrices[N-1] = buyPriceEnd;
-                sellPrices[N-1] = sellPriceEnd;
+            const buyStartPrice = (!State.sellOnlyMode) ? parseStartPrice(els.buyStartMode, els.buyStartValue, true) : null;
+            const sellStartPrice = (!State.buyOnlyMode) ? parseStartPrice(els.sellStartMode, els.sellStartValue, false) : null;
+
+            let buyPrices = [];
+            let sellPrices = [];
+
+            if (isRelativeSpacing) {
+                if (State.tradingMode === 'buy-only') {
+                    const startBuy = (buyStartPrice && buyStartPrice > 0) ? buyStartPrice : currentPrice;
+                    const ratioBuy = (N > 1 && startBuy > 0 && buyPriceEnd > 0) ? Math.pow(buyPriceEnd / startBuy, 1 / (N - 1)) : 1;
+                    buyPrices = Array.from({ length: N }, (_, i) => startBuy * Math.pow(ratioBuy, i));
+                } else if (State.tradingMode === 'sell-only') {
+                    const startSell = (sellStartPrice && sellStartPrice > 0) ? sellStartPrice : currentPrice;
+                    const ratioSell = (N > 1 && startSell > 0 && sellPriceEnd > 0) ? Math.pow(sellPriceEnd / startSell, 1 / (N - 1)) : 1;
+                    sellPrices = Array.from({ length: N }, (_, i) => startSell * Math.pow(ratioSell, i));
+                } else {
+                    const baseBuyEnd = Math.max(buyPriceEnd, 0.0000001);
+                    const baseSellEnd = Math.max(sellPriceEnd, baseBuyEnd * 1.0001);
+                    const ratio = Math.pow(baseSellEnd / baseBuyEnd, 1 / (2 * N));
+                    const anchorBuyTarget = (buyStartPrice && buyStartPrice > 0)
+                        ? buyStartPrice
+                        : (currentPrice > 0 ? currentPrice / Math.pow(ratio, N) : baseBuyEnd * Math.pow(ratio, N));
+                    let scale = anchorBuyTarget / (baseBuyEnd * Math.pow(ratio, N - 1));
+                    if (!Number.isFinite(scale) || scale <= 0) scale = 1;
+                    const adjBuyEnd = baseBuyEnd * scale;
+                    const adjSellEnd = baseSellEnd * scale;
+
+                    buyPrices = Array.from({ length: N }, (_, i) => adjBuyEnd * Math.pow(ratio, i + 1));
+                    sellPrices = Array.from({ length: N }, (_, i) => adjBuyEnd * Math.pow(ratio, N + (i + 1)));
+
+                    if (sellStartPrice && sellStartPrice > 0) {
+                        const currentSellStart = sellPrices[0];
+                        const adjustScale = currentSellStart > 0 ? sellStartPrice / currentSellStart : 1;
+                        buyPrices = buyPrices.map(p => p * adjustScale);
+                        sellPrices = sellPrices.map(p => p * adjustScale);
+                    }
+                }
+            } else {
+                if (!State.sellOnlyMode) {
+                    const startBuy = (buyStartPrice && buyStartPrice > buyPriceEnd) ? buyStartPrice : currentPrice - buyStep;
+                    const buyInterval = N > 1 ? (startBuy - buyPriceEnd) / (N - 1) : 0;
+                    buyPrices = Array.from({ length: N }, (_, i) => startBuy - (buyInterval * i));
+                }
+                if (!State.buyOnlyMode) {
+                    const startSell = (sellStartPrice && sellStartPrice < sellPriceEnd) ? sellStartPrice : currentPrice + sellStep;
+                    const sellInterval = N > 1 ? (sellPriceEnd - startSell) / (N - 1) : 0;
+                    sellPrices = Array.from({ length: N }, (_, i) => startSell + (sellInterval * i));
+                }
             }
 
             let buyLadder = [];
@@ -1284,7 +1398,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTable('sell-ladder-body', plan.sellLadder, true);
 
             if (typeof drawDepthChart === 'function') {
-                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder);
+                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder, s.avgBuy, s.avgSell);
             }
             
             setTimeout(() => App.ensureTableBottomSpace(), 100);
@@ -1417,7 +1531,8 @@ document.addEventListener('DOMContentLoaded', function () {
             history.replaceState({ introVisible: true }, '');
         },
         
-        returnToWelcome: (fromBackButton = false) => {
+        returnToWelcome: (options = {}) => {
+            const { fromBackButton = false, forceSavePrompt = false, source = '' } = options;
             const introLayer = document.getElementById('intro-layer');
             if (!introLayer) return;
             
@@ -1425,11 +1540,15 @@ document.addEventListener('DOMContentLoaded', function () {
             const computedDisplay = window.getComputedStyle(introLayer).display;
             const isMainScreen = computedDisplay === 'none' || introLayer.style.opacity === '0';
             
-            if (isMainScreen && !fromBackButton) {
-                // Offer to save config first
-                const saveNow = confirm('Would you like to save your current configuration before returning to the welcome screen?\n\nClick OK to save, or Cancel to continue without saving.');
-                if (saveNow) {
-                    App.saveConfig();
+            // Confirm navigation and optionally offer saving before resetting
+            if ((isMainScreen && !fromBackButton) || forceSavePrompt) {
+                const proceed = confirm('Return to the welcome screen and reset the current plan?\n\nClick OK to continue, or Cancel to stay here.');
+                if (!proceed) return;
+                if (State.currentPlanData) {
+                    const saveNow = confirm('Would you like to save your current configuration before leaving?');
+                    if (saveNow) {
+                        App.saveConfig();
+                    }
                 }
             }
             
