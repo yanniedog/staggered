@@ -176,6 +176,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const exportMenu = document.getElementById('export-menu');
             
             if (advancedToggle) {
+                // Sync checkbox checked state with State.advancedMode
+                advancedToggle.checked = State.advancedMode;
                 if (State.advancedMode) {
                     advancedToggle.classList.add('bg-[var(--color-primary)]/20', 'text-[var(--color-primary)]');
                     advancedToggle.classList.remove('text-[var(--color-text-muted)]');
@@ -274,7 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const redrawChart = () => {
                 if (State.currentPlanData) {
-                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder);
+                    const s = State.currentPlanData.summary;
+                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder, s?.avgBuy, s?.avgSell);
                 }
             };
 
@@ -1182,7 +1185,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTable('sell-ladder-body', plan.sellLadder, true);
 
             if (typeof drawDepthChart === 'function') {
-                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder);
+                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder, s.avgBuy, s.avgSell);
             }
             
             setTimeout(() => App.ensureTableBottomSpace(), 100);
