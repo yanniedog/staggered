@@ -25,14 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
         floorContainer: document.getElementById('floor-mode-container'),
         buyFloor: document.getElementById('buy_floor'),
         sellCeiling: document.getElementById('sell_ceiling'),
-        buyStartMode: document.getElementById('buy-start-mode'),
-        buyStartValue: document.getElementById('buy-start-value'),
-        sellStartMode: document.getElementById('sell-start-mode'),
-        sellStartValue: document.getElementById('sell-start-value'),
         
         // Advanced
         sellOnlyCheck: document.getElementById('sell_only_mode'),
-        sellOnlyInputs: document.getElementById('sell-mode-inputs'),
+        sellOnlyInputs: document.getElementById('sell-only-inputs'),
         existQty: document.getElementById('existing_quantity'),
         existAvg: document.getElementById('existing_avg_price'),
         feeType: document.getElementById('fee_type'),
@@ -63,13 +59,10 @@ document.addEventListener('DOMContentLoaded', function () {
         qrModal: document.getElementById('qr-modal'),
         qrBackdrop: document.getElementById('qr-backdrop'),
         qrClose: document.getElementById('qr-close'),
-        donationChain: document.getElementById('donation-chain'),
-        donationAddress: document.getElementById('donation-address'),
-        donationCopy: document.getElementById('donation-copy'),
-        donationQr: document.getElementById('donation-qr'),
 
         // Video
         videoBtn: document.getElementById('video-btn'),
+        videoBtnMobile: document.getElementById('video-btn-mobile'),
         videoModal: document.getElementById('video-modal'),
         videoBackdrop: document.getElementById('video-backdrop'),
         videoClose: document.getElementById('video-close'),
@@ -85,36 +78,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Expose elements for wizard
     window.OrderSkewEls = els;
-
-    // Capture initial UI defaults so the refresh/start-over control can truly reset the app
-    const DEFAULTS = {
-        startCap: els.startCap?.value || '10,000',
-        currPrice: els.currPrice?.value || '100',
-        currentPriceSell: document.getElementById('current_price_sell')?.value || els.currPrice?.value || '',
-        rungs: els.rungs?.value || '10',
-        depth: els.depth?.value || '20',
-        skew: els.skew?.value || '50',
-        priceRangeMode: els.priceRangeMode?.value || 'width',
-        buyFloor: els.buyFloor?.value || '',
-        sellCeiling: els.sellCeiling?.value || '',
-        feeType: els.feeType?.value || 'percent',
-        feeValue: els.feeValue?.value || '0.1',
-        feeSettlement: els.feeSettlement?.value || 'netted',
-        spacingMode: els.spacingMode?.value || 'absolute',
-        buyStartMode: els.buyStartMode?.value || 'percent',
-        buyStartValue: els.buyStartValue?.value || '0',
-        sellStartMode: els.sellStartMode?.value || 'percent',
-        sellStartValue: els.sellStartValue?.value || '0',
-        equalQty: false,
-        showFees: false,
-        chartShowBars: true,
-        chartShowCumulative: true,
-        chartUnitType: 'volume',
-        tradingMode: State.tradingMode,
-        advancedMode: false,
-        activeTab: 'buy',
-        mode: 'simple'
-    };
 
     // --- APP LOGIC ---
     const App = {
@@ -161,102 +124,6 @@ document.addEventListener('DOMContentLoaded', function () {
             
             const isMobile = window.innerWidth < 1024;
             tableContainer.style.marginBottom = isMobile ? '24px' : '48px';
-        },
-
-        donationWallets: {
-            sol: 'F6mjNXKBKzjmKTK1Z9cWabFHZYtxMg8rojuNuppX2EG1',
-            ada: 'addr_test1qplacholderexampleforada0000000000000000000',
-            bnb: 'bnb1placeholderaddress0000000000000000000000',
-            doge: 'DPlaceholderAddrForDOGE00000000000000000',
-            xmr: '48PlaceholderAddressForXMR000000000000000000000000000000000'
-        },
-
-        updateDonationUI: (chainKey = 'sol') => {
-            const chain = chainKey in App.donationWallets ? chainKey : 'sol';
-            const address = App.donationWallets[chain];
-            const label = document.getElementById('donation-network-label');
-            if (label) label.textContent = `${chain.toUpperCase()} wallet`;
-            if (els.donationAddress) {
-                els.donationAddress.textContent = address;
-                els.donationAddress.setAttribute('data-address', address);
-            }
-            if (els.donationQr) {
-                els.donationQr.innerHTML = '';
-                if (window.QRCode) {
-                    new QRCode(els.donationQr, { text: address, width: 180, height: 180 });
-                }
-            }
-        },
-
-        resetApp: () => {
-            // Clear persisted state
-            localStorage.removeItem(CONSTANTS.STORAGE_PREFIX + 'setup_completed');
-            localStorage.removeItem(CONSTANTS.STORAGE_PREFIX + 'advanced_mode');
-
-            // Reset runtime state
-            State.currentPlanData = null;
-            State.baselineBuySnapshot = null;
-            State.sellOnlyHighestExecuted = null;
-            State.activeTab = DEFAULTS.activeTab;
-            State.showFees = DEFAULTS.showFees;
-            State.chartShowBars = DEFAULTS.chartShowBars;
-            State.chartShowCumulative = DEFAULTS.chartShowCumulative;
-            State.chartUnitType = DEFAULTS.chartUnitType;
-            State.sellOnlyMode = false;
-            State.buyOnlyMode = true;
-            State.tradingMode = DEFAULTS.tradingMode;
-            State.mode = DEFAULTS.mode;
-            State.advancedMode = DEFAULTS.advancedMode;
-
-            // Reset form controls
-            const setVal = (el, val) => { if (el) el.value = val; };
-            setVal(els.startCap, DEFAULTS.startCap);
-            setVal(els.currPrice, DEFAULTS.currPrice);
-            const currentPriceSell = document.getElementById('current_price_sell');
-            setVal(currentPriceSell, DEFAULTS.currentPriceSell);
-            setVal(els.rungs, DEFAULTS.rungs);
-            setVal(els.rungsInput, DEFAULTS.rungs);
-            if (els.rungsDisplay) els.rungsDisplay.textContent = DEFAULTS.rungs;
-            setVal(els.depth, DEFAULTS.depth);
-            setVal(els.depthInput, DEFAULTS.depth);
-            setVal(els.skew, DEFAULTS.skew);
-            if (els.skewLabel) els.skewLabel.textContent = Utils.getSkewLabel(parseInt(DEFAULTS.skew, 10) || 0);
-            setVal(els.priceRangeMode, DEFAULTS.priceRangeMode);
-            setVal(els.buyFloor, DEFAULTS.buyFloor);
-            setVal(els.sellCeiling, DEFAULTS.sellCeiling);
-            setVal(els.feeType, DEFAULTS.feeType);
-            setVal(els.feeValue, DEFAULTS.feeValue);
-            setVal(els.feeSettlement, DEFAULTS.feeSettlement);
-            setVal(els.spacingMode, DEFAULTS.spacingMode);
-            setVal(els.buyStartMode, DEFAULTS.buyStartMode);
-            setVal(els.buyStartValue, DEFAULTS.buyStartValue);
-            setVal(els.sellStartMode, DEFAULTS.sellStartMode);
-            setVal(els.sellStartValue, DEFAULTS.sellStartValue);
-
-            if (els.equalQtyCheck) els.equalQtyCheck.checked = DEFAULTS.equalQty;
-            if (els.showFeesToggle) els.showFeesToggle.checked = DEFAULTS.showFees;
-
-            // Reset chart/table toggle controls
-            const chartShowBars = document.getElementById('chart-show-bars');
-            const chartShowCumulative = document.getElementById('chart-show-cumulative');
-            const chartUnitVolume = document.getElementById('chart-unit-volume');
-            const chartUnitValue = document.getElementById('chart-unit-value');
-            if (chartShowBars) chartShowBars.checked = DEFAULTS.chartShowBars;
-            if (chartShowCumulative) chartShowCumulative.checked = DEFAULTS.chartShowCumulative;
-            if (chartUnitVolume && chartUnitValue) {
-                chartUnitVolume.classList.add('active');
-                chartUnitValue.classList.remove('active');
-            }
-
-            // Ensure layout/visibility reflects defaults
-            App.setMode(DEFAULTS.mode);
-            App.applyAdvancedMode();
-            if (typeof App.setTradingMode === 'function') {
-                App.setTradingMode(DEFAULTS.tradingMode);
-            }
-            App.switchTab(DEFAULTS.activeTab);
-            App.togglePriceMode();
-            App.calculatePlan();
         },
 
         loadTheme: () => {
@@ -306,11 +173,20 @@ document.addEventListener('DOMContentLoaded', function () {
             const modeToggleContainer = document.getElementById('mode-toggle-container');
             const chartDisplayOptions = document.getElementById('chart-display-options');
             const tableOptions = document.getElementById('table-options');
-            const exportMenuItems = document.getElementById('export-menu-items');
+            const exportMenu = document.getElementById('export-menu');
             
-            // Update toggle switch state
             if (advancedToggle) {
-                advancedToggle.checked = State.advancedMode;
+                if (State.advancedMode) {
+                    advancedToggle.classList.add('bg-[var(--color-primary)]/20', 'text-[var(--color-primary)]');
+                    advancedToggle.classList.remove('text-[var(--color-text-muted)]');
+                    advancedToggle.setAttribute('title', 'Advanced Mode: On - Click to hide options');
+                    advancedToggle.setAttribute('aria-label', 'Advanced Mode: On');
+                } else {
+                    advancedToggle.classList.remove('bg-[var(--color-primary)]/20', 'text-[var(--color-primary)]');
+                    advancedToggle.classList.add('text-[var(--color-text-muted)]');
+                    advancedToggle.setAttribute('title', 'Advanced Mode: Off - Click to show advanced features');
+                    advancedToggle.setAttribute('aria-label', 'Advanced Mode: Off');
+                }
             }
 
             const advancedHint = document.getElementById('advanced-hint');
@@ -334,9 +210,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     tableOptions.classList.remove('hidden');
                     tableOptions.style.display = '';
                 }
-                if (exportMenuItems) {
-                    exportMenuItems.classList.remove('hidden');
-                    exportMenuItems.style.display = '';
+                if (exportMenu) {
+                    exportMenu.classList.remove('hidden');
+                    exportMenu.style.display = '';
                 }
                 if (advancedHint) {
                     advancedHint.style.display = 'none';
@@ -366,9 +242,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     tableOptions.classList.add('hidden');
                     tableOptions.style.display = 'none';
                 }
-                if (exportMenuItems) {
-                    exportMenuItems.classList.add('hidden');
-                    exportMenuItems.style.display = 'none';
+                if (exportMenu) {
+                    exportMenu.classList.add('hidden');
+                    exportMenu.style.display = 'none';
                 }
                 if (advancedHint) {
                     advancedHint.style.display = 'block';
@@ -398,8 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const redrawChart = () => {
                 if (State.currentPlanData) {
-                    const s = State.currentPlanData.summary;
-                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder, s?.avgBuy, s?.avgSell);
+                    drawDepthChart('#depth-chart', State.currentPlanData.buyLadder, State.currentPlanData.sellLadder);
                 }
             };
 
@@ -466,7 +341,9 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // How It Works button in header
             const howItWorksBtn = document.getElementById('how-it-works-btn');
+            const howItWorksBtnMobile = document.getElementById('how-it-works-btn-mobile');
             if (howItWorksBtn) howItWorksBtn.addEventListener('click', () => toggleHowItWorks(true));
+            if (howItWorksBtnMobile) howItWorksBtnMobile.addEventListener('click', () => toggleHowItWorks(true));
 
             // Handle Intro Page
             const enterBtn = document.getElementById('enter-app-btn');
@@ -510,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const startOverBtn = document.getElementById('start-over-btn');
             if (startOverBtn) {
                 startOverBtn.addEventListener('click', () => {
-                    App.returnToWelcome({ source: 'start-over', forceSavePrompt: true });
+                    App.returnToWelcome();
                 });
             }
             
@@ -546,7 +423,7 @@ document.addEventListener('DOMContentLoaded', function () {
             Utils.bindCurrencyInput(els.currPrice, App.debouncedCalc);
 
             // Standard Inputs
-            const inputs = [els.buyFloor, els.sellCeiling, els.existQty, els.existAvg, els.feeValue, els.buyStartValue, els.sellStartValue];
+            const inputs = [els.buyFloor, els.sellCeiling, els.existQty, els.existAvg, els.feeValue];
             inputs.forEach(el => { if(el) el.addEventListener('input', App.debouncedCalc); });
 
             // Fee Type Toggle Buttons
@@ -575,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Selects
-            [els.priceRangeMode, els.feeSettlement, els.spacingMode, els.buyStartMode, els.sellStartMode].forEach(el => {
+            [els.priceRangeMode, els.feeSettlement, els.spacingMode].forEach(el => {
                 if(el) el.addEventListener('change', (e) => {
                     if (e.target === els.priceRangeMode) App.togglePriceMode();
                     App.calculatePlan();
@@ -676,7 +553,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 sellModeInputs?.classList.toggle('hidden', mode !== 'sell-only');
                 document.body.classList.toggle('sell-mode-active', mode === 'sell-only');
                 document.body.classList.toggle('buy-only-mode-active', mode === 'buy-only');
-                App.updateStartOffsetVisibility();
                 
                 if (mode === 'sell-only') App.switchTab('sell');
                 else if (mode === 'buy-only') App.switchTab('buy');
@@ -797,79 +673,59 @@ document.addEventListener('DOMContentLoaded', function () {
             if (els.tabSell) els.tabSell.addEventListener('click', () => App.switchTab('sell'));
             if (els.themeBtn) els.themeBtn.addEventListener('click', App.toggleTheme);
             
-            // Actions Menu Toggle
-            const actionsMenuBtn = document.getElementById('actions-menu-btn');
-            const actionsMenuDropdown = document.getElementById('actions-menu-dropdown');
+            // Hamburger Menu Toggle
+            const menuToggleBtn = document.getElementById('menu-toggle-btn');
+            const menuDropdown = document.getElementById('menu-dropdown');
+            const menuIcon = document.getElementById('menu-icon');
+            const menuCloseIcon = document.getElementById('menu-close-icon');
             
-            if (actionsMenuBtn && actionsMenuDropdown) {
-                const toggleActionsMenu = (open) => {
-                    if (open) {
-                        actionsMenuDropdown.classList.remove('opacity-0', 'invisible');
-                        actionsMenuDropdown.classList.add('opacity-100', 'visible');
+            if (menuToggleBtn && menuDropdown) {
+                const toggleMenu = () => {
+                    const isOpen = menuDropdown.classList.contains('opacity-100');
+                    if (isOpen) {
+                        menuDropdown.classList.remove('opacity-100', 'visible');
+                        menuDropdown.classList.add('opacity-0', 'invisible');
+                        menuIcon.classList.remove('hidden');
+                        menuCloseIcon.classList.add('hidden');
                     } else {
-                        actionsMenuDropdown.classList.add('opacity-0', 'invisible');
-                        actionsMenuDropdown.classList.remove('opacity-100', 'visible');
+                        menuDropdown.classList.remove('opacity-0', 'invisible');
+                        menuDropdown.classList.add('opacity-100', 'visible');
+                        menuIcon.classList.add('hidden');
+                        menuCloseIcon.classList.remove('hidden');
                     }
                 };
                 
-                actionsMenuBtn.addEventListener('click', (e) => {
+                menuToggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
-                    const isOpen = actionsMenuDropdown.classList.contains('opacity-100');
-                    toggleActionsMenu(!isOpen);
-                    // Close links menu if open
-                    const linksDropdown = document.getElementById('links-menu-dropdown');
-                    if (linksDropdown) {
-                        linksDropdown.classList.add('opacity-0', 'invisible');
-                        linksDropdown.classList.remove('opacity-100', 'visible');
+                    toggleMenu();
+                });
+                
+                // Close menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menuDropdown.contains(e.target) && !menuToggleBtn.contains(e.target)) {
+                        if (menuDropdown.classList.contains('opacity-100')) {
+                            toggleMenu();
+                        }
+                    }
+                });
+                
+                // Close menu when clicking on menu items (except theme toggle which needs to stay open)
+                const menuItems = menuDropdown.querySelectorAll('a, button');
+                menuItems.forEach(item => {
+                    if (item.id !== 'theme-toggle-btn' && item.id !== 'sol-btn') {
+                        item.addEventListener('click', () => {
+                            if (menuDropdown.classList.contains('opacity-100')) {
+                                toggleMenu();
+                            }
+                        });
                     }
                 });
             }
             
-            // Links Menu Toggle
-            const linksMenuBtn = document.getElementById('links-menu-btn');
-            const linksMenuDropdown = document.getElementById('links-menu-dropdown');
-            
-            if (linksMenuBtn && linksMenuDropdown) {
-                const toggleLinksMenu = (open) => {
-                    if (open) {
-                        linksMenuDropdown.classList.remove('opacity-0', 'invisible');
-                        linksMenuDropdown.classList.add('opacity-100', 'visible');
-                    } else {
-                        linksMenuDropdown.classList.add('opacity-0', 'invisible');
-                        linksMenuDropdown.classList.remove('opacity-100', 'visible');
-                    }
-                };
-                
-                linksMenuBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const isOpen = linksMenuDropdown.classList.contains('opacity-100');
-                    toggleLinksMenu(!isOpen);
-                    // Close actions menu if open
-                    if (actionsMenuDropdown) {
-                        actionsMenuDropdown.classList.add('opacity-0', 'invisible');
-                        actionsMenuDropdown.classList.remove('opacity-100', 'visible');
-                    }
-                });
-            }
-            
-            // Close menus when clicking outside
-            document.addEventListener('click', (e) => {
-                if (actionsMenuDropdown && actionsMenuBtn && 
-                    !actionsMenuDropdown.contains(e.target) && !actionsMenuBtn.contains(e.target)) {
-                    actionsMenuDropdown.classList.add('opacity-0', 'invisible');
-                    actionsMenuDropdown.classList.remove('opacity-100', 'visible');
-                }
-                if (linksMenuDropdown && linksMenuBtn && 
-                    !linksMenuDropdown.contains(e.target) && !linksMenuBtn.contains(e.target)) {
-                    linksMenuDropdown.classList.add('opacity-0', 'invisible');
-                    linksMenuDropdown.classList.remove('opacity-100', 'visible');
-                }
-            });
-            
-            // Advanced Mode Toggle (checkbox switch)
+            // Advanced Mode Toggle
             const advancedModeToggle = document.getElementById('advanced-mode-toggle');
             if (advancedModeToggle) {
-                advancedModeToggle.addEventListener('change', App.toggleAdvancedMode);
+                advancedModeToggle.addEventListener('click', App.toggleAdvancedMode);
             }
             
             const downloadBtn = document.getElementById('download-csv-btn');
@@ -881,18 +737,6 @@ document.addEventListener('DOMContentLoaded', function () {
             
             // QR Modal
             const toggleModal = Utils.bindModal(els.qrModal, [els.solBtn], [els.qrBackdrop, els.qrClose]);
-            if (els.donationChain) {
-                els.donationChain.addEventListener('change', (e) => {
-                    App.updateDonationUI(e.target.value);
-                });
-            }
-            if (els.donationCopy && els.donationAddress) {
-                els.donationCopy.addEventListener('click', () => {
-                    const addr = els.donationAddress.getAttribute('data-address') || els.donationAddress.textContent;
-                    if (addr) App.copy(addr);
-                });
-            }
-            App.updateDonationUI(els.donationChain?.value || 'sol');
 
             // Video Modal with lazy loading
             const videoIframe = els.videoModal?.querySelector('iframe');
@@ -912,6 +756,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             };
             if (els.videoBtn) els.videoBtn.addEventListener('click', openVideo);
+            if (els.videoBtnMobile) els.videoBtnMobile.addEventListener('click', openVideo);
             if (introVideoLink) introVideoLink.addEventListener('click', openVideo);
             [els.videoBackdrop, els.videoClose].forEach(el => {
                 if (el) {
@@ -1020,14 +865,6 @@ document.addEventListener('DOMContentLoaded', function () {
             const mode = els.priceRangeMode.value;
             els.widthContainer?.classList.toggle('hidden', mode !== 'width');
             els.floorContainer?.classList.toggle('hidden', mode !== 'floor');
-            App.updateStartOffsetVisibility();
-        },
-
-        updateStartOffsetVisibility: () => {
-            const buyStartRow = document.getElementById('buy-start-row');
-            const sellStartRow = document.getElementById('sell-start-row');
-            if (buyStartRow) buyStartRow.classList.toggle('hidden', State.tradingMode === 'sell-only');
-            if (sellStartRow) sellStartRow.classList.toggle('hidden', State.tradingMode === 'buy-only');
         },
 
         switchTab: (tab) => {
@@ -1092,66 +929,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             const buyStep = (!isRelativeSpacing && N > 0) ? (currentPrice - buyPriceEnd) / N : 0;
             const sellStep = (!isRelativeSpacing && N > 0) ? (sellPriceEnd - currentPrice) / N : 0;
-            const parseStartPrice = (modeEl, valueEl, isBuy) => {
-                const mode = modeEl?.value || 'percent';
-                const raw = parseFloat(Utils.stripCommas(valueEl?.value));
-                if (!Number.isFinite(raw)) return null;
-                if (mode === 'percent') {
-                    const pct = Math.abs(raw);
-                    const signedPct = isBuy ? -pct : pct;
-                    return currentPrice * (1 + signedPct / 100);
-                }
-                return raw;
-            };
+            const buyRatio = (isRelativeSpacing && N > 0) ? Math.pow(Math.max(buyPriceEnd/currentPrice, 0), 1/N) : 1;
+            const sellRatio = (isRelativeSpacing && N > 0) ? Math.pow(sellPriceEnd/currentPrice, 1/N) : 1;
 
-            const buyStartPrice = (!State.sellOnlyMode) ? parseStartPrice(els.buyStartMode, els.buyStartValue, true) : null;
-            const sellStartPrice = (!State.buyOnlyMode) ? parseStartPrice(els.sellStartMode, els.sellStartValue, false) : null;
-
-            let buyPrices = [];
-            let sellPrices = [];
-
-            if (isRelativeSpacing) {
-                if (State.tradingMode === 'buy-only') {
-                    const startBuy = (buyStartPrice && buyStartPrice > 0) ? buyStartPrice : currentPrice;
-                    const ratioBuy = (N > 1 && startBuy > 0 && buyPriceEnd > 0) ? Math.pow(buyPriceEnd / startBuy, 1 / (N - 1)) : 1;
-                    buyPrices = Array.from({ length: N }, (_, i) => startBuy * Math.pow(ratioBuy, i));
-                } else if (State.tradingMode === 'sell-only') {
-                    const startSell = (sellStartPrice && sellStartPrice > 0) ? sellStartPrice : currentPrice;
-                    const ratioSell = (N > 1 && startSell > 0 && sellPriceEnd > 0) ? Math.pow(sellPriceEnd / startSell, 1 / (N - 1)) : 1;
-                    sellPrices = Array.from({ length: N }, (_, i) => startSell * Math.pow(ratioSell, i));
-                } else {
-                    const baseBuyEnd = Math.max(buyPriceEnd, 0.0000001);
-                    const baseSellEnd = Math.max(sellPriceEnd, baseBuyEnd * 1.0001);
-                    const ratio = Math.pow(baseSellEnd / baseBuyEnd, 1 / (2 * N));
-                    const anchorBuyTarget = (buyStartPrice && buyStartPrice > 0)
-                        ? buyStartPrice
-                        : (currentPrice > 0 ? currentPrice / Math.pow(ratio, N) : baseBuyEnd * Math.pow(ratio, N));
-                    let scale = anchorBuyTarget / (baseBuyEnd * Math.pow(ratio, N - 1));
-                    if (!Number.isFinite(scale) || scale <= 0) scale = 1;
-                    const adjBuyEnd = baseBuyEnd * scale;
-                    const adjSellEnd = baseSellEnd * scale;
-
-                    buyPrices = Array.from({ length: N }, (_, i) => adjBuyEnd * Math.pow(ratio, i + 1));
-                    sellPrices = Array.from({ length: N }, (_, i) => adjBuyEnd * Math.pow(ratio, N + (i + 1)));
-
-                    if (sellStartPrice && sellStartPrice > 0) {
-                        const currentSellStart = sellPrices[0];
-                        const adjustScale = currentSellStart > 0 ? sellStartPrice / currentSellStart : 1;
-                        buyPrices = buyPrices.map(p => p * adjustScale);
-                        sellPrices = sellPrices.map(p => p * adjustScale);
-                    }
-                }
-            } else {
-                if (!State.sellOnlyMode) {
-                    const startBuy = (buyStartPrice && buyStartPrice > buyPriceEnd) ? buyStartPrice : currentPrice - buyStep;
-                    const buyInterval = N > 1 ? (startBuy - buyPriceEnd) / (N - 1) : 0;
-                    buyPrices = Array.from({ length: N }, (_, i) => startBuy - (buyInterval * i));
-                }
-                if (!State.buyOnlyMode) {
-                    const startSell = (sellStartPrice && sellStartPrice < sellPriceEnd) ? sellStartPrice : currentPrice + sellStep;
-                    const sellInterval = N > 1 ? (sellPriceEnd - startSell) / (N - 1) : 0;
-                    sellPrices = Array.from({ length: N }, (_, i) => startSell + (sellInterval * i));
-                }
+            let buyPrices = Array.from({length: N}, (_, i) => isRelativeSpacing ? currentPrice * Math.pow(buyRatio, i+1) : currentPrice - ((i+1)*buyStep));
+            let sellPrices = Array.from({length: N}, (_, i) => isRelativeSpacing ? currentPrice * Math.pow(sellRatio, i+1) : currentPrice + ((i+1)*sellStep));
+            
+            if (N > 0) {
+                buyPrices[N-1] = buyPriceEnd;
+                sellPrices[N-1] = sellPriceEnd;
             }
 
             let buyLadder = [];
@@ -1360,9 +1146,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 'sticky-fees': Utils.fmtCurr(s.totalFees), 
                 'sticky-vol': Utils.fmtNum(s.totalQuantity),
                 'sticky-floor': Utils.fmtCurr(s.lowestBuy), 
-                'sticky-ceiling': Utils.fmtCurr(s.highestSell),
-                'legend-buy-summary': `${Utils.fmtNum(s.buyTotalVolume)} @ ${Utils.fmtCurr(s.avgBuy)} avg`,
-                'legend-sell-summary': `${Utils.fmtNum(s.sellTotalVolume)} @ ${Utils.fmtCurr(s.avgSell)} avg`
+                'sticky-ceiling': Utils.fmtCurr(s.highestSell)
             };
             Object.entries(summaryMap).forEach(([id, val]) => setTxt(id, val));
             setCls('chart-summary-net-profit', `text-lg font-bold ${s.netProfit >= 0 ? 'text-[var(--color-primary)]' : 'text-[var(--color-invalid)]'}`);
@@ -1398,7 +1182,7 @@ document.addEventListener('DOMContentLoaded', function () {
             updateTable('sell-ladder-body', plan.sellLadder, true);
 
             if (typeof drawDepthChart === 'function') {
-                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder, s.avgBuy, s.avgSell);
+                drawDepthChart('#depth-chart', plan.buyLadder, plan.sellLadder);
             }
             
             setTimeout(() => App.ensureTableBottomSpace(), 100);
@@ -1524,28 +1308,30 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             // Return to welcome screen
-            App.resetApp();
             introLayer.style.display = 'flex';
             introLayer.style.opacity = '1';
             introLayer.style.pointerEvents = 'auto';
             history.replaceState({ introVisible: true }, '');
         },
         
-        returnToWelcome: (options = {}) => {
-            const { fromBackButton = false, forceSavePrompt = false, source = '' } = options;
+        returnToWelcome: (fromBackButton = false) => {
             const introLayer = document.getElementById('intro-layer');
             if (!introLayer) return;
             
-            // Check if we're on main screen (intro is hidden)
-            const computedDisplay = window.getComputedStyle(introLayer).display;
-            const isMainScreen = computedDisplay === 'none' || introLayer.style.opacity === '0';
+            // Check if we're on main screen
+            const isMainScreen = introLayer.style.display === 'none' || 
+                (introLayer.style.opacity === '0' && introLayer.style.pointerEvents === 'none');
             
-            // Confirm navigation and optionally offer saving before resetting
-            if ((isMainScreen && !fromBackButton) || forceSavePrompt) {
-                const proceed = confirm('Return to the welcome screen and reset the current plan?\n\nClick OK to continue, or Cancel to stay here.');
-                if (!proceed) return;
+            if (isMainScreen && !fromBackButton) {
+                // Show confirmation dialog with save option
+                const shouldSave = confirm('Leave and return to welcome screen?\n\nClick OK to continue, or Cancel to stay.');
+                if (!shouldSave) {
+                    return;
+                }
+                
+                // Offer to save config
                 if (State.currentPlanData) {
-                    const saveNow = confirm('Would you like to save your current configuration before leaving?');
+                    const saveNow = confirm('Save your current plan before leaving?');
                     if (saveNow) {
                         App.saveConfig();
                     }
@@ -1574,7 +1360,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             
             // Show welcome screen
-            App.resetApp();
             introLayer.style.display = 'flex';
             introLayer.style.opacity = '1';
             introLayer.style.pointerEvents = 'auto';
@@ -1595,7 +1380,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     App.init();
 });
-
 
 
 
